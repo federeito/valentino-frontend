@@ -1,6 +1,14 @@
+import { CartContext } from "@/lib/CartContext";
 import Link from "next/link";
+import { useContext } from "react";
+import toast from "react-hot-toast";
 
 export default function Hero({ product }) {
+    const { addProduct } = useContext(CartContext);
+    function addITemToCart() {
+        addProduct(product._id);
+        toast.success('Producto añadido al carrito!')
+    }
     if (product) {
         return <>
             <div className="relative overflow-hidden my-14 md:my-10">
@@ -28,7 +36,9 @@ export default function Hero({ product }) {
                                 <button type="button" class="rounded-lg border border-primary bg-primary px-5 py-2.5 text-center 
                         text-md font-medium text-white shadow-sm transition-all hover:border-secondary hover:bg-secondary 
                         focus:ring focus:ring-primary-200 disabled:cursor-not-allowed disabled:border-primary-300 
-                        disabled:bg-primary-300">Añadir al Carrito</button>
+                        disabled:bg-primary-300"
+                                    onClick={addITemToCart}
+                                >Añadir al Carrito</button>
 
                                 <Link href={'/products'} class="rounded-lg border border-gray-300 bg-white px-5 py-2.5 text-center 
                                     text-md font-medium text-gray-700 shadow-sm transition-all hover:bg-gray-100 focus:ring

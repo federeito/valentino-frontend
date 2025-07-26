@@ -1,4 +1,7 @@
+import { CartContext } from "@/lib/CartContext";
 import Link from "next/link";
+import { useContext } from "react";
+import toast from "react-hot-toast";
 
 const formatPrice = (price) => {
     return price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
@@ -6,6 +9,8 @@ const formatPrice = (price) => {
 };
 
 export default function Products({ products }) {
+ const { addProduct } = useContext(CartContext);
+    
     return <>
         <div className="">
             <div className="mx-auto px-4 py-6">
@@ -36,7 +41,7 @@ export default function Products({ products }) {
                                                 $ {formatPrice(product.Precio)} c/u
                                             </p>
 
-                                            <button type="button" class="inline-flex items-center gap-1.5 rounded-lg border border-primary
+                                            <button onClick={() => {addProduct(product._id), toast.success ('Producto añadido al carrito')}} type="button" class="inline-flex items-center gap-1.5 rounded-lg border border-primary
                                              bg-white px-4 py-2.5 text-center text-sm font-medium text-gray-700 shadow-sm transition-all hover:bg-gray-100 focus:ring focus:ring-gray-100 hover:border-secondary">
                                                 Agregar
                                                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="size-5">
