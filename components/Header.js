@@ -1,4 +1,5 @@
 import { CartContext } from "@/lib/CartContext";
+import { useSession } from "next-auth/react";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { useContext } from "react";
@@ -10,6 +11,8 @@ export default function Header() {
 
     const active = 'text-primary transition hover:text-secondary font-bold'
     const inactive = 'text-gray-500 transition hover:text-gray-500/75 font-medium'
+
+    const { data: session } = useSession()
     return <>
 
         <header className="bg-white border-b border-primary border-opacity-30 sticky top-0 z-40">
@@ -39,12 +42,21 @@ export default function Header() {
 
                     <div className="flex items-center gap-4">
                         <div className="sm:flex sm:gap-4 items-center">
-                            <Link
-                                className="text-sm font-medium px-4 py-1 transition border-r border-primary"
+                            {session ? (
+                               <div className="sm:flex sm:gap-2 border-r pr-4">
+                                <div className="h-9 w-9">
+                                  <img src={session.user.image} alt={session.user.name}
+                                   className="h-full w-full rounded-full object-cover object-center" />  
+                                </div>
+                               </div>
+                            ) : (
+                                <Link
+                                className=" text-sm font-medium px-4 py-1 transition border-r border-primary"
                                 href="/"
-                            >
-                                Account
-                            </Link>
+                                >
+                                    Account
+                                </Link>
+                            )}
 
                             <Link
                                 className="group rounded-md text-sm flex items-center font-medium transition p-2"

@@ -9,9 +9,13 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@mercadopago/sdk-js": "^0.0.3",
+    "@mercadopago/sdk-react": "^1.0.3",
     "axios": "^1.11.0",
+    "mercadopago": "^2.8.0",
     "mongoose": "^8.16.4",
     "next": "15.4.2",
+    "next-auth": "^4.24.11",
     "react": "19.1.0",
     "react-dom": "19.1.0",
     "react-hot-toast": "^2.5.2"
