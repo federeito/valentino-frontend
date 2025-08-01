@@ -21,7 +21,9 @@ export default function Cart() {
 
     const { data: session } = useSession()
 
-    const [isSuccess, setIsSucess] = useState(false);
+    const [isSuccess, setIsSuccess] = useState(false);
+    const [isCanceled, setIsCanceled] = useState(false);
+    const [isPending, setIsPending] = useState(false);
 
     useEffect(() => {
         if (cartProducts.length > 0) {
@@ -37,13 +39,20 @@ export default function Cart() {
         if (typeof window === 'undefined') {
             return
         }
-        
-if (window?.location.href.includes('success')) {
-    setIsSucess(true);
-    clearCart();
-    toast.success('Compra realizada con éxito');
-}
-}, [])
+
+        if (window?.location.href.includes('success')) {
+            setIsSuccess(true);
+            clearCart();
+            toast.success('Compra realizada con éxito');
+        } else if (window?.location.href.includes('canceled')) {
+            setIsCanceled(true);
+            clearCart();
+            toast.error('La compra fue cancelada');
+        } else if (window?.location.href.includes('pending')) {
+            setIsPending(true);
+            toast('El pago está pendiente de aprobación');
+        }
+    }, [])
 
     function increaseProduct(id) {
         addProduct(id);
@@ -80,6 +89,24 @@ if (window?.location.href.includes('success')) {
         return <>
         <Success />
         </>
+    }
+
+    if (isCanceled) {
+        return (
+            <div className="bg-red-100 border-l-4 border-red-500 text-red-700 p-4" role="alert">
+                <p className="font-bold">¡Pago cancelado!</p>
+                <p>El pago fue cancelado. Si tienes algún problema, por favor contáctanos.</p>
+            </div>
+        );
+    }
+
+    if (isPending) {
+        return (
+            <div className="bg-yellow-100 border-l-4 border-yellow-500 text-yellow-700 p-4" role="alert">
+                <p className="font-bold">¡Pago pendiente!</p>
+                <p>El pago está siendo procesado. Te notificaremos cuando se complete.</p>
+            </div>
+        );
     }
 
     if (session) {
