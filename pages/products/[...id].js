@@ -6,7 +6,6 @@ import toast from "react-hot-toast";
 
 const formatPrice = (price) => {
     return price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-
 };
 
 export default function ProductPage({ product }) {
@@ -40,16 +39,6 @@ export default function ProductPage({ product }) {
                             </p>
                         </div>
 
-                        {/* product details */}
-                        {/*<div className="mt-6">
-                        <h2 className="text-xl font-semibold">
-                                Detalles
-                            </h2>
-                            <p className="mt-2 text-gray-700">
-                                {product.Detalles}
-                            </p>
-                        </div> */}
-
                         <div className="mt-4 flex justify-between items-center">
                             <h2 className="text-xl font-semibold text-gray-700">
                                 Precio
@@ -59,12 +48,47 @@ export default function ProductPage({ product }) {
                                 $ {formatPrice(product.Precio)} c/u
                             </p>
                         </div>
-                        <div class="text-center w-full mt-6">
-                            <button onClick={() => {
-                                addProduct(product._id); toast.success("Producto agregado al carrito")
-                            }} className="block rounded bg-secondary px-5 py-3 text-md text-text
-                             transition hover:bg-purple-300 w-full">Agregar al Carrito</button>
-                        </div>
+
+                        {/* START: STOCK DISPLAY AND BUTTON LOGIC */}
+                        {product.stock > 0 ? (
+                            <>
+                                <div className="mt-4 flex justify-between items-center">
+                                    <h2 className="text-xl font-semibold text-gray-700">
+                                        Stock
+                                    </h2>
+                                    <p className="mt-2 text-primary font-semibold text-lg">
+                                        {product.stock} disponibles
+                                    </p>
+                                </div>
+                                <div className="text-center w-full mt-6">
+                                    <button 
+                                        onClick={() => {
+                                            addProduct(product._id);
+                                            toast.success("Producto agregado al carrito");
+                                        }} 
+                                        className="block rounded bg-secondary px-5 py-3 text-md text-text
+                                         transition hover:bg-purple-300 w-full"
+                                    >
+                                        Agregar al Carrito
+                                    </button>
+                                </div>
+                            </>
+                        ) : (
+                            <>
+                                <p className="text-red-500 font-bold mt-4">¡Producto sin stock!</p>
+                                <div className="text-center w-full mt-6">
+                                    <button 
+                                        disabled 
+                                        className="block rounded bg-gray-300 text-gray-500 px-5 py-3 text-md
+                                         cursor-not-allowed w-full"
+                                    >
+                                        Agregar al Carrito
+                                    </button>
+                                </div>
+                            </>
+                        )}
+                        {/* END: STOCK DISPLAY AND BUTTON LOGIC */}
+                        
                     </div>
                 </div>
             </section>
@@ -78,7 +102,7 @@ export async function getServerSideProps(context) {
     const product = await Product.findById(id);
     return {
         props: {
-            Product: JSON.parse(JSON.stringify(product))
+            product: JSON.parse(JSON.stringify(product))
         }
     }
 }

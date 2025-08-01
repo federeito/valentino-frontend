@@ -7,7 +7,6 @@ import toast from "react-hot-toast";
 
 const formatPrice = (price) => {
     return price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-
 };
 
 export default function Products({ allProducts }) {
@@ -22,7 +21,7 @@ export default function Products({ allProducts }) {
                          rounded-xl border-opacity-10">
                             <div className="relative md:h-[300px] h-[200px]">
                                 <img src={product.Imagenes[0]} alt='product image' className="absolute
-                            inset-0 h-full w-full object-contain opacity-100 
+                            inset-0 h-full w-full object-contain opacity-100
                             group-hover:opacity-0" />
                                 <img src={product.Imagenes[1]} alt='product image' className="absolute
                             inset-0 h-full w-full object-contain opacity-0
@@ -36,18 +35,41 @@ export default function Products({ allProducts }) {
                                     </h3>
                                 </Link>
 
-                                <div className="mt-1.5 flex flex-col items-center justify-between
-                             text-text">
+                                <div className="mt-1.5 flex flex-col items-center justify-between text-text">
                                     <p className="tracking-wide text-primary text-sm md:text-md">
                                         $ {formatPrice(product.Precio)} c/u
                                     </p>
 
-                                    <div class="col-span-12 text-center w-full">
-                                        <button onClick={() => {addProduct(product._id); toast.success
-                                         ("Producto agregado al carrito")}} className="block rounded
-                                         bg-secondary px-5 py-3 text-md text-text transition
-                                         hover:bg-purple-300 w-full">Agregar al Carrito</button>
-                                    </div>
+                                    {/* START: ADDED STOCK DISPLAY AND BUTTON LOGIC */}
+                                    {product.stock > 0 ? (
+                                        <>
+                                            <p className="text-sm text-gray-500">Stock: {product.stock}</p>
+                                            <div className="col-span-12 text-center w-full">
+                                                <button
+                                                    onClick={() => {
+                                                        addProduct(product._id);
+                                                        toast.success("Producto agregado al carrito");
+                                                    }}
+                                                    className="block rounded bg-secondary px-5 py-3 text-md text-text transition hover:bg-purple-300 w-full"
+                                                >
+                                                    Agregar al Carrito
+                                                </button>
+                                            </div>
+                                        </>
+                                    ) : (
+                                        <>
+                                            <p className="text-sm text-red-500 font-bold">¡Sin stock!</p>
+                                            <div className="col-span-12 text-center w-full">
+                                                <button
+                                                    disabled
+                                                    className="block rounded bg-gray-300 text-gray-500 px-5 py-3 text-md cursor-not-allowed w-full"
+                                                >
+                                                    Agregar al Carrito
+                                                </button>
+                                            </div>
+                                        </>
+                                    )}
+                                    {/* END: ADDED STOCK DISPLAY AND BUTTON LOGIC */}
                                 </div>
                             </div>
                         </div>
@@ -56,7 +78,6 @@ export default function Products({ allProducts }) {
             </div>
         </div>
     </>
-
 }
 
 export async function getServerSideProps() {
