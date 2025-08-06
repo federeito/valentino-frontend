@@ -49,11 +49,15 @@ export default function Cart() {
         if (window?.location.href.includes('success=1')) {
             setIsSuccess(true);
             clearCart();
-            toast.success('Compra realizada con éxito');
+            toast.success('Compra realizada con éxito'), {
+                duration: 5000,
+            }
         } else if (window?.location.href.includes('canceled=1')) {
             setIsCanceled(true);
             clearCart();
-            toast.error('La compra fue cancelada');
+            toast.error('La compra fue cancelada'), {
+                duration: 5000,
+            }
         } else if (window?.location.href.includes('pending=1')) {
             setIsPending(true);
             toast('El pago está pendiente de aprobación');
@@ -130,10 +134,12 @@ export default function Cart() {
             });
 
             if (response.data.orderId) {
-                toast.success('Orden creada. Revisa tu correo para los detalles de pago.');
+                toast.success('Orden creada. Revisa tu correo para los detalles de pago.'), {
+                    duration: 5000,
+                }
                 clearCart();
                 // Redirigir a una página de confirmación, si tienes una
-                window.location.href = '/cart'; // O a '/order-confirmation?id=' + response.data.orderId
+                window.location.href = '/cart?success=1'; // O a '/order-confirmation?id=' + response.data.orderId
             }
         } catch (error) {
             toast.error('Error al procesar la transferencia bancaria')
