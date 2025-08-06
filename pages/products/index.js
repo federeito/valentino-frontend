@@ -43,7 +43,6 @@ export default function Products({ allProducts }) {
                                     {/* START: ADDED STOCK DISPLAY AND BUTTON LOGIC */}
                                     {product.stock > 0 ? (
                                         <>
-                                            <p className="text-sm text-gray-500">Stock: {product.stock}</p>
                                             <div className="col-span-12 text-center w-full">
                                                 <button
                                                     onClick={() => {

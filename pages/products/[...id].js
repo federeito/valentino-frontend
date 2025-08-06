@@ -9,7 +9,10 @@ const formatPrice = (price) => {
 };
 
 export default function ProductPage({ product }) {
-    const { addProduct } = useContext(CartContext);
+    const { addProduct, removeProduct, cartProducts } = useContext(CartContext);
+    
+    const countInCart = cartProducts.filter(id => id === product._id).length;
+
     if (product) {
         return <>
             <section className="mt-20 md:mt-6">
@@ -21,74 +24,77 @@ export default function ProductPage({ product }) {
                     <div className="grid grid-cols-2 lg:grid lg:grid-cols-1 lg:gap-y-4 px-2 gap-2 md:gap-0 md:px-2">
                         {product.Imagenes.slice(1, 3).map((image, index) => (
                             <div className="lg:aspect-h-2 lg:aspect-w-3 lg:rounded-lg lg:overflow-hidden" key={index}>
-                                <img src={image} alt="product-image" className="w-full h-full md:h-[44vh] object-cover object-center
-                                border border-secondary rounder-lg p-4" />
+                                <img src={image} alt="product-image" className="w-full h-full object-cover object-center border border-primary rounder-lg" />
                             </div>
                         ))}
                     </div>
-                    <div className="p-4 lg:p-8 border">
-                        <h1 className="text-3xl font-semibold text-text">
+
+                    <div className="px-4 pt-8 md:pt-0 sm:px-0 lg:col-span-1">
+                        <h1 className="text-2xl font-bold tracking-tight text-gray-900 md:text-3xl">
                             {product.Título}
                         </h1>
-                        <div className="mt-6">
-                            <h2 className="text-xl font-semibold">
+
+                        <div className="mt-4">
+                            <h2 className="text-xl font-semibold text-gray-700">
                                 Descripción
                             </h2>
                             <p className="mt-2 text-gray-700">
                                 {product.Descripción}
                             </p>
                         </div>
-
-                        <div className="mt-4 flex justify-between items-center">
+                        
+                        <div className="mt-4">
                             <h2 className="text-xl font-semibold text-gray-700">
                                 Precio
                             </h2>
-
                             <p className="mt-2 text-primary font-semibold text-lg">
                                 $ {formatPrice(product.Precio)} c/u
                             </p>
                         </div>
-
-                        {/* START: STOCK DISPLAY AND BUTTON LOGIC */}
+                        
                         {product.stock > 0 ? (
-                            <>
-                                <div className="mt-4 flex justify-between items-center">
-                                    <h2 className="text-xl font-semibold text-gray-700">
-                                        Stock
-                                    </h2>
-                                    <p className="mt-2 text-primary font-semibold text-lg">
-                                        {product.stock} disponibles
-                                    </p>
-                                </div>
-                                <div className="text-center w-full mt-6">
+                            <div className="mt-6">
+                                <div className="flex items-center justify-between text-center w-full">
+                                    <button 
+                                        onClick={() => removeProduct(product._id)}
+                                        disabled={countInCart === 0}
+                                        className={`rounded-full px-5 py-3 text-2xl text-text transition w-1/4
+                                            ${countInCart === 0 ? 'bg-gray-300 text-gray-500 cursor-not-allowed' : 'bg-secondary hover:bg-purple-300'}`}
+                                    >
+                                        -
+                                    </button>
+                                    <span className="text-2xl font-bold text-gray-800 w-1/2">{countInCart}</span>
                                     <button 
                                         onClick={() => {
-                                            addProduct(product._id);
-                                            toast.success("Producto agregado al carrito");
-                                        }} 
-                                        className="block rounded bg-secondary px-5 py-3 text-md text-text
-                                         transition hover:bg-purple-300 w-full"
+                                            addProduct(product._id); 
+                                            toast.success("Producto agregado");
+                                        }}
+                                        disabled={countInCart >= product.stock}
+                                        className={`rounded-full px-5 py-3 text-2xl text-text transition w-1/4
+                                            ${countInCart >= product.stock ? 'bg-gray-300 text-gray-500 cursor-not-allowed' : 'bg-secondary hover:bg-purple-300'}`}
                                     >
-                                        Agregar al Carrito
+                                        +
                                     </button>
                                 </div>
-                            </>
+                                {countInCart >= product.stock && (
+                                    <p className="text-red-500 font-bold mt-2 text-center">¡Límite de stock alcanzado!</p>
+                                )}
+                            </div>
                         ) : (
                             <>
-                                <p className="text-red-500 font-bold mt-4">¡Producto sin stock!</p>
+                                <p className="text-red-500 font-bold mt-4 text-center">
+                                    ¡Producto sin stock!
+                                </p>
                                 <div className="text-center w-full mt-6">
                                     <button 
                                         disabled 
-                                        className="block rounded bg-gray-300 text-gray-500 px-5 py-3 text-md
-                                         cursor-not-allowed w-full"
+                                        className="block rounded bg-gray-300 text-gray-500 px-5 py-3 text-md cursor-not-allowed w-full"
                                     >
                                         Agregar al Carrito
                                     </button>
                                 </div>
                             </>
                         )}
-                        {/* END: STOCK DISPLAY AND BUTTON LOGIC */}
-                        
                     </div>
                 </div>
             </section>
