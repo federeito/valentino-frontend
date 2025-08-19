@@ -222,10 +222,10 @@ export default function Cart() {
         const guestInfoComplete = guestEmail && guestName;
         
         return (
-            <section className="flex justify-between max-md:flex-col md:space-x-4">
-                <div className="md:w-2/3 px-4">
-                    <div className="mt-16 md:mt-6">
-                        <header className="text-center flex justify-between w-full">
+            <section className="flex justify-between max-md:flex-col md:space-x-4 px-4 md:px-6 pb-8">
+                <div className="md:w-2/3">
+                    <div className="mt-8 md:mt-6">
+                        <header className="text-left flex justify-between w-full">
                             <h1 className="text-xl font-bold text-gray-900 sm:text-3xl">
                                 Tú Carrito
                             </h1>
@@ -245,59 +245,55 @@ export default function Cart() {
                                     return (
                                         <div className="mt-8" key={product._id}>
                                             <ul className="space-y-4">
-                                                <li className="flex items-center gap-4 justify-between">
-                                                    <img src={product.Imagenes[0]} alt="cart image" className="h-16 w16 object-cover" />
-                                                    <div>
-                                                        <h3 className="text-md text-text max-w-md">
+                                                <li className="flex items-center gap-2 md:gap-4 justify-between flex-wrap sm:flex-nowrap">
+                                                    <img src={product.Imagenes[0]} alt="cart image" className="h-16 w-16 object-cover rounded-lg" />
+                                                    <div className="min-w-[200px] flex-grow">
+                                                        <h3 className="text-sm md:text-md text-text">
                                                             {product.Título}
                                                         </h3>
-                                                        <dl className="mt-1 space-y-px text-md text-text">
+                                                        <dl className="mt-1 space-y-px text-sm md:text-md text-text">
                                                             <p>$ {formatPrice(quantity * product.Precio)}</p>
                                                         </dl>
                                                     </div>
-                                                    <div>
-                                                        <label htmlFor="Quantity" className="sr-only"> Cantidad </label>
+                                                    <div className="flex items-center gap-2 mt-2 sm:mt-0">
+                                                        <button onClick={() => decreaseProduct(product._id)}
+                                                            type="button" className="h-10 w10 leading-10 text-gray-600
+                                                            transition hover:opacity-75 border">
+                                                            -
+                                                        </button>
 
-                                                        <div className="flex items-center gap-1">
-                                                            <button onClick={() => decreaseProduct(product._id)}
-                                                                type="button" className="h-10 w10 leading-10 text-gray-600
-                                                                transition hover:opacity-75 border">
-                                                                -
-                                                            </button>
-
-                                                            <input
-                                                                type="number"
-                                                                id="Quantity"
-                                                                value={quantity}
-                                                                readOnly
-                                                                className="h-10 w16 rounded border text-primary text-lg
-                                                                font-bold border-gray-200 text-center
-                                                                [-moz-appearance:_textfield] sm:text-md [&
-                                                                ::-webkit-inner-spin-button]:m-0 [&
-                                                                ::-webkit-inner-spin-button]:appearance-none [&
-                                                                ::-webkit-outer-spin-button]:m-0 [&
-                                                                ::-webkit-outer-spin-button]:appearance-none"
-                                                            />
-                                                            <button
-                                                                onClick={() => increaseProduct(product._id, product.stock)}
-                                                                type="button"
-                                                                disabled={isAtStockLimit}
-                                                                className={`h-10 w10 leading-10 text-gray-600 transition hover:opacity-75 border
-                                                                ${isAtStockLimit ? 'bg-gray-300 cursor-not-allowed' : ''}`}>
-                                                                +
-                                                            </button>
-                                                        </div>
-                                                        {isOverstocked && (
-                                                            <p className="text-xs text-red-500 font-bold mt-1">
-                                                                ¡Excede el stock disponible!
-                                                            </p>
-                                                        )}
-                                                        {!isOverstocked && isAtStockLimit && (
-                                                            <p className="text-xs text-orange-500 font-bold mt-1">
-                                                                Límite de stock alcanzado.
-                                                            </p>
-                                                        )}
+                                                        <input
+                                                            type="number"
+                                                            id="Quantity"
+                                                            value={quantity}
+                                                            readOnly
+                                                            className="h-10 w16 rounded border text-primary text-lg
+                                                            font-bold border-gray-200 text-center
+                                                            [-moz-appearance:_textfield] sm:text-md [&
+                                                            ::-webkit-inner-spin-button]:m-0 [&
+                                                            ::-webkit-inner-spin-button]:appearance-none [&
+                                                            ::-webkit-outer-spin-button]:m-0 [&
+                                                            ::-webkit-outer-spin-button]:appearance-none"
+                                                        />
+                                                        <button
+                                                            onClick={() => increaseProduct(product._id, product.stock)}
+                                                            type="button"
+                                                            disabled={isAtStockLimit}
+                                                            className={`h-10 w10 leading-10 text-gray-600 transition hover:opacity-75 border
+                                                            ${isAtStockLimit ? 'bg-gray-300 cursor-not-allowed' : ''}`}>
+                                                            +
+                                                        </button>
                                                     </div>
+                                                    {isOverstocked && (
+                                                        <p className="text-xs text-red-500 font-bold mt-1">
+                                                            ¡Excede el stock disponible!
+                                                        </p>
+                                                    )}
+                                                    {!isOverstocked && isAtStockLimit && (
+                                                        <p className="text-xs text-orange-500 font-bold mt-1">
+                                                            Límite de stock alcanzado.
+                                                        </p>
+                                                    )}
                                                 </li>
                                             </ul>
                                         </div>
@@ -349,16 +345,16 @@ export default function Cart() {
                         )}
                     </div>
                 </div>
-                <div className="md:1/3 mt-16 md:mt-6">
+                <div className="md:w-1/3 mt-8 md:mt-6">
                     <header className="text-start flex flex-col w-full">
                         <h1 className="text-xl font-bold text-gray-900 sm:text-3xl">
                             Información del Comprador
                         </h1>
                         <p className="mt-2">Complete sus datos para continuar con la compra</p>
                     </header>
-                    <div className="mx-auto max-w-xl p-4 border shadow-xl my-3">
-                        <div className="space-y-5">
-                            <div className="grid grid-cols-12 gap-5">
+                    <div className="mx-auto max-w-xl p-4 border shadow-xl my-3 bg-white">
+                        <div className="space-y-4">
+                            <div className="grid grid-cols-12 gap-3 md:gap-5">
                                 <div className="col-span-12">
                                     <label className="mb-1 block text-md font-medium text-gray-700">Email</label>
                                     <input 
@@ -388,22 +384,22 @@ export default function Cart() {
                                                 onChange={ev => setAddress(ev.target.value)}
                                             />
                                         </div>
-                                        <div className="col-span-6">
+                                        <div className="col-span-12 sm:col-span-6">
                                             <label htmlFor="example10" className="mb-1 block text-md font-medium text-gray-700">Ciudad</label>
                                             <input type="text" id="example10" className="block p-3 border w-full rounded-md border-gray-300 shadow-sm focus:border-primary-400 focus:ring focus:ring-primary-200 focus:ring-opacity-50 disabled:cursor-not-allowed disabled:bg-gray-50 disabled:text-gray-500" placeholder=""
                                                 value={city}
                                                 onChange={ev => setCity(ev.target.value)}
                                             />
                                         </div>
-                                        <div className="col-span-4">
+                                        <div className="col-span-12 sm:col-span-4">
                                             <label htmlFor="example11" className="mb-1 block text-md font-medium text-gray-700">Región/Provincia</label>
-                                            <input type="text" id="example10" className="block p-3 border w-full rounded-md border-gray-300 shadow-sm focus:border-primary-400 focus:ring focus:ring-primary-200 focus:ring-opacity-50 disabled:cursor-not-allowed disabled:bg-gray-50 disabled:text-gray-500" placeholder=""
+                                            <input type="text" id="example11" className="block p-3 border w-full rounded-md border-gray-300 shadow-sm focus:border-primary-400 focus:ring focus:ring-primary-200 focus:ring-opacity-50 disabled:cursor-not-allowed disabled:bg-gray-50 disabled:text-gray-500" placeholder=""
                                                 value={state}
                                                 onChange={ev => setState(ev.target.value)}
                                             />
                                         </div>
-                                        <div className="col-span-2">
-                                            <label htmlFor="example12" className="mb-1 block text-md font-medium text-gray-700">C. P.</label>
+                                        <div className="col-span-12 sm:col-span-2">
+                                            <label htmlFor="example12" className="mb-1 block text-md font-medium text-gray-700">C.P.</label>
                                             <input type="text" id="example12" className="block p-3 border w-full rounded-md border-gray-300 shadow-sm focus:border-primary-400 focus:ring focus:ring-primary-200 focus:ring-opacity-50 disabled:cursor-not-allowed disabled:bg-gray-50 disabled:text-gray-500" placeholder=""
                                                 value={zip}
                                                 onChange={ev => setZip(ev.target.value)}
@@ -420,7 +416,7 @@ export default function Cart() {
                                                 <button
                                                     onClick={() => setPaymentMethod('mercadopago')}
                                                     disabled={!isCartValid || cartProducts.length === 0 || !formComplete}
-                                                    className={`flex-1 rounded p-2 text-md transition border-2
+                                                    className={`flex-1 rounded p-2 text-md transition border-2 min-h-[60px] flex items-center justify-center
                                                         ${paymentMethod === 'mercadopago' ? 'border-purple-600 bg-secondary' : 'border-gray-300 bg-gray-100'}
                                                         ${(!isCartValid || cartProducts.length === 0 || !formComplete) ? 'bg-gray-300 text-gray-500 cursor-not-allowed' : ''}
                                                     `}
@@ -428,7 +424,7 @@ export default function Cart() {
                                                     <img
                                                         src="https://res.cloudinary.com/djuk4a84p/image/upload/v1755571794/MP_RGB_HANDSHAKE_color_horizontal_l0i6d8.svg"
                                                         alt="Mercado Pago"
-                                                        className="h-[120px] w-auto mx-auto"
+                                                        className="h-[40px] md:h-[120px] w-auto mx-auto"
                                                     />
                                                 </button>
                                                 <button
@@ -466,10 +462,10 @@ export default function Cart() {
 
     if (session) {
         return (
-            <section className="flex justify-between max-md:flex-col md:space-x-4">
-                <div className="md:w-2/3 px-4">
-                    <div className="mt-16 md:mt-6">
-                        <header className="text-center flex justify-between w-full">
+            <section className="flex justify-between max-md:flex-col md:space-x-4 px-4 md:px-6 pb-8">
+                <div className="md:w-2/3">
+                    <div className="mt-8 md:mt-6">
+                        <header className="text-left flex justify-between w-full">
                             <h1 className="text-xl font-bold text-gray-900 sm:text-3xl">
                                 Tú Carrito
                             </h1>
@@ -489,59 +485,55 @@ export default function Cart() {
                                     return (
                                         <div className="mt-8" key={product._id}>
                                             <ul className="space-y-4">
-                                                <li className="flex items-center gap-4 justify-between">
-                                                    <img src={product.Imagenes[0]} alt="cart image" className="h-16 w16 object-cover" />
-                                                    <div>
-                                                        <h3 className="text-md text-text max-w-md">
+                                                <li className="flex items-center gap-2 md:gap-4 justify-between flex-wrap sm:flex-nowrap">
+                                                    <img src={product.Imagenes[0]} alt="cart image" className="h-16 w-16 object-cover rounded-lg" />
+                                                    <div className="min-w-[200px] flex-grow">
+                                                        <h3 className="text-sm md:text-md text-text">
                                                             {product.Título}
                                                         </h3>
-                                                        <dl className="mt-1 space-y-px text-md text-text">
+                                                        <dl className="mt-1 space-y-px text-sm md:text-md text-text">
                                                             <p>$ {formatPrice(quantity * product.Precio)}</p>
                                                         </dl>
                                                     </div>
-                                                    <div>
-                                                        <label htmlFor="Quantity" className="sr-only"> Cantidad </label>
+                                                    <div className="flex items-center gap-2 mt-2 sm:mt-0">
+                                                        <button onClick={() => decreaseProduct(product._id)}
+                                                            type="button" className="h-10 w10 leading-10 text-gray-600
+                                                            transition hover:opacity-75 border">
+                                                            -
+                                                        </button>
 
-                                                        <div className="flex items-center gap-1">
-                                                            <button onClick={() => decreaseProduct(product._id)}
-                                                                type="button" className="h-10 w10 leading-10 text-gray-600
-                                                                transition hover:opacity-75 border">
-                                                                -
-                                                            </button>
-
-                                                            <input
-                                                                type="number"
-                                                                id="Quantity"
-                                                                value={quantity}
-                                                                readOnly
-                                                                className="h-10 w16 rounded border text-primary text-lg
-                                                                font-bold border-gray-200 text-center
-                                                                [-moz-appearance:_textfield] sm:text-md [&
-                                                                ::-webkit-inner-spin-button]:m-0 [&
-                                                                ::-webkit-inner-spin-button]:appearance-none [&
-                                                                ::-webkit-outer-spin-button]:m-0 [&
-                                                                ::-webkit-outer-spin-button]:appearance-none"
-                                                            />
-                                                            <button
-                                                                onClick={() => increaseProduct(product._id, product.stock)}
-                                                                type="button"
-                                                                disabled={isAtStockLimit}
-                                                                className={`h-10 w10 leading-10 text-gray-600 transition hover:opacity-75 border
-                                                                ${isAtStockLimit ? 'bg-gray-300 cursor-not-allowed' : ''}`}>
-                                                                +
-                                                            </button>
-                                                        </div>
-                                                        {isOverstocked && (
-                                                            <p className="text-xs text-red-500 font-bold mt-1">
-                                                                ¡Excede el stock disponible!
-                                                            </p>
-                                                        )}
-                                                        {!isOverstocked && isAtStockLimit && (
-                                                            <p className="text-xs text-orange-500 font-bold mt-1">
-                                                                Límite de stock alcanzado.
-                                                            </p>
-                                                        )}
+                                                        <input
+                                                            type="number"
+                                                            id="Quantity"
+                                                            value={quantity}
+                                                            readOnly
+                                                            className="h-10 w16 rounded border text-primary text-lg
+                                                            font-bold border-gray-200 text-center
+                                                            [-moz-appearance:_textfield] sm:text-md [&
+                                                            ::-webkit-inner-spin-button]:m-0 [&
+                                                            ::-webkit-inner-spin-button]:appearance-none [&
+                                                            ::-webkit-outer-spin-button]:m-0 [&
+                                                            ::-webkit-outer-spin-button]:appearance-none"
+                                                        />
+                                                        <button
+                                                            onClick={() => increaseProduct(product._id, product.stock)}
+                                                            type="button"
+                                                            disabled={isAtStockLimit}
+                                                            className={`h-10 w10 leading-10 text-gray-600 transition hover:opacity-75 border
+                                                            ${isAtStockLimit ? 'bg-gray-300 cursor-not-allowed' : ''}`}>
+                                                            +
+                                                        </button>
                                                     </div>
+                                                    {isOverstocked && (
+                                                        <p className="text-xs text-red-500 font-bold mt-1">
+                                                            ¡Excede el stock disponible!
+                                                        </p>
+                                                    )}
+                                                    {!isOverstocked && isAtStockLimit && (
+                                                        <p className="text-xs text-orange-500 font-bold mt-1">
+                                                            Límite de stock alcanzado.
+                                                        </p>
+                                                    )}
                                                 </li>
                                             </ul>
                                         </div>
@@ -596,16 +588,16 @@ export default function Cart() {
                 {!products?.length ? (
                     ''
                 ) : (
-                    <div className="md:1/3 mt-16 md:mt-6">
+                    <div className="md:w-1/3 mt-8 md:mt-6">
                         <header className="text-start flex flex-col w-full">
                             <h1 className="text-xl font-bold text-gray-900 sm:text-3xl">
                                 Detalles de Envío
                             </h1>
                             <p className="mt-2">Utilizamos los Datos de su Cuenta para el Envío.</p>
                         </header>
-                        <div className="mx-auto max-w-xl p-4 border shadow-xl h-[400px] my-3">
-                            <div className="space-y-5">
-                                <div className="grid grid-cols-12 gap-5">
+                        <div className="mx-auto max-w-xl p-4 border shadow-xl my-3 bg-white">
+                            <div className="space-y-4">
+                                <div className="grid grid-cols-12 gap-3 md:gap-5">
                                     <div className="col-span-6">
                                         <label htmlFor="example7" className="mb-1 block text-md font-medium text-gray-700">Email</label>
                                         <input type="email" id="example7" className="block w-full rounded-md p-3 border border-gray-300 shadow-sm focus:border-primary-400 focus:ring focus:ring-primary-200 focus:ring-opacity-50 disabled:cursor-not-allowed disabled:bg-gray-50 disabled:text-gray-500" placeholder="tu@correo.com"
@@ -625,22 +617,22 @@ export default function Cart() {
                                             onChange={ev => setAddress(ev.target.value)}
                                         />
                                     </div>
-                                    <div className="col-span-6">
+                                    <div className="col-span-12 sm:col-span-6">
                                         <label htmlFor="example10" className="mb-1 block text-md font-medium text-gray-700">Ciudad</label>
                                         <input type="text" id="example10" className="block p-3 border w-full rounded-md border-gray-300 shadow-sm focus:border-primary-400 focus:ring focus:ring-primary-200 focus:ring-opacity-50 disabled:cursor-not-allowed disabled:bg-gray-50 disabled:text-gray-500" placeholder=""
                                             value={city}
                                             onChange={ev => setCity(ev.target.value)}
                                         />
                                     </div>
-                                    <div className="col-span-4">
+                                    <div className="col-span-12 sm:col-span-4">
                                         <label htmlFor="example11" className="mb-1 block text-md font-medium text-gray-700">Región/Provincia</label>
-                                        <input type="text" id="example10" className="block p-3 border w-full rounded-md border-gray-300 shadow-sm focus:border-primary-400 focus:ring focus:ring-primary-200 focus:ring-opacity-50 disabled:cursor-not-allowed disabled:bg-gray-50 disabled:text-gray-500" placeholder=""
+                                        <input type="text" id="example11" className="block p-3 border w-full rounded-md border-gray-300 shadow-sm focus:border-primary-400 focus:ring focus:ring-primary-200 focus:ring-opacity-50 disabled:cursor-not-allowed disabled:bg-gray-50 disabled:text-gray-500" placeholder=""
                                             value={state}
                                             onChange={ev => setState(ev.target.value)}
                                         />
                                     </div>
-                                    <div className="col-span-2">
-                                        <label htmlFor="example12" className="mb-1 block text-md font-medium text-gray-700">C. P.</label>
+                                    <div className="col-span-12 sm:col-span-2">
+                                        <label htmlFor="example12" className="mb-1 block text-md font-medium text-gray-700">C.P.</label>
                                         <input type="text" id="example12" className="block p-3 border w-full rounded-md border-gray-300 shadow-sm focus:border-primary-400 focus:ring focus:ring-primary-200 focus:ring-opacity-50 disabled:cursor-not-allowed disabled:bg-gray-50 disabled:text-gray-500" placeholder=""
                                             value={zip}
                                             onChange={ev => setZip(ev.target.value)}
@@ -657,7 +649,7 @@ export default function Cart() {
                                             <button
                                                 onClick={() => setPaymentMethod('mercadopago')}
                                                 disabled={!isCartValid || cartProducts.length === 0 || !formComplete}
-                                                className={`flex-1 rounded p-2 text-md transition border-2
+                                                className={`flex-1 rounded p-2 text-md transition border-2 min-h-[60px] flex items-center justify-center
                                                     ${paymentMethod === 'mercadopago' ? 'border-purple-600 bg-secondary' : 'border-gray-300 bg-gray-100'}
                                                     ${(!isCartValid || cartProducts.length === 0 || !formComplete) ? 'bg-gray-300 text-gray-500 cursor-not-allowed' : ''}
                                                 `}
@@ -665,7 +657,7 @@ export default function Cart() {
                                                 <img
                                                     src="https://res.cloudinary.com/djuk4a84p/image/upload/v1755571794/MP_RGB_HANDSHAKE_color_horizontal_l0i6d8.svg"
                                                     alt="Mercado Pago"
-                                                    className="h-[120px] w-auto mx-auto"
+                                                    className="h-[40px] md:h-[120px] w-auto mx-auto"
                                                 />
                                             </button>
                                             <button
