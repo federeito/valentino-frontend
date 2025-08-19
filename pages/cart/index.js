@@ -17,11 +17,15 @@ const countOfId = (id, cartProducts) => {
 export default function Cart() {
     const { cartProducts, removeProduct, addProduct, clearCart } = useContext(CartContext);
     const [products, setProducts] = useState([]);
+    const [isGuest, setIsGuest] = useState(false);
+    const [guestEmail, setGuestEmail] = useState('');
+    const [guestName, setGuestName] = useState('');
 
     const [address, setAddress] = useState('');
     const [city, setCity] = useState('');
     const [state, setState] = useState('');
     const [zip, setZip] = useState('');
+    const [formComplete, setFormComplete] = useState(false);
 
     const { data: session } = useSession()
 
@@ -76,6 +80,12 @@ export default function Cart() {
         setIsCartValid(valid);
     }, [products, cartProducts]);
 
+    useEffect(() => {
+        const isComplete = address && city && state && zip && 
+            (session || (isGuest && guestEmail && guestName));
+        setFormComplete(isComplete);
+    }, [address, city, state, zip, guestEmail, guestName, isGuest, session]);
+
     function increaseProduct(id, stockLimit) {
         const currentCount = countOfId(id, cartProducts);
         if (currentCount < stockLimit) {
@@ -108,12 +118,19 @@ export default function Cart() {
     }
 
     async function mpCheckout() {
+        if (!formComplete) {
+            toast.error('Por favor complete todos los campos del formulario');
+            return;
+        }
         if (paymentMethod !== 'mercadopago') return;
 
         const response = await axios.post('/api/checkout', {
-            email: session.user.email, name: session.user.name, address, state, zip, city,
+            email: session ? session.user.email : guestEmail,
+            name: session ? session.user.name : guestName,
+            address, state, zip, city,
             cartProducts,
-            paymentMethod
+            paymentMethod,
+            isGuest
         });
 
         if (response.data.url) {
@@ -124,13 +141,20 @@ export default function Cart() {
     }
 
     async function transferCheckout() {
+        if (!formComplete) {
+            toast.error('Por favor complete todos los campos del formulario');
+            return;
+        }
         if (paymentMethod !== 'transfer') return;
 
         try {
             const response = await axios.post('/api/checkout', {
-                email: session.user.email, name: session.user.name, address, state, zip, city,
+                email: session ? session.user.email : guestEmail,
+                name: session ? session.user.name : guestName,
+                address, state, zip, city,
                 cartProducts,
-                paymentMethod
+                paymentMethod,
+                isGuest
             });
 
             if (response.data.orderId) {
@@ -138,8 +162,7 @@ export default function Cart() {
                     duration: 5000,
                 }
                 clearCart();
-                // Redirigir a una página de confirmación, si tienes una
-                window.location.href = '/cart?success=1'; // O a '/order-confirmation?id=' + response.data.orderId
+                window.location.href = '/cart?success=1';
             }
         } catch (error) {
             toast.error('Error al procesar la transferencia bancaria')
@@ -149,7 +172,6 @@ export default function Cart() {
     if (isSuccess) {
         return <Success />
     }
-    // ... (el resto del código de isCanceled, isPending, etc. permanece igual)
     if (isCanceled) {
         return (
             <div className="bg-red-100 border-l-4 border-red-500 text-red-700 p-4" role="alert">
@@ -167,7 +189,280 @@ export default function Cart() {
             </div>
         );
     }
-    
+
+    if (!session && !isGuest) {
+        return (
+            <div className="grid h-screen px-4 bg-white place-content-center">
+                <div className="text-center">
+                    <p className="mt-4 text-text text-2xl">
+                        Elige cómo deseas continuar
+                    </p>
+                    <div className="flex flex-col gap-4 mt-6">
+                        <button
+                            onClick={() => signIn('google')}
+                            className="inline-block rounded-sm border border-primary bg-primary px-12 py-3
+                            text-md font-medium text-white hover:bg-transparent hover:text-primary focus:ring-3 focus:outline-hidden"
+                        >
+                            Continuar con Google
+                        </button>
+                        <button
+                            onClick={() => setIsGuest(true)}
+                            className="inline-block rounded-sm border border-gray-300 px-12 py-3
+                            text-md font-medium text-gray-700 hover:bg-gray-50 focus:ring-3 focus:outline-hidden"
+                        >
+                            Continuar como invitado
+                        </button>
+                    </div>
+                </div>
+            </div>
+        );
+    }
+
+    if (!session && isGuest) {
+        const guestInfoComplete = guestEmail && guestName;
+        
+        return (
+            <section className="flex justify-between max-md:flex-col md:space-x-4">
+                <div className="md:w-2/3 px-4">
+                    <div className="mt-16 md:mt-6">
+                        <header className="text-center flex justify-between w-full">
+                            <h1 className="text-xl font-bold text-gray-900 sm:text-3xl">
+                                Tú Carrito
+                            </h1>
+                        </header>
+                        {!products?.length ? (
+                            <p className="my-6 text-center">Tu Carrito Está Vacío.</p>
+                        ) : (
+                            <>
+                                {uniqueProductIds.map(productId => {
+                                    const product = products.find(p => p._id === productId);
+                                    if (!product) return null;
+
+                                    const quantity = countOfId(product._id, cartProducts);
+                                    const isOverstocked = quantity > product.stock;
+                                    const isAtStockLimit = quantity === product.stock;
+
+                                    return (
+                                        <div className="mt-8" key={product._id}>
+                                            <ul className="space-y-4">
+                                                <li className="flex items-center gap-4 justify-between">
+                                                    <img src={product.Imagenes[0]} alt="cart image" className="h-16 w16 object-cover" />
+                                                    <div>
+                                                        <h3 className="text-md text-text max-w-md">
+                                                            {product.Título}
+                                                        </h3>
+                                                        <dl className="mt-1 space-y-px text-md text-text">
+                                                            <p>$ {formatPrice(quantity * product.Precio)}</p>
+                                                        </dl>
+                                                    </div>
+                                                    <div>
+                                                        <label htmlFor="Quantity" className="sr-only"> Cantidad </label>
+
+                                                        <div className="flex items-center gap-1">
+                                                            <button onClick={() => decreaseProduct(product._id)}
+                                                                type="button" className="h-10 w10 leading-10 text-gray-600
+                                                                transition hover:opacity-75 border">
+                                                                -
+                                                            </button>
+
+                                                            <input
+                                                                type="number"
+                                                                id="Quantity"
+                                                                value={quantity}
+                                                                readOnly
+                                                                className="h-10 w16 rounded border text-primary text-lg
+                                                                font-bold border-gray-200 text-center
+                                                                [-moz-appearance:_textfield] sm:text-md [&
+                                                                ::-webkit-inner-spin-button]:m-0 [&
+                                                                ::-webkit-inner-spin-button]:appearance-none [&
+                                                                ::-webkit-outer-spin-button]:m-0 [&
+                                                                ::-webkit-outer-spin-button]:appearance-none"
+                                                            />
+                                                            <button
+                                                                onClick={() => increaseProduct(product._id, product.stock)}
+                                                                type="button"
+                                                                disabled={isAtStockLimit}
+                                                                className={`h-10 w10 leading-10 text-gray-600 transition hover:opacity-75 border
+                                                                ${isAtStockLimit ? 'bg-gray-300 cursor-not-allowed' : ''}`}>
+                                                                +
+                                                            </button>
+                                                        </div>
+                                                        {isOverstocked && (
+                                                            <p className="text-xs text-red-500 font-bold mt-1">
+                                                                ¡Excede el stock disponible!
+                                                            </p>
+                                                        )}
+                                                        {!isOverstocked && isAtStockLimit && (
+                                                            <p className="text-xs text-orange-500 font-bold mt-1">
+                                                                Límite de stock alcanzado.
+                                                            </p>
+                                                        )}
+                                                    </div>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    );
+                                })}
+                                <div className="mt-8 flex justify-end border-t border-gray-100 pt-8">
+                                    <div className="max-w-md space-y-4">
+                                        <dl className="space-y-1 text-md text-text">
+                                            <div className="flex justify-end text-red-500 border-b mb-3">
+                                                <button onClick={deleteCart}>Borrar Carrito</button>
+                                            </div>
+                                            <div className="flex justify-between">
+                                                <dt>Total</dt>
+                                                <dd> ${formatPrice(total)}</dd>
+                                            </div>
+                                        </dl>
+                                        <div className="flex justify-end">
+                                            <Link
+                                                className="group flex items-center justify-between gap-4
+                                            rounded-lg border border-primary bg-primary px-5 py-3
+                                            transition-colors hover:bg-transparent focus:ring focus:outline-none"
+                                                href="/products"
+                                            >
+                                                <span className="font-medium text-white transition-colors
+                                                group-hover:text-primary">
+                                                    Continuar Comprando
+                                                </span>
+                                                <span className="shrink-0 rounded-full border border-current bg-white p-2 text-primary">
+                                                    <svg
+                                                        className="size-5 shadow-sm rtl:rotate-180"
+                                                        xmlns="http://www.w3.org/2000/svg"
+                                                        fill="none"
+                                                        viewBox="0 0 24 24"
+                                                        stroke="currentColor"
+                                                    >
+                                                        <path
+                                                            strokeLinecap="round"
+                                                            strokeLinejoin="round"
+                                                            strokeWidth="2"
+                                                            d="M17 8l4 4m0 0l-4 4m4-4H3"
+                                                        />
+                                                    </svg>
+                                                </span>
+                                            </Link>
+                                        </div>
+                                    </div>
+                                </div>
+                            </>
+                        )}
+                    </div>
+                </div>
+                <div className="md:1/3 mt-16 md:mt-6">
+                    <header className="text-start flex flex-col w-full">
+                        <h1 className="text-xl font-bold text-gray-900 sm:text-3xl">
+                            Información del Comprador
+                        </h1>
+                        <p className="mt-2">Complete sus datos para continuar con la compra</p>
+                    </header>
+                    <div className="mx-auto max-w-xl p-4 border shadow-xl my-3">
+                        <div className="space-y-5">
+                            <div className="grid grid-cols-12 gap-5">
+                                <div className="col-span-12">
+                                    <label className="mb-1 block text-md font-medium text-gray-700">Email</label>
+                                    <input 
+                                        type="email" 
+                                        className="block w-full rounded-md p-3 border border-gray-300"
+                                        value={guestEmail}
+                                        onChange={e => setGuestEmail(e.target.value)}
+                                        placeholder="tu@email.com"
+                                    />
+                                </div>
+                                <div className="col-span-12">
+                                    <label className="mb-1 block text-md font-medium text-gray-700">Nombre Completo</label>
+                                    <input 
+                                        type="text"
+                                        className="block w-full rounded-md p-3 border border-gray-300"
+                                        value={guestName}
+                                        onChange={e => setGuestName(e.target.value)}
+                                        placeholder="Tu nombre completo"
+                                    />
+                                </div>
+                                {guestInfoComplete && (
+                                    <>
+                                        <div className="col-span-12">
+                                            <label htmlFor="example9" className="mb-1 block text-md font-medium text-gray-700">Dirección</label>
+                                            <input type="text" id="example9" className="block p-3 border w-full rounded-md border-gray-300 shadow-sm focus:border-primary-400 focus:ring focus:ring-primary-200 focus:ring-opacity-50 disabled:cursor-not-allowed disabled:bg-gray-50 disabled:text-gray-500" placeholder="1864 Calle Principal"
+                                                value={address}
+                                                onChange={ev => setAddress(ev.target.value)}
+                                            />
+                                        </div>
+                                        <div className="col-span-6">
+                                            <label htmlFor="example10" className="mb-1 block text-md font-medium text-gray-700">Ciudad</label>
+                                            <input type="text" id="example10" className="block p-3 border w-full rounded-md border-gray-300 shadow-sm focus:border-primary-400 focus:ring focus:ring-primary-200 focus:ring-opacity-50 disabled:cursor-not-allowed disabled:bg-gray-50 disabled:text-gray-500" placeholder=""
+                                                value={city}
+                                                onChange={ev => setCity(ev.target.value)}
+                                            />
+                                        </div>
+                                        <div className="col-span-4">
+                                            <label htmlFor="example11" className="mb-1 block text-md font-medium text-gray-700">Región/Provincia</label>
+                                            <input type="text" id="example10" className="block p-3 border w-full rounded-md border-gray-300 shadow-sm focus:border-primary-400 focus:ring focus:ring-primary-200 focus:ring-opacity-50 disabled:cursor-not-allowed disabled:bg-gray-50 disabled:text-gray-500" placeholder=""
+                                                value={state}
+                                                onChange={ev => setState(ev.target.value)}
+                                            />
+                                        </div>
+                                        <div className="col-span-2">
+                                            <label htmlFor="example12" className="mb-1 block text-md font-medium text-gray-700">C. P.</label>
+                                            <input type="text" id="example12" className="block p-3 border w-full rounded-md border-gray-300 shadow-sm focus:border-primary-400 focus:ring focus:ring-primary-200 focus:ring-opacity-50 disabled:cursor-not-allowed disabled:bg-gray-50 disabled:text-gray-500" placeholder=""
+                                                value={zip}
+                                                onChange={ev => setZip(ev.target.value)}
+                                            />
+                                        </div>
+
+                                        <div className="col-span-12 text-center w-full mt-4">
+                                            {!isCartValid && (
+                                                <p className="text-red-500 font-bold mb-2">
+                                                    Hay productos en el carrito con stock insuficiente. Por favor, ajusta las cantidades.
+                                                </p>
+                                            )}
+                                            <div className="flex gap-2">
+                                                <button
+                                                    onClick={() => setPaymentMethod('mercadopago')}
+                                                    disabled={!isCartValid || cartProducts.length === 0 || !formComplete}
+                                                    className={`flex-1 rounded p-2 text-md transition border-2
+                                                        ${paymentMethod === 'mercadopago' ? 'border-purple-600 bg-secondary' : 'border-gray-300 bg-gray-100'}
+                                                        ${(!isCartValid || cartProducts.length === 0 || !formComplete) ? 'bg-gray-300 text-gray-500 cursor-not-allowed' : ''}
+                                                    `}
+                                                >
+                                                    <img
+                                                        src="https://imgmp.mlstatic.com/org-img/banners/ar/medios/online/468X60.jpg"
+                                                        alt="Mercado Pago"
+                                                        className="h-full w-auto mx-auto"
+                                                    />
+                                                </button>
+                                                <button
+                                                    onClick={() => setPaymentMethod('transfer')}
+                                                    disabled={!isCartValid || cartProducts.length === 0 || !formComplete}
+                                                    className={`flex-1 rounded p-2 text-md transition border-2 font-bold
+                                                        ${paymentMethod === 'transfer' ? 'border-purple-600 bg-secondary' : 'border-gray-300 bg-gray-100'}
+                                                        ${(!isCartValid || cartProducts.length === 0 || !formComplete) ? 'bg-gray-300 text-gray-500 cursor-not-allowed' : ''}
+                                                    `}
+                                                >
+                                                    Transferencia Bancaria
+                                                </button>
+                                            </div>
+                                            <button
+                                                onClick={paymentMethod === 'mercadopago' ? mpCheckout : transferCheckout}
+                                                disabled={!isCartValid || cartProducts.length === 0 || !formComplete}
+                                                className={`mt-4 block rounded px-5 py-3 w-full transition font-bold
+                                                ${(!isCartValid || cartProducts.length === 0 || !formComplete) ? 'bg-gray-300 text-gray-500 cursor-not-allowed' : 'bg-primary text-white hover:bg-purple-300'}`}
+                                            >
+                                                {!formComplete ? 'Complete todos los campos para continuar' :
+                                                    paymentMethod === 'mercadopago' ? 
+                                                        'Proceder al Pago con Mercado Pago' : 
+                                                        'Confirmar Pedido (Pagar con Transferencia)'}
+                                            </button>
+                                        </div>
+                                    </>
+                                )}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        );
+    }
 
     if (session) {
         return (
@@ -361,10 +656,10 @@ export default function Cart() {
                                         <div className="flex gap-2">
                                             <button
                                                 onClick={() => setPaymentMethod('mercadopago')}
-                                                disabled={!isCartValid || cartProducts.length === 0}
+                                                disabled={!isCartValid || cartProducts.length === 0 || !formComplete}
                                                 className={`flex-1 rounded p-2 text-md transition border-2
                                                     ${paymentMethod === 'mercadopago' ? 'border-purple-600 bg-secondary' : 'border-gray-300 bg-gray-100'}
-                                                    ${(!isCartValid || cartProducts.length === 0) ? 'bg-gray-300 text-gray-500 cursor-not-allowed' : ''}
+                                                    ${(!isCartValid || cartProducts.length === 0 || !formComplete) ? 'bg-gray-300 text-gray-500 cursor-not-allowed' : ''}
                                                 `}
                                             >
                                                 <img
@@ -375,10 +670,10 @@ export default function Cart() {
                                             </button>
                                             <button
                                                 onClick={() => setPaymentMethod('transfer')}
-                                                disabled={!isCartValid || cartProducts.length === 0}
+                                                disabled={!isCartValid || cartProducts.length === 0 || !formComplete}
                                                 className={`flex-1 rounded p-2 text-md transition border-2 font-bold
                                                     ${paymentMethod === 'transfer' ? 'border-purple-600 bg-secondary' : 'border-gray-300 bg-gray-100'}
-                                                    ${(!isCartValid || cartProducts.length === 0) ? 'bg-gray-300 text-gray-500 cursor-not-allowed' : ''}
+                                                    ${(!isCartValid || cartProducts.length === 0 || !formComplete) ? 'bg-gray-300 text-gray-500 cursor-not-allowed' : ''}
                                                 `}
                                             >
                                                 Transferencia Bancaria
@@ -386,11 +681,14 @@ export default function Cart() {
                                         </div>
                                         <button
                                             onClick={paymentMethod === 'mercadopago' ? mpCheckout : transferCheckout}
-                                            disabled={!isCartValid || cartProducts.length === 0}
+                                            disabled={!isCartValid || cartProducts.length === 0 || !formComplete}
                                             className={`mt-4 block rounded px-5 py-3 w-full transition font-bold
-                                            ${!isCartValid || cartProducts.length === 0 ? 'bg-gray-300 text-gray-500 cursor-not-allowed' : 'bg-primary text-white hover:bg-purple-300'}`}
+                                            ${(!isCartValid || cartProducts.length === 0 || !formComplete) ? 'bg-gray-300 text-gray-500 cursor-not-allowed' : 'bg-primary text-white hover:bg-purple-300'}`}
                                         >
-                                            {paymentMethod === 'mercadopago' ? 'Proceder al Pago con Mercado Pago' : 'Confirmar Pedido (Pagar con Transferencia)'}
+                                            {!formComplete ? 'Complete todos los campos para continuar' :
+                                                paymentMethod === 'mercadopago' ? 
+                                                    'Proceder al Pago con Mercado Pago' : 
+                                                    'Confirmar Pedido (Pagar con Transferencia)'}
                                         </button>
                                     </div>
                                 </div>
@@ -413,9 +711,8 @@ export default function Cart() {
                     className="inline-block rounded-sm border border-primary bg-primary mt-6 px-12 py-3
                      text-md font-medium text-white hover:bg-transparent hover:text-primary focus:ring-3 focus:outline-hidden"
                     href="#"
-                >
+                ></button>
                     Continuar con el inicio de sesión de Google
-                </button>
             </div>
         </div>
     );
