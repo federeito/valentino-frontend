@@ -142,7 +142,7 @@ export default function Products({ allProducts }) {
                         {/* Resultados de búsqueda */}
                         <div className="mt-4 text-sm text-gray-600">
                             {searchTerm && (
-                                <span>Resultados para "<strong>{searchTerm}</strong>": </span>
+                                <span>Resultados para <strong>{searchTerm}</strong>:</span>
                             )}
                             <span className="font-semibold">{filteredProducts.length} producto(s) encontrado(s)</span>
                         </div>
