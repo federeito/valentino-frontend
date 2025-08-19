@@ -10,6 +10,7 @@ export default function Header() {
     const { cartProducts } = useContext(CartContext);
     const [isScrolled, setIsScrolled] = useState(false);
     const [cartBounce, setCartBounce] = useState(false);
+    const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
     const active = 'text-primary transition-all duration-300 hover:text-secondary font-bold relative after:absolute after:bottom-0 after:left-0 after:h-0.5 after:w-full after:bg-gradient-to-r after:from-primary after:to-secondary after:transform after:scale-x-100 after:transition-transform after:duration-300';
     const inactive = 'text-gray-500 transition-all duration-300 hover:text-primary font-medium relative after:absolute after:bottom-0 after:left-0 after:h-0.5 after:w-0 after:bg-gradient-to-r after:from-primary after:to-secondary after:transition-all after:duration-300 hover:after:w-full';
@@ -150,12 +151,13 @@ export default function Header() {
 
                             {/* Mobile menu button con animación */}
                             <button
+                                onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
                                 className="block rounded-lg bg-gradient-to-r from-gray-50 to-gray-100 p-2.5 text-gray-600 transition-all duration-300 hover:from-primary/10 hover:to-secondary/10 hover:text-primary hover:shadow-md md:hidden group"
                             >
                                 <span className="sr-only">Toggle menu</span>
                                 <svg
                                     xmlns="http://www.w3.org/2000/svg"
-                                    className="size-5 transition-transform duration-300 group-hover:rotate-90"
+                                    className={`size-5 transition-transform duration-300 ${isMobileMenuOpen ? 'rotate-90' : ''}`}
                                     fill="none"
                                     viewBox="0 0 24 24"
                                     stroke="currentColor"
@@ -166,6 +168,36 @@ export default function Header() {
                             </button>
                         </div>
                     </div>
+                </div>
+
+                {/* Mobile Menu */}
+                <div className={`md:hidden transition-all duration-300 ease-in-out ${
+                    isMobileMenuOpen 
+                        ? 'max-h-64 opacity-100 visible'
+                        : 'max-h-0 opacity-0 invisible'
+                }`}>
+                    <nav className="px-4 pt-2 pb-4 space-y-2 bg-white/95 backdrop-blur-xl border-t border-primary/10">
+                        <Link 
+                            href="/"
+                            className={`block py-2 px-4 rounded-lg transition-all duration-300 ${
+                                pathname === '/' 
+                                    ? 'bg-gradient-to-r from-primary/10 to-secondary/10 text-primary font-bold'
+                                    : 'text-gray-500 hover:bg-primary/5'
+                            }`}
+                        >
+                            Home
+                        </Link>
+                        <Link 
+                            href="/products"
+                            className={`block py-2 px-4 rounded-lg transition-all duration-300 ${
+                                pathname === '/products'
+                                    ? 'bg-gradient-to-r from-primary/10 to-secondary/10 text-primary font-bold'
+                                    : 'text-gray-500 hover:bg-primary/5'
+                            }`}
+                        >
+                            Todos los Productos
+                        </Link>
+                    </nav>
                 </div>
 
                 {/* Gradient border bottom */}
