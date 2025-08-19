@@ -2,7 +2,7 @@ import { CartContext } from "@/lib/CartContext";
 import { mongooseconnect } from "@/lib/mongoose";
 import { Product } from "@/models/Product";
 import Link from "next/link";
-import { useContext, useState, useEffect } from "react";
+import { useContext, useState, useEffect, useCallback } from "react";
 import toast from "react-hot-toast";
 
 const formatPrice = (price) => {
@@ -16,35 +16,7 @@ export default function Products({ allProducts }) {
     const [sortBy, setSortBy] = useState('newest'); // 'newest', 'price-low', 'price-high', 'name'
     const [searchTerm, setSearchTerm] = useState('');
 
-    // Animación de aparición escalonada
-    useEffect(() => {
-        setVisibleProducts([]);
-        const timer = setTimeout(() => {
-            const filteredProducts = getFilteredProducts();
-            filteredProducts.forEach((_, index) => {
-                setTimeout(() => {
-                    setVisibleProducts(prev => [...prev, index]);
-                }, index * 50);
-            });
-        }, 100);
-
-        return () => clearTimeout(timer);
-    }, [allProducts, sortBy, searchTerm]);
-
-    const handleAddToCart = (productId, productTitle) => {
-        addProduct(productId);
-        toast.success(`¡${productTitle} añadido al carrito!`, {
-            style: {
-                background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
-                color: 'white',
-                borderRadius: '12px',
-                fontWeight: 'bold'
-            },
-            duration: 3000,
-        });
-    };
-
-    const getFilteredProducts = () => {
+    const getFilteredProducts = useCallback(() => {
         let filtered = allProducts || [];
 
         // Filtrar por búsqueda
@@ -71,6 +43,34 @@ export default function Products({ allProducts }) {
         }
 
         return filtered;
+    }, [allProducts, searchTerm, sortBy]);
+
+    // Animación de aparición escalonada
+    useEffect(() => {
+        setVisibleProducts([]);
+        const timer = setTimeout(() => {
+            const filteredProducts = getFilteredProducts();
+            filteredProducts.forEach((_, index) => {
+                setTimeout(() => {
+                    setVisibleProducts(prev => [...prev, index]);
+                }, index * 50);
+            });
+        }, 100);
+
+        return () => clearTimeout(timer);
+    }, [getFilteredProducts]);
+
+    const handleAddToCart = (productId, productTitle) => {
+        addProduct(productId);
+        toast.success(`¡${productTitle} añadido al carrito!`, {
+            style: {
+                background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+                color: 'white',
+                borderRadius: '12px',
+                fontWeight: 'bold'
+            },
+            duration: 3000,
+        });
     };
 
     const filteredProducts = getFilteredProducts();
@@ -142,7 +142,7 @@ export default function Products({ allProducts }) {
                         {/* Resultados de búsqueda */}
                         <div className="mt-4 text-sm text-gray-600">
                             {searchTerm && (
-                                <span>Resultados para <strong>{searchTerm}</strong>:</span>
+                                <span>Resultados para <strong>&ldquo;{searchTerm}&rdquo;</strong>:</span>
                             )}
                             <span className="font-semibold">{filteredProducts.length} producto(s) encontrado(s)</span>
                         </div>
@@ -264,7 +264,7 @@ export default function Products({ allProducts }) {
                             <h3 className="text-2xl font-semibold text-gray-700 mb-4">No se encontraron productos</h3>
                             <p className="text-gray-500 mb-6">
                                 {searchTerm 
-                                    ? `No hay productos que coincidan con "${searchTerm}"`
+                                    ? `No hay productos que coincidan con &ldquo;${searchTerm}&rdquo;`
                                     : "No hay productos disponibles con los filtros seleccionados"
                                 }
                             </p>
