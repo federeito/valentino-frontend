@@ -426,9 +426,9 @@ export default function Cart() {
                                                     `}
                                                 >
                                                     <img
-                                                        src="https://imgmp.mlstatic.com/org-img/banners/ar/medios/online/468X60.jpg"
+                                                        src="https://res.cloudinary.com/djuk4a84p/image/upload/v1755571794/MP_RGB_HANDSHAKE_color_horizontal_l0i6d8.svg"
                                                         alt="Mercado Pago"
-                                                        className="h-full w-auto mx-auto"
+                                                        className="h-[120px] w-auto mx-auto"
                                                     />
                                                 </button>
                                                 <button
@@ -663,9 +663,9 @@ export default function Cart() {
                                                 `}
                                             >
                                                 <img
-                                                    src="https://imgmp.mlstatic.com/org-img/banners/ar/medios/online/468X60.jpg"
+                                                    src="https://res.cloudinary.com/djuk4a84p/image/upload/v1755571794/MP_RGB_HANDSHAKE_color_horizontal_l0i6d8.svg"
                                                     alt="Mercado Pago"
-                                                    className="h-full w-auto mx-auto"
+                                                    className="h-[120px] w-auto mx-auto"
                                                 />
                                             </button>
                                             <button

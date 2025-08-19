@@ -82,36 +82,34 @@ export default function Header() {
                             </ul>
                         </nav>
 
-                        <div className="flex items-center gap-4">
-                            <div className="sm:flex sm:gap-4 items-center">
-                                {session ? (
-                                    <div className="sm:flex sm:gap-2 border-r border-primary/20 pr-4">
-                                        <div className="h-10 w-10 relative group">
-                                            <img 
-                                                src={session.user.image} 
-                                                alt={session.user.name}
-                                                className="h-full w-full rounded-full object-cover object-center border-2 border-primary/20 transition-all duration-300 group-hover:border-secondary group-hover:shadow-lg group-hover:shadow-primary/20" 
-                                            />
-                                            <div className="absolute inset-0 rounded-full bg-gradient-to-tr from-primary/20 to-secondary/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-                                        </div>
-                                    </div>
-                                ) : (
-                                    <Link
-                                        className="text-sm font-medium px-4 py-2 transition-all duration-300 border border-primary/20 rounded-lg hover:border-primary hover:bg-primary/5 hover:shadow-md"
-                                        href="/"
-                                    >
-                                        Mi cuenta
-                                    </Link>
-                                )}
+                        <div className="flex items-center gap-2 sm:gap-4">
+                            {/* Mobile menu button con animación */}
+                            <button
+                                onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+                                className="block rounded-lg bg-gradient-to-r from-gray-50 to-gray-100 p-2.5 text-gray-600 transition-all duration-300 hover:from-primary/10 hover:to-secondary/10 hover:text-primary hover:shadow-md md:hidden group order-1 md:order-none"
+                            >
+                                <span className="sr-only">Toggle menu</span>
+                                <svg
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    className={`size-5 transition-transform duration-300 ${isMobileMenuOpen ? 'rotate-90' : ''}`}
+                                    fill="none"
+                                    viewBox="0 0 24 24"
+                                    stroke="currentColor"
+                                    strokeWidth="2"
+                                >
+                                    <path strokeLinecap="round" strokeLinejoin="round" d="M4 6h16M4 12h16M4 18h16" />
+                                </svg>
+                            </button>
 
+                            <div className="flex items-center gap-2 sm:gap-4">
                                 {/* Carrito animado */}
                                 <Link
-                                    className={`group rounded-lg text-sm flex items-center font-medium transition-all duration-300 p-3 hover:bg-gradient-to-r hover:from-primary/10 hover:to-secondary/10 hover:shadow-md ${
+                                    className={`group rounded-lg text-sm flex items-center font-medium transition-all duration-300 p-2 sm:p-2.5 hover:bg-gradient-to-r hover:from-primary/10 hover:to-secondary/10 hover:shadow-md order-2 md:order-none ${
                                         cartBounce ? 'animate-bounce' : ''
                                     }`}
                                     href="/cart"
                                 >
-                                    <div className="relative">
+                                    <div className="relative flex items-center">
                                         <svg 
                                             xmlns="http://www.w3.org/2000/svg" 
                                             fill="none" 
@@ -137,35 +135,37 @@ export default function Header() {
                                                 </svg>
                                             </div>
                                         )}
+                                        
+                                        <span className={`ml-1 font-bold transition-all duration-300 min-w-[20px] text-center px-1.5 py-0.5 rounded-full ${
+                                            cartProducts.length > 0 
+                                                ? 'bg-gradient-to-r from-primary to-secondary text-white shadow-md' 
+                                                : 'text-primary group-hover:text-secondary'
+                                        }`}>
+                                            {cartProducts.length}
+                                        </span>
                                     </div>
-                                    
-                                    <span className={`ml-2 font-bold transition-all duration-300 px-2 py-1 rounded-full ${
-                                        cartProducts.length > 0 
-                                            ? 'bg-gradient-to-r from-primary to-secondary text-white shadow-md' 
-                                            : 'text-primary group-hover:text-secondary'
-                                    }`}>
-                                        {cartProducts.length}
-                                    </span>
                                 </Link>
-                            </div>
 
-                            {/* Mobile menu button con animación */}
-                            <button
-                                onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-                                className="block rounded-lg bg-gradient-to-r from-gray-50 to-gray-100 p-2.5 text-gray-600 transition-all duration-300 hover:from-primary/10 hover:to-secondary/10 hover:text-primary hover:shadow-md md:hidden group"
-                            >
-                                <span className="sr-only">Toggle menu</span>
-                                <svg
-                                    xmlns="http://www.w3.org/2000/svg"
-                                    className={`size-5 transition-transform duration-300 ${isMobileMenuOpen ? 'rotate-90' : ''}`}
-                                    fill="none"
-                                    viewBox="0 0 24 24"
-                                    stroke="currentColor"
-                                    strokeWidth="2"
-                                >
-                                    <path strokeLinecap="round" strokeLinejoin="round" d="M4 6h16M4 12h16M4 18h16" />
-                                </svg>
-                            </button>
+                                {session ? (
+                                    <div className="flex items-center gap-2 sm:gap-2 border-l border-primary/20 pl-2 sm:pl-4 order-3 md:order-none">
+                                        <div className="h-8 w-8 sm:h-10 sm:w-10 relative group">
+                                            <img 
+                                                src={session.user.image} 
+                                                alt={session.user.name}
+                                                className="h-full w-full rounded-full object-cover object-center border-2 border-primary/20 transition-all duration-300 group-hover:border-secondary group-hover:shadow-lg group-hover:shadow-primary/20" 
+                                            />
+                                            <div className="absolute inset-0 rounded-full bg-gradient-to-tr from-primary/20 to-secondary/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                                        </div>
+                                    </div>
+                                ) : (
+                                    <Link
+                                        className="text-sm font-medium px-3 py-2 sm:px-4 sm:py-2 transition-all duration-300 border border-primary/20 rounded-lg hover:border-primary hover:bg-primary/5 hover:shadow-md order-3 md:order-none whitespace-nowrap"
+                                        href="/"
+                                    >
+                                        Mi cuenta
+                                    </Link>
+                                )}
+                            </div>
                         </div>
                     </div>
                 </div>
