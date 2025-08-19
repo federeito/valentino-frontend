@@ -222,8 +222,21 @@ export default function Products({ allProducts }) {
                                                     className="w-full group/btn relative overflow-hidden rounded-xl bg-gradient-to-r from-primary to-secondary px-6 py-3 text-center text-sm font-bold text-white shadow-lg shadow-primary/25 transition-all duration-300 hover:shadow-xl hover:shadow-primary/40 hover:scale-105 active:scale-95"
                                                 >
                                                     <span className="relative z-10 flex items-center justify-center gap-2">
-                                                        <svg className="w-4 h-4 transition-transform group-hover/btn:rotate-12" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 3h2l.4 2M7 13h10l4-8H5.4m0 0L7 13m0 0l-2.5 5M7 13l2.5 5m6-5v6a2 2 0 11-4 0v-6m4 0V9a2 2 0 10-4 0v4.01" />
+                                                        <svg 
+                                                            xmlns="http://www.w3.org/2000/svg" 
+                                                            width="24" 
+                                                            height="24" 
+                                                            viewBox="0 0 24 24" 
+                                                            fill="none" 
+                                                            stroke="currentColor" 
+                                                            strokeWidth="2" 
+                                                            strokeLinecap="round" 
+                                                            strokeLinejoin="round" 
+                                                            className="w-4 h-4 transition-transform group-hover/btn:rotate-12"
+                                                        >
+                                                            <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                                                            <path d="M6.331 8h11.339a2 2 0 0 1 1.977 2.304l-1.255 8.152a3 3 0 0 1 -2.966 2.544h-6.852a3 3 0 0 1 -2.965 -2.544l-1.255 -8.152a2 2 0 0 1 1.977 -2.304z" />
+                                                            <path d="M9 11v-5a3 3 0 0 1 6 0v5" />
                                                         </svg>
                                                         Agregar al Carrito
                                                     </span>

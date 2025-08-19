@@ -173,40 +173,6 @@ export default function ProductPage({ product }) {
                                 {/* Controles de cantidad y botones */}
                                 {product.stock > 0 ? (
                                     <div className="space-y-6">
-                                        {/* Control de cantidad en carrito */}
-                                        {countInCart > 0 && (
-                                            <div className="bg-blue-50 border-2 border-blue-200 rounded-xl p-4">
-                                                <p className="text-blue-800 font-semibold mb-3">Ya tienes {countInCart} unidade(s) en tu carrito</p>
-                                                <div className="flex items-center justify-between">
-                                                    <button 
-                                                        onClick={handleRemoveFromCart}
-                                                        className="flex-1 mr-2 rounded-xl bg-gradient-to-r from-red-500 to-pink-500 px-6 py-3 text-white font-bold hover:from-red-600 hover:to-pink-600 transition-all duration-300 hover:scale-105 active:scale-95"
-                                                    >
-                                                        Remover del carrito
-                                                    </button>
-                                                    <span className="mx-4 text-2xl font-bold text-gray-800 bg-white px-4 py-2 rounded-lg border-2 border-gray-200">
-                                                        {countInCart}
-                                                    </span>
-                                                    <button 
-                                                        onClick={() => addProduct(product._id)}
-                                                        disabled={countInCart >= product.stock}
-                                                        className={`flex-1 ml-2 rounded-xl px-6 py-3 font-bold transition-all duration-300 hover:scale-105 active:scale-95 ${
-                                                            countInCart >= product.stock 
-                                                                ? 'bg-gray-300 text-gray-500 cursor-not-allowed' 
-                                                                : 'bg-gradient-to-r from-green-500 to-emerald-500 text-white hover:from-green-600 hover:to-emerald-600'
-                                                        }`}
-                                                    >
-                                                        Agregar más
-                                                    </button>
-                                                </div>
-                                                {countInCart >= product.stock && (
-                                                    <p className="text-red-500 font-bold mt-2 text-center">
-                                                        ¡Límite de stock alcanzado!
-                                                    </p>
-                                                )}
-                                            </div>
-                                        )}
-
                                         {/* Selector de cantidad para nueva compra */}
                                         <div className="bg-white border-2 border-gray-200 rounded-xl p-6 shadow-lg">
                                             <label className="block text-sm font-semibold text-gray-700 mb-3">
@@ -254,8 +220,21 @@ export default function ProductPage({ product }) {
                                                 }`}
                                             >
                                                 <span className="relative z-10 flex items-center justify-center gap-3">
-                                                    <svg className="w-6 h-6 transition-transform group-hover:rotate-12" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 3h2l.4 2M7 13h10l4-8H5.4m0 0L7 13m0 0l-2.5 5M7 13l2.5 5m6-5v6a2 2 0 11-4 0v-6m4 0V9a2 2 0 10-4 0v4.01" />
+                                                    <svg 
+                                                        xmlns="http://www.w3.org/2000/svg" 
+                                                        width="24" 
+                                                        height="24" 
+                                                        viewBox="0 0 24 24" 
+                                                        fill="none" 
+                                                        stroke="currentColor" 
+                                                        strokeWidth="2" 
+                                                        strokeLinecap="round" 
+                                                        strokeLinejoin="round" 
+                                                        className="w-6 h-6 transition-transform group-hover:rotate-12"
+                                                    >
+                                                        <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                                                        <path d="M6.331 8h11.339a2 2 0 0 1 1.977 2.304l-1.255 8.152a3 3 0 0 1 -2.966 2.544h-6.852a3 3 0 0 1 -2.965 -2.544l-1.255 -8.152a2 2 0 0 1 1.977 -2.304z" />
+                                                        <path d="M9 11v-5a3 3 0 0 1 6 0v5" />
                                                     </svg>
                                                     {quantity === 1 ? 'Agregar al Carrito' : `Agregar ${quantity} al Carrito`}
                                                 </span>
