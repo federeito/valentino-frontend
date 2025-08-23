@@ -36,10 +36,13 @@ export default function Cart() {
     const [paymentMethod, setPaymentMethod] = useState('mercadopago'); // Estado para el método de pago
 
     useEffect(() => {
-        if (cartProducts.length > 0) {
-            axios.post('/api/cart', { ids: cartProducts }).then(response => {
-                setProducts(response.data)
-            })
+        // Obtener un array de IDs únicos del carrito
+        const uniqueIds = Array.from(new Set(cartProducts.map(item => item.id)));
+    
+        if (uniqueIds.length > 0) {
+            axios.post('/api/cart', { ids: uniqueIds }).then(response => {
+                setProducts(response.data);
+            });
         } else {
             setProducts([]);
         }
