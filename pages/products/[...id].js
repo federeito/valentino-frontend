@@ -14,18 +14,43 @@ export default function ProductPage({ product }) {
     const [selectedImage, setSelectedImage] = useState(0);
     const [isVisible, setIsVisible] = useState(false);
     const [quantity, setQuantity] = useState(1);
+    const [selectedColor, setSelectedColor] = useState(null);
     
     const countInCart = cartProducts.filter(id => id === product._id).length;
 
     useEffect(() => {
         setIsVisible(true);
-    }, []);
+        // Establecer el primer color como seleccionado por defecto si hay colores disponibles
+        if (product.colors && product.colors.length > 0) {
+            setSelectedColor(product.colors[0]);
+        }
+    }, [product.colors]);
 
     const handleAddToCart = () => {
-        for (let i = 0; i < quantity; i++) {
-            addProduct(product._id);
+        // Verificar si hay colores disponibles y si se ha seleccionado uno
+        if (product.colors && product.colors.length > 0 && !selectedColor) {
+            toast.error('Por favor selecciona un color', {
+                style: {
+                    background: 'linear-gradient(135deg, #f093fb 0%, #f5576c 100%)',
+                    color: 'white',
+                    borderRadius: '12px',
+                    fontWeight: 'bold'
+                }
+            });
+            return;
         }
-        toast.success(`¡${quantity} ${product.Título} añadido(s) al carrito!`, {
+
+        for (let i = 0; i < quantity; i++) {
+            // Si hay colores, agregar el producto con el color seleccionado
+            if (selectedColor) {
+                addProduct(product._id, { color: selectedColor });
+            } else {
+                addProduct(product._id);
+            }
+        }
+        
+        const colorText = selectedColor ? ` en color ${selectedColor.name}` : '';
+        toast.success(`¡${quantity} ${product.Título} agregado(s) al carrito${colorText}!`, {
             style: {
                 background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
                 color: 'white',
@@ -46,6 +71,72 @@ export default function ProductPage({ product }) {
                 fontWeight: 'bold'
             }
         });
+    };
+
+    const ColorSelector = () => {
+        if (!product.colors || product.colors.length === 0) {
+            return null;
+        }
+
+        return (
+            <div className="mb-6">
+                <h2 className="text-lg font-semibold text-gray-900 mb-4 flex items-center gap-2">
+                    <span role="img" aria-label="paleta" className="text-xl">🎨</span>
+                    Colores Disponibles
+                </h2>
+                
+                <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3">
+                    {product.colors.map((color, index) => (
+                        <div 
+                            key={index}
+                            onClick={() => setSelectedColor(color)}
+                            className={`relative cursor-pointer group transition-all duration-300 ${
+                                selectedColor && selectedColor.name === color.name
+                                    ? 'ring-4 ring-primary ring-offset-2' 
+                                    : 'hover:ring-2 hover:ring-primary/50 hover:ring-offset-1'
+                            } rounded-xl overflow-hidden`}
+                        >
+                            <div className="bg-white border-2 border-gray-200 rounded-xl p-4 flex flex-col items-center space-y-3 transition-all duration-300 group-hover:shadow-lg">
+                                {/* Círculo de color */}
+                                <div 
+                                    className="w-12 h-12 rounded-full border-4 border-white shadow-lg ring-1 ring-gray-200"
+                                    style={{ backgroundColor: color.code }}
+                                />
+                                
+                                {/* Nombre del color */}
+                                <span className="text-sm font-medium text-gray-700 text-center leading-tight">
+                                    {color.name}
+                                </span>
+                                
+                                {/* Indicador de selección */}
+                                {selectedColor && selectedColor.name === color.name && (
+                                    <div className="absolute -top-2 -right-2 bg-primary rounded-full p-1">
+                                        <svg className="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
+                                        </svg>
+                                    </div>
+                                )}
+                            </div>
+                        </div>
+                    ))}
+                </div>
+
+                {/* Información del color seleccionado */}
+                {selectedColor && (
+                    <div className="mt-4 bg-gradient-to-r from-primary/10 to-secondary/10 rounded-xl p-4">
+                        <div className="flex items-center gap-3">
+                            <div 
+                                className="w-6 h-6 rounded-full border-2 border-white shadow-sm"
+                                style={{ backgroundColor: selectedColor.code }}
+                            />
+                            <span className="text-sm font-medium text-gray-700">
+                                Color seleccionado: <span className="text-primary font-semibold">{selectedColor.name}</span>
+                            </span>
+                        </div>
+                    </div>
+                )}
+            </div>
+        );
     };
 
     if (product) {
@@ -157,6 +248,9 @@ export default function ProductPage({ product }) {
                                     <p className="text-green-600 font-semibold mt-2">✨ Envío gratis en pedidos mayores a $50,000</p>
                                 </div>
 
+                                {/* Selector de colores */}
+                                <ColorSelector />
+
                                 {/* Descripción */}
                                 <div className="mb-8">
                                     <h3 className="text-xl font-semibold text-gray-900 mb-4 flex items-center gap-2">
@@ -204,9 +298,6 @@ export default function ProductPage({ product }) {
                                                 >
                                                     +
                                                 </button>
-                                                <span className="text-sm text-gray-500 ml-2">
-                                                    Disponibles: {product.stock - countInCart}
-                                                </span>
                                             </div>
 
                                             {/* Botón principal de compra */}

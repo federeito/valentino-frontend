@@ -1,6 +1,7 @@
 import { CartContext } from "@/lib/CartContext";
 import { mongooseconnect } from "@/lib/mongoose";
 import { Product } from "@/models/Product";
+import { Category } from "@/models/Category";
 import Link from "next/link";
 import { useContext, useState, useEffect, useCallback } from "react";
 import toast from "react-hot-toast";
@@ -9,15 +10,22 @@ const formatPrice = (price) => {
     return price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 };
 
-export default function Products({ allProducts }) {
+export default function Products({ allProducts = [], categories = [] }) {
     const { addProduct } = useContext(CartContext);
     const [visibleProducts, setVisibleProducts] = useState([]);
     const [hoveredProduct, setHoveredProduct] = useState(null);
     const [sortBy, setSortBy] = useState('newest'); // 'newest', 'price-low', 'price-high', 'name'
     const [searchTerm, setSearchTerm] = useState('');
+    const [selectedCategory, setSelectedCategory] = useState('');
 
     const getFilteredProducts = useCallback(() => {
         let filtered = allProducts || [];
+
+        // Debug: Log first product to see its structure
+        if (allProducts && allProducts.length > 0 && selectedCategory) {
+            console.log('First product structure:', allProducts[0]);
+            console.log('Selected category:', selectedCategory);
+        }
 
         // Filtrar por búsqueda
         if (searchTerm) {
@@ -25,6 +33,32 @@ export default function Products({ allProducts }) {
                 product.Título.toLowerCase().includes(searchTerm.toLowerCase()) ||
                 product.Descripción.toLowerCase().includes(searchTerm.toLowerCase())
             );
+        }
+
+        // Filtrar por categoría
+        if (selectedCategory) {
+            filtered = filtered.filter(product => {
+                // Use the correct field name from your Product model: 'Categoria'
+                const productCategory = product.Categoria;
+                
+                console.log('Product category:', {
+                    productId: product._id,
+                    title: product.Título,
+                    categoria: productCategory
+                });
+                
+                if (!productCategory) return false;
+                
+                // If category is an object with _id (populated)
+                if (typeof productCategory === 'object' && productCategory._id) {
+                    return productCategory._id === selectedCategory;
+                }
+                
+                // If category is just a string ID
+                return productCategory === selectedCategory;
+            });
+            
+            console.log('Filtered products count:', filtered.length);
         }
 
         // Ordenar
@@ -43,7 +77,7 @@ export default function Products({ allProducts }) {
         }
 
         return filtered;
-    }, [allProducts, searchTerm, sortBy]);
+    }, [allProducts, searchTerm, sortBy, selectedCategory]);
 
     // Animación de aparición escalonada
     useEffect(() => {
@@ -126,6 +160,18 @@ export default function Products({ allProducts }) {
 
                             {/* Filtros */}
                             <div className="flex gap-4">
+                                <select
+                                    value={selectedCategory}
+                                    onChange={(e) => setSelectedCategory(e.target.value)}
+                                    className="px-4 py-3 border-2 border-gray-200 rounded-xl bg-white focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary transition-all duration-300"
+                                >
+                                    <option value="">Todas las categorías</option>
+                                    {Array.isArray(categories) && categories.map(category => (
+                                        <option key={category._id} value={category._id}>
+                                            {category.name}
+                                        </option>
+                                    ))}
+                                </select>
                                 <select
                                     value={sortBy}
                                     onChange={(e) => setSortBy(e.target.value)}
@@ -285,6 +331,7 @@ export default function Products({ allProducts }) {
                                 onClick={() => {
                                     setSearchTerm('');
                                     setSortBy('newest');
+                                    setSelectedCategory('');
                                 }}
                                 className="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-primary to-secondary text-white font-semibold rounded-xl hover:shadow-lg hover:shadow-primary/30 transition-all duration-300 hover:scale-105"
                             >
@@ -318,11 +365,34 @@ export default function Products({ allProducts }) {
 }
 
 export async function getServerSideProps() {
-    await mongooseconnect();
-    const allProducts = await Product.find({}, null, { sort: { _id: 1 } });
-    return {
-        props: {
-            allProducts: JSON.parse(JSON.stringify(allProducts))
+    try {
+        await mongooseconnect();
+        
+        const [allProducts, categories] = await Promise.all([
+            Product.find({}).populate('Categoria'), // Use correct field name with capital C
+            Category.find({})
+        ]);
+        
+        console.log('Server - Products count:', allProducts.length);
+        console.log('Server - Categories count:', categories.length);
+        if (allProducts.length > 0) {
+            console.log('Server - First product keys:', Object.keys(allProducts[0]));
+            console.log('Server - First product:', allProducts[0]);
+        }
+        
+        return {
+            props: {
+                allProducts: JSON.parse(JSON.stringify(allProducts)),
+                categories: JSON.parse(JSON.stringify(categories))
+            }
+        }
+    } catch (error) {
+        console.error("Error fetching data:", error);
+        return {
+            props: {
+                allProducts: [],
+                categories: []
+            }
         }
     }
 }
