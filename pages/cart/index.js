@@ -36,12 +36,37 @@ export default function Cart() {
     const [paymentMethod, setPaymentMethod] = useState('mercadopago'); // Estado para el método de pago
 
     useEffect(() => {
-        // Obtener un array de IDs únicos del carrito
-        const uniqueIds = Array.from(new Set(cartProducts.map(item => item.id)));
-    
+        // CORRECCIÓN: cartProducts son strings directamente, no objetos
+        const uniqueIds = Array.from(new Set(cartProducts));
+
         if (uniqueIds.length > 0) {
             axios.post('/api/cart', { ids: uniqueIds }).then(response => {
-                setProducts(response.data);
+                const validProducts = response.data;
+                setProducts(validProducts);
+
+                // Limpia productos que ya no existen en la base de datos
+                const validProductIds = validProducts.map(p => p._id);
+                const invalidIds = uniqueIds.filter(id => !validProductIds.includes(id));
+
+                // Remueve productos inválidos del carrito
+                if (invalidIds.length > 0) {
+                    console.log('Removiendo productos inválidos del carrito:', invalidIds);
+                    let updatedCartProducts = [...cartProducts];
+
+                    invalidIds.forEach(invalidId => {
+                        // Filtra todas las instancias del ID inválido
+                        updatedCartProducts = updatedCartProducts.filter(id => id !== invalidId);
+                    });
+
+                    // Actualiza el carrito con productos válidos únicamente
+                    if (updatedCartProducts.length !== cartProducts.length) {
+                        setCartProducts(updatedCartProducts);
+                    }
+                }
+            }).catch(error => {
+                console.error('Error fetching cart products:', error);
+                // En caso de error de red, mantén los productos pero marca como error
+                setProducts([]);
             });
         } else {
             setProducts([]);
@@ -84,7 +109,7 @@ export default function Cart() {
     }, [products, cartProducts]);
 
     useEffect(() => {
-        const isComplete = address && city && state && zip && 
+        const isComplete = address && city && state && zip &&
             (session || (isGuest && guestEmail && guestName));
         setFormComplete(isComplete);
     }, [address, city, state, zip, guestEmail, guestName, isGuest, session]);
@@ -223,7 +248,7 @@ export default function Cart() {
 
     if (!session && isGuest) {
         const guestInfoComplete = guestEmail && guestName;
-        
+
         return (
             <section className="flex justify-between max-md:flex-col md:space-x-4 px-4 md:px-6 pb-8">
                 <div className="md:w-2/3">
@@ -360,8 +385,8 @@ export default function Cart() {
                             <div className="grid grid-cols-12 gap-3 md:gap-5">
                                 <div className="col-span-12">
                                     <label className="mb-1 block text-md font-medium text-gray-700">Email</label>
-                                    <input 
-                                        type="email" 
+                                    <input
+                                        type="email"
                                         className="block w-full rounded-md p-3 border border-gray-300"
                                         value={guestEmail}
                                         onChange={e => setGuestEmail(e.target.value)}
@@ -370,7 +395,7 @@ export default function Cart() {
                                 </div>
                                 <div className="col-span-12">
                                     <label className="mb-1 block text-md font-medium text-gray-700">Nombre Completo</label>
-                                    <input 
+                                    <input
                                         type="text"
                                         className="block w-full rounded-md p-3 border border-gray-300"
                                         value={guestName}
@@ -448,8 +473,8 @@ export default function Cart() {
                                                 ${(!isCartValid || cartProducts.length === 0 || !formComplete) ? 'bg-gray-300 text-gray-500 cursor-not-allowed' : 'bg-primary text-white hover:bg-purple-300'}`}
                                             >
                                                 {!formComplete ? 'Complete todos los campos para continuar' :
-                                                    paymentMethod === 'mercadopago' ? 
-                                                        'Proceder al Pago con Mercado Pago' : 
+                                                    paymentMethod === 'mercadopago' ?
+                                                        'Proceder al Pago con Mercado Pago' :
                                                         'Confirmar Pedido (Pagar con Transferencia)'}
                                             </button>
                                         </div>
@@ -681,8 +706,8 @@ export default function Cart() {
                                             ${(!isCartValid || cartProducts.length === 0 || !formComplete) ? 'bg-gray-300 text-gray-500 cursor-not-allowed' : 'bg-primary text-white hover:bg-purple-300'}`}
                                         >
                                             {!formComplete ? 'Complete todos los campos para continuar' :
-                                                paymentMethod === 'mercadopago' ? 
-                                                    'Proceder al Pago con Mercado Pago' : 
+                                                paymentMethod === 'mercadopago' ?
+                                                    'Proceder al Pago con Mercado Pago' :
                                                     'Confirmar Pedido (Pagar con Transferencia)'}
                                         </button>
                                     </div>
@@ -707,7 +732,7 @@ export default function Cart() {
                      text-md font-medium text-white hover:bg-transparent hover:text-primary focus:ring-3 focus:outline-hidden"
                     href="#"
                 ></button>
-                    Continuar con el inicio de sesión de Google
+                Continuar con el inicio de sesión de Google
             </div>
         </div>
     );
