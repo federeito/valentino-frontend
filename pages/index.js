@@ -5,7 +5,7 @@ import { mongooseconnect } from "@/lib/mongoose";
 import { Product } from "@/models/Product";
 import { useEffect, useState } from "react";
 
-export default function Home({ featuredProduct, newProducts, collectionProduct }) {
+export default function Home({ featuredProducts, newProducts, collectionProduct }) {
     const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
     const [isVisible, setIsVisible] = useState(false);
 
@@ -94,7 +94,7 @@ export default function Home({ featuredProduct, newProducts, collectionProduct }
             }`}>
                 {/* Hero Section */}
                 <section className="relative">
-                    <Hero product={featuredProduct} />
+                    <Hero product={featuredProducts[0]} secondProduct={featuredProducts[1]} />
                 </section>
 
                 {/* Elegant divider with gradient */}
@@ -237,16 +237,18 @@ export default function Home({ featuredProduct, newProducts, collectionProduct }
 export async function getServerSideProps() {
     await mongooseconnect();
 
-    const featuredId = '687d9dc349600dbdb138ea4f';
-    const collectionId = '687d9f4b49600dbdb138ea82';
+    const featuredId1 = '68ab98dc13094de877cadfdd';
+    const featuredId2 = '68ab993013094de877cadff7';
+    const collectionId = '68aba14f06a44779c3754538';
 
-    const featuredProduct = await Product.findById(featuredId);
+    const featuredProduct1 = await Product.findById(featuredId1);
+    const featuredProduct2 = await Product.findById(featuredId2);
     const collectionProduct = await Product.findById(collectionId);
     const newProducts = await Product.find({}, null, { sort: { '_id': 1 }, limit: 5 });
 
     return {
         props: {
-            featuredProduct: JSON.parse(JSON.stringify(featuredProduct)),
+            featuredProducts: JSON.parse(JSON.stringify([featuredProduct1, featuredProduct2])),
             newProducts: JSON.parse(JSON.stringify(newProducts)),
             collectionProduct: JSON.parse(JSON.stringify(collectionProduct)),
         }

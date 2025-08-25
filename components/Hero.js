@@ -3,7 +3,7 @@ import Link from "next/link";
 import { useContext, useState, useEffect } from "react";
 import toast from "react-hot-toast";
 
-export default function Hero({ product }) {
+export default function Hero({ product, secondProduct }) {
     const { addProduct } = useContext(CartContext);
     const [isVisible, setIsVisible] = useState(false);
     const [currentImageIndex, setCurrentImageIndex] = useState(0);
@@ -11,17 +11,18 @@ export default function Hero({ product }) {
     useEffect(() => {
         setIsVisible(true);
         
-        // Cambio automático de imágenes
+        // Cambio automático de imágenes para ambos productos
         const interval = setInterval(() => {
-            if (product?.Imagenes?.length > 1) {
+            const totalImages = (product?.Imagenes?.length || 0) + (secondProduct?.Imagenes?.length || 0);
+            if (totalImages > 1) {
                 setCurrentImageIndex((prev) => 
-                    (prev + 1) % product.Imagenes.length
+                    (prev + 1) % totalImages
                 );
             }
         }, 3000);
 
         return () => clearInterval(interval);
-    }, [product]);
+    }, [product, secondProduct]);
 
     function addItemToCart() {
         addProduct(product._id);
@@ -149,12 +150,26 @@ export default function Hero({ product }) {
                                     <div className="flex gap-4 px-4">
                                         {product.Imagenes.map((imagen, index) => (
                                             <div
-                                                key={index}
+                                                key={`product1-${index}`}
                                                 className="flex-shrink-0 w-64 h-72 relative rounded-xl overflow-hidden shadow-lg"
                                             >
                                                 <img
                                                     src={imagen}
                                                     alt={`${product.Título} - Imagen ${index + 1}`}
+                                                    className="h-full w-full object-cover object-center"
+                                                />
+                                                <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent" />
+                                            </div>
+                                        ))}
+                                        {/* Second product images */}
+                                        {secondProduct?.Imagenes?.map((imagen, index) => (
+                                            <div
+                                                key={`product2-${index}`}
+                                                className="flex-shrink-0 w-64 h-72 relative rounded-xl overflow-hidden shadow-lg"
+                                            >
+                                                <img
+                                                    src={imagen}
+                                                    alt={`${secondProduct.Título} - Imagen ${index + 1}`}
                                                     className="h-full w-full object-cover object-center"
                                                 />
                                                 <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent" />
@@ -166,11 +181,11 @@ export default function Hero({ product }) {
                                 {/* Versión desktop de la galería */}
                                 <div className="hidden lg:block">
                                     <div className="flex items-center space-x-6 md:space-x-8">
-                                        {/* Left column */}
+                                        {/* Left column - First product */}
                                         <div className="grid flex-shrink-0 grid-cols-1 gap-y-12">
                                             {product.Imagenes.slice(0, 2).map((imagen, index) => (
                                                 <div 
-                                                    key={index}
+                                                    key={`desktop-product1-${index}`}
                                                     className={`w-72 h-80 overflow-hidden rounded-2xl border-4 border-white shadow-2xl transform transition-all duration-500 hover:scale-110 hover:rotate-3 hover:shadow-3xl ${
                                                         currentImageIndex === index ? 'ring-4 ring-primary animate-pulse' : ''
                                                     }`}
@@ -184,34 +199,35 @@ export default function Hero({ product }) {
                                                         alt={`${product.Título} - Imagen ${index + 1}`} 
                                                         className="h-full w-full object-cover object-center transition-transform duration-700 hover:scale-105" 
                                                     />
-                                                    {/* Gradient overlay */}
                                                     <div className="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-transparent opacity-0 hover:opacity-100 transition-opacity duration-300" />
                                                 </div>
                                             ))}
                                         </div>
                                         
-                                        {/* Right column */}
+                                        {/* Right column - Second product with same effects */}
                                         <div className="grid flex-shrink-0 grid-cols-1 gap-y-12">
-                                            {product.Imagenes.slice(2, 4).map((imagen, index) => (
-                                                <div 
-                                                    key={index + 2}
-                                                    className={`w-72 h-80 overflow-hidden rounded-2xl border-4 border-white shadow-2xl transform transition-all duration-500 hover:scale-110 hover:rotate-3 hover:shadow-3xl ${
-                                                        currentImageIndex === (index + 2) ? 'ring-4 ring-secondary animate-pulse' : ''
-                                                    }`}
-                                                    style={{
-                                                        transform: `rotate(${-2 + index * 2}deg) translate(${-index * 4}px, ${-index * 8}px)`,
-                                                        animationDelay: `${(index + 2) * 0.2}s`
-                                                    }}
-                                                >
-                                                    <img 
-                                                        src={imagen} 
-                                                        alt={`${product.Título} - Imagen ${index + 3}`} 
-                                                        className="h-full w-full object-cover object-center transition-transform duration-700 hover:scale-105" 
-                                                    />
-                                                    {/* Gradient overlay */}
-                                                    <div className="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-transparent opacity-0 hover:opacity-100 transition-opacity duration-300" />
-                                                </div>
-                                            ))}
+                                            {secondProduct?.Imagenes?.slice(0, 2).map((imagen, index) => {
+                                                const adjustedIndex = (product?.Imagenes?.length || 0) + index;
+                                                return (
+                                                    <div 
+                                                        key={`desktop-product2-${index}`}
+                                                        className={`w-72 h-80 overflow-hidden rounded-2xl border-4 border-white shadow-2xl transform transition-all duration-500 hover:scale-110 hover:rotate-3 hover:shadow-3xl ${
+                                                            currentImageIndex === adjustedIndex ? 'ring-4 ring-secondary animate-pulse' : ''
+                                                        }`}
+                                                        style={{
+                                                            transform: `rotate(${-2 + index * 2}deg) translate(${-index * 4}px, ${-index * 8}px)`,
+                                                            animationDelay: `${(index + 2) * 0.2}s`
+                                                        }}
+                                                    >
+                                                        <img 
+                                                            src={imagen} 
+                                                            alt={`${secondProduct.Título} - Imagen ${index + 1}`} 
+                                                            className="h-full w-full object-cover object-center transition-transform duration-700 hover:scale-105" 
+                                                        />
+                                                        <div className="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-transparent opacity-0 hover:opacity-100 transition-opacity duration-300" />
+                                                    </div>
+                                                );
+                                            })}
                                         </div>
                                     </div>
                                     
