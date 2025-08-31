@@ -1,5 +1,6 @@
 import Success from "@/components/Success";
 import { CartContext } from "@/lib/CartContext";
+import { usePriceVisibility } from "@/lib/PriceVisibilityContext";
 import axios from "axios";
 import { signIn, useSession } from "next-auth/react";
 import Link from "next/link";
@@ -28,6 +29,7 @@ const countOfId = (id, cartProducts, color = null) => {
 };
 
 export default function Cart() {
+    const { canViewPrices, isLoading: pricePermissionLoading } = usePriceVisibility();
     const {
         cartProducts,
         removeProduct,
@@ -422,6 +424,50 @@ export default function Cart() {
             </>
         );
     };
+
+    // Show loading state while checking permissions
+    if (pricePermissionLoading) {
+        return (
+            <div className="grid h-screen px-4 bg-white place-content-center">
+                <div className="text-center">
+                    <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto mb-4"></div>
+                    <p className="text-gray-600">Verificando permisos...</p>
+                </div>
+            </div>
+        );
+    }
+
+    // Restrict cart access if user can't view prices
+    if (!canViewPrices) {
+        return (
+            <div className="grid h-screen px-4 bg-white place-content-center">
+                <div className="text-center max-w-md">
+                    <div className="w-20 h-20 mx-auto bg-gradient-to-br from-yellow-100 to-yellow-200 rounded-full flex items-center justify-center mb-6">
+                        <svg className="w-10 h-10 text-yellow-600" fill="currentColor" viewBox="0 0 20 20">
+                            <path fillRule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clipRule="evenodd" />
+                        </svg>
+                    </div>
+                    <h2 className="text-2xl font-bold text-gray-900 mb-4">
+                        Acceso Restringido
+                    </h2>
+                    <p className="text-gray-600 mb-6">
+                        {!session ? 
+                            'Debes iniciar sesión para acceder al carrito de compras.' :
+                            'Tu cuenta está pendiente de aprobación. Una vez aprobada, podrás ver precios y realizar compras.'
+                        }
+                    </p>
+                    {!session && (
+                        <button
+                            onClick={() => signIn('google')}
+                            className="inline-block rounded-sm border border-primary bg-primary px-12 py-3 text-md font-medium text-white hover:bg-transparent hover:text-primary focus:ring-3 focus:outline-hidden"
+                        >
+                            Iniciar Sesión con Google
+                        </button>
+                    )}
+                </div>
+            </div>
+        );
+    }
 
     if (isSuccess) {
         return <Success />;

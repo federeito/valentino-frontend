@@ -1,4 +1,6 @@
 import { CartContext } from "@/lib/CartContext";
+import { PriceDisplay, CartButton } from "@/components/PriceDisplay";
+import { usePriceVisibility } from "@/lib/PriceVisibilityContext";
 import { mongooseconnect } from "@/lib/mongoose";
 import { Product } from "@/models/Product";
 import Link from "next/link";
@@ -11,6 +13,7 @@ const formatPrice = (price) => {
 
 export default function ProductPage({ product }) {
     const { addProduct, removeProduct, cartProducts } = useContext(CartContext);
+    const { canViewPrices } = usePriceVisibility();
     const [selectedImage, setSelectedImage] = useState(0);
     const [isVisible, setIsVisible] = useState(false);
     const [quantity, setQuantity] = useState(1);
@@ -20,14 +23,12 @@ export default function ProductPage({ product }) {
 
     useEffect(() => {
         setIsVisible(true);
-        // Establecer el primer color como seleccionado por defecto si hay colores disponibles
         if (product.colors && product.colors.length > 0) {
             setSelectedColor(product.colors[0]);
         }
     }, [product.colors]);
 
     const handleAddToCart = () => {
-        // Verificar si hay colores disponibles y si se ha seleccionado uno
         if (product.colors && product.colors.length > 0 && !selectedColor) {
             toast.error('Por favor selecciona un color', {
                 style: {
@@ -41,7 +42,6 @@ export default function ProductPage({ product }) {
         }
 
         for (let i = 0; i < quantity; i++) {
-            // Si hay colores, agregar el producto con el color seleccionado
             if (selectedColor) {
                 addProduct(product._id, { color: selectedColor });
             } else {
@@ -97,18 +97,13 @@ export default function ProductPage({ product }) {
                             } rounded-xl overflow-hidden`}
                         >
                             <div className="bg-white border-2 border-gray-200 rounded-xl p-4 flex flex-col items-center space-y-3 transition-all duration-300 group-hover:shadow-lg">
-                                {/* Círculo de color */}
                                 <div 
                                     className="w-12 h-12 rounded-full border-4 border-white shadow-lg ring-1 ring-gray-200"
                                     style={{ backgroundColor: color.code }}
                                 />
-                                
-                                {/* Nombre del color */}
                                 <span className="text-sm font-medium text-gray-700 text-center leading-tight">
                                     {color.name}
                                 </span>
-                                
-                                {/* Indicador de selección */}
                                 {selectedColor && selectedColor.name === color.name && (
                                     <div className="absolute -top-2 -right-2 bg-primary rounded-full p-1">
                                         <svg className="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -121,7 +116,6 @@ export default function ProductPage({ product }) {
                     ))}
                 </div>
 
-                {/* Información del color seleccionado */}
                 {selectedColor && (
                     <div className="mt-4 bg-gradient-to-r from-primary/10 to-secondary/10 rounded-xl p-4">
                         <div className="flex items-center gap-3">
@@ -142,7 +136,6 @@ export default function ProductPage({ product }) {
     if (product) {
         return (
             <>
-                {/* Background decorativo */}
                 <div className="fixed inset-0 overflow-hidden pointer-events-none -z-10">
                     <div className="absolute top-20 left-10 w-96 h-96 bg-gradient-to-br from-blue-100/40 to-purple-100/40 rounded-full blur-3xl animate-pulse" />
                     <div className="absolute bottom-20 right-10 w-80 h-80 bg-gradient-to-br from-pink-100/40 to-orange-100/40 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '2s' }} />
@@ -150,7 +143,6 @@ export default function ProductPage({ product }) {
 
                 <section className="relative mt-20 md:mt-6 px-4 md:px-8 lg:px-12">
                     <div className="max-w-7xl mx-auto">
-                        {/* Breadcrumb */}
                         <nav className="flex mb-8" aria-label="Breadcrumb">
                             <ol className="inline-flex items-center space-x-1 md:space-x-3">
                                 <li className="inline-flex items-center">
@@ -181,11 +173,9 @@ export default function ProductPage({ product }) {
                         </nav>
 
                         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16">
-                            {/* Galería de imágenes */}
                             <div className={`transform transition-all duration-1000 ${
                                 isVisible ? 'translate-x-0 opacity-100' : '-translate-x-10 opacity-0'
                             }`}>
-                                {/* Imagen principal */}
                                 <div className="aspect-square overflow-hidden rounded-2xl border-4 border-white shadow-2xl bg-gradient-to-br from-gray-50 to-gray-100 mb-6">
                                     <img 
                                         src={product.Imagenes[selectedImage]} 
@@ -194,9 +184,8 @@ export default function ProductPage({ product }) {
                                     />
                                 </div>
 
-                                {/* Miniaturas */}
-                                <div className="grid grid-cols-3 gap-4">
-                                    {product.Imagenes.slice(0, 3).map((image, index) => (
+                                <div className="grid grid-cols-4 gap-3">
+                                    {product.Imagenes.slice(0, 4).map((image, index) => (
                                         <div 
                                             key={index}
                                             className={`aspect-square overflow-hidden rounded-xl cursor-pointer border-3 transition-all duration-300 hover:scale-105 ${
@@ -216,16 +205,13 @@ export default function ProductPage({ product }) {
                                 </div>
                             </div>
 
-                            {/* Información del producto */}
                             <div className={`transform transition-all duration-1000 delay-300 ${
                                 isVisible ? 'translate-x-0 opacity-100' : 'translate-x-10 opacity-0'
                             }`}>
-                                {/* Título del producto */}
                                 <h1 className="text-3xl md:text-4xl font-bold tracking-tight bg-gradient-to-r from-gray-900 via-primary to-secondary bg-clip-text text-transparent mb-6">
                                     {product.Título}
                                 </h1>
 
-                                {/* Rating simulado */}
                                 <div className="flex items-center gap-4 mb-8">
                                     <div className="flex items-center">
                                         {[...Array(5)].map((_, i) => (
@@ -237,21 +223,23 @@ export default function ProductPage({ product }) {
                                     </div>
                                 </div>
 
-                                {/* Precio */}
                                 <div className="bg-gradient-to-r from-primary/10 to-secondary/10 rounded-2xl p-6 mb-8">
                                     <div className="flex items-baseline gap-4">
-                                        <span className="text-4xl font-bold bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
-                                            ${formatPrice(product.Precio)}
-                                        </span>
-                                        <span className="text-gray-600 text-lg">por unidad</span>
+                                        <PriceDisplay 
+                                            price={product.Precio} 
+                                            size="large"
+                                        />
+                                        {canViewPrices && (
+                                            <span className="text-gray-600 text-lg">por unidad</span>
+                                        )}
                                     </div>
-                                    <p className="text-green-600 font-semibold mt-2">✨ Envío gratis en pedidos mayores a $50,000</p>
+                                    {canViewPrices && (
+                                        <p className="text-green-600 font-semibold mt-2">✨ Envío gratis en pedidos mayores a $50,000</p>
+                                    )}
                                 </div>
 
-                                {/* Selector de colores */}
                                 <ColorSelector />
 
-                                {/* Descripción */}
                                 <div className="mb-8">
                                     <h3 className="text-xl font-semibold text-gray-900 mb-4 flex items-center gap-2">
                                         <svg className="w-5 h-5 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -264,95 +252,102 @@ export default function ProductPage({ product }) {
                                     </p>
                                 </div>
 
-                                {/* Controles de cantidad y botones */}
-                                {product.stock > 0 ? (
-                                    <div className="space-y-6">
-                                        {/* Selector de cantidad para nueva compra */}
-                                        <div className="bg-white border-2 border-gray-200 rounded-xl p-6 shadow-lg">
-                                            <label className="block text-sm font-semibold text-gray-700 mb-3">
-                                                Cantidad a agregar:
-                                            </label>
-                                            <div className="flex items-center gap-4 mb-4">
-                                                <button 
-                                                    onClick={() => setQuantity(Math.max(1, quantity - 1))}
-                                                    className="w-12 h-12 rounded-xl bg-gradient-to-r from-gray-100 to-gray-200 flex items-center justify-center text-2xl font-bold text-gray-700 hover:from-gray-200 hover:to-gray-300 transition-all duration-300 hover:scale-110 active:scale-95"
-                                                >
-                                                    −
-                                                </button>
-                                                <input 
-                                                    type="number" 
-                                                    min="1" 
-                                                    max={product.stock - countInCart} 
-                                                    value={quantity}
-                                                    onChange={(e) => setQuantity(Math.min(product.stock - countInCart, Math.max(1, parseInt(e.target.value) || 1)))}
-                                                    className="w-20 h-12 text-center text-xl font-bold border-2 border-gray-200 rounded-xl focus:border-primary focus:outline-none"
-                                                />
-                                                <button 
-                                                    onClick={() => setQuantity(Math.min(product.stock - countInCart, quantity + 1))}
-                                                    disabled={quantity >= (product.stock - countInCart)}
-                                                    className={`w-12 h-12 rounded-xl flex items-center justify-center text-2xl font-bold transition-all duration-300 hover:scale-110 active:scale-95 ${
-                                                        quantity >= (product.stock - countInCart)
-                                                            ? 'bg-gray-100 text-gray-400 cursor-not-allowed'
-                                                            : 'bg-gradient-to-r from-primary to-secondary text-white hover:from-primary/80 hover:to-secondary/80'
+                                {canViewPrices ? (
+                                    product.stock > 0 ? (
+                                        <div className="space-y-6">
+                                            <div className="bg-white border-2 border-gray-200 rounded-xl p-6 shadow-lg">
+                                                <label className="block text-sm font-semibold text-gray-700 mb-3">
+                                                    Cantidad a agregar:
+                                                </label>
+                                                <div className="flex items-center gap-4 mb-4">
+                                                    <button 
+                                                        onClick={() => setQuantity(Math.max(1, quantity - 1))}
+                                                        className="w-12 h-12 rounded-xl bg-gradient-to-r from-gray-100 to-gray-200 flex items-center justify-center text-2xl font-bold text-gray-700 hover:from-gray-200 hover:to-gray-300 transition-all duration-300 hover:scale-110 active:scale-95"
+                                                    >
+                                                        −
+                                                    </button>
+                                                    <input 
+                                                        type="number" 
+                                                        min="1" 
+                                                        max={product.stock - countInCart} 
+                                                        value={quantity}
+                                                        onChange={(e) => setQuantity(Math.min(product.stock - countInCart, Math.max(1, parseInt(e.target.value) || 1)))}
+                                                        className="w-20 h-12 text-center text-xl font-bold border-2 border-gray-200 rounded-xl focus:border-primary focus:outline-none"
+                                                    />
+                                                    <button 
+                                                        onClick={() => setQuantity(Math.min(product.stock - countInCart, quantity + 1))}
+                                                        disabled={quantity >= (product.stock - countInCart)}
+                                                        className={`w-12 h-12 rounded-xl flex items-center justify-center text-2xl font-bold transition-all duration-300 hover:scale-110 active:scale-95 ${
+                                                            quantity >= (product.stock - countInCart)
+                                                                ? 'bg-gray-100 text-gray-400 cursor-not-allowed'
+                                                                : 'bg-gradient-to-r from-primary to-secondary text-white hover:from-primary/80 hover:to-secondary/80'
+                                                        }`}
+                                                    >
+                                                        +
+                                                    </button>
+                                                </div>
+
+                                                <button
+                                                    onClick={handleAddToCart}
+                                                    disabled={quantity > (product.stock - countInCart)}
+                                                    className={`w-full group relative overflow-hidden rounded-xl px-8 py-4 text-lg font-bold transition-all duration-300 ${
+                                                        quantity > (product.stock - countInCart)
+                                                            ? 'bg-gray-300 text-gray-500 cursor-not-allowed'
+                                                            : 'bg-gradient-to-r from-primary to-secondary text-white shadow-lg shadow-primary/30 hover:shadow-xl hover:shadow-primary/50 hover:scale-105 active:scale-95'
                                                     }`}
                                                 >
-                                                    +
+                                                    <span className="relative z-10 flex items-center justify-center gap-3">
+                                                        <svg 
+                                                            xmlns="http://www.w3.org/2000/svg" 
+                                                            width="24" 
+                                                            height="24" 
+                                                            viewBox="0 0 24 24" 
+                                                            fill="none" 
+                                                            stroke="currentColor" 
+                                                            strokeWidth="2" 
+                                                            strokeLinecap="round" 
+                                                            strokeLinejoin="round" 
+                                                            className="w-6 h-6 transition-transform group-hover:rotate-12"
+                                                        >
+                                                            <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                                                            <path d="M6.331 8h11.339a2 2 0 0 1 1.977 2.304l-1.255 8.152a3 3 0 0 1 -2.966 2.544h-6.852a3 3 0 0 1 -2.965 -2.544l-1.255 -8.152a2 2 0 0 1 1.977 -2.304z" />
+                                                            <path d="M9 11v-5a3 3 0 0 1 6 0v5" />
+                                                        </svg>
+                                                        {quantity === 1 ? 'Agregar al Carrito' : `Agregar ${quantity} al Carrito`}
+                                                    </span>
+                                                    <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/25 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-700" />
                                                 </button>
                                             </div>
-
-                                            {/* Botón principal de compra */}
-                                            <button
-                                                onClick={handleAddToCart}
-                                                disabled={quantity > (product.stock - countInCart)}
-                                                className={`w-full group relative overflow-hidden rounded-xl px-8 py-4 text-lg font-bold transition-all duration-300 ${
-                                                    quantity > (product.stock - countInCart)
-                                                        ? 'bg-gray-300 text-gray-500 cursor-not-allowed'
-                                                        : 'bg-gradient-to-r from-primary to-secondary text-white shadow-lg shadow-primary/30 hover:shadow-xl hover:shadow-primary/50 hover:scale-105 active:scale-95'
-                                                }`}
-                                            >
-                                                <span className="relative z-10 flex items-center justify-center gap-3">
-                                                    <svg 
-                                                        xmlns="http://www.w3.org/2000/svg" 
-                                                        width="24" 
-                                                        height="24" 
-                                                        viewBox="0 0 24 24" 
-                                                        fill="none" 
-                                                        stroke="currentColor" 
-                                                        strokeWidth="2" 
-                                                        strokeLinecap="round" 
-                                                        strokeLinejoin="round" 
-                                                        className="w-6 h-6 transition-transform group-hover:rotate-12"
-                                                    >
-                                                        <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
-                                                        <path d="M6.331 8h11.339a2 2 0 0 1 1.977 2.304l-1.255 8.152a3 3 0 0 1 -2.966 2.544h-6.852a3 3 0 0 1 -2.965 -2.544l-1.255 -8.152a2 2 0 0 1 1.977 -2.304z" />
-                                                        <path d="M9 11v-5a3 3 0 0 1 6 0v5" />
-                                                    </svg>
-                                                    {quantity === 1 ? 'Agregar al Carrito' : `Agregar ${quantity} al Carrito`}
-                                                </span>
-                                                {/* Shimmer effect */}
-                                                <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/25 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-700" />
-                                            </button>
                                         </div>
-                                    </div>
+                                    ) : (
+                                        <div className="space-y-4">
+                                            <div className="bg-red-50 border-2 border-red-200 rounded-xl p-6 text-center">
+                                                <div className="w-16 h-16 mx-auto bg-red-100 rounded-full flex items-center justify-center mb-4">
+                                                    <svg className="w-8 h-8 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                                                    </svg>
+                                                </div>
+                                                <h3 className="text-xl font-bold text-red-800 mb-2">
+                                                    ¡Producto Agotado!
+                                                </h3>
+                                                <p className="text-red-600">
+                                                    Este producto no está disponible en este momento.
+                                                </p>
+                                            </div>
+                                        </div>
+                                    )
                                 ) : (
                                     <div className="space-y-4">
-                                        <div className="bg-red-50 border-2 border-red-200 rounded-xl p-6 text-center">
-                                            <div className="w-16 h-16 mx-auto bg-red-100 rounded-full flex items-center justify-center mb-4">
-                                                <svg className="w-8 h-8 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                                                </svg>
-                                            </div>
-                                            <h3 className="text-xl font-bold text-red-800 mb-2">
-                                                ¡Producto Agotado!
-                                            </h3>
-                                            <p className="text-red-600">
-                                                Este producto no está disponible en este momento.
-                                            </p>
-                                        </div>
+                                        <CartButton
+                                            productId={product._id}
+                                            productTitle={product.Título}
+                                            stock={product.stock}
+                                            onAddToCart={handleAddToCart}
+                                            className="h-16 text-lg"
+                                        />
                                     </div>
                                 )}
 
-                                {/* Características del producto */}
                                 <div className="mt-8 bg-gradient-to-r from-gray-50 to-blue-50 rounded-2xl p-6">
                                     <h3 className="text-lg font-semibold text-gray-900 mb-4 flex items-center gap-2">
                                         <svg className="w-5 h-5 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -380,7 +375,6 @@ export default function ProductPage({ product }) {
                                     </ul>
                                 </div>
 
-                                {/* Botones secundarios */}
                                 <div className="flex gap-4 mt-8">
                                     <button className="flex-1 border-2 border-gray-300 rounded-xl px-6 py-3 text-gray-700 font-semibold hover:border-primary hover:text-primary transition-all duration-300 flex items-center justify-center gap-2">
                                         <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
