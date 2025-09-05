@@ -254,6 +254,13 @@ export default function Products({ allProducts = [], categories = [] }) {
                                                 </h3>
                                             </Link>
 
+                                            {/* Product Code */}
+                                            <div className="mb-3">
+                                                <span className="text-xs font-medium text-gray-500 bg-gray-100 px-2 py-1 rounded-md">
+                                                    COD. {product.código || 'N/A'}
+                                                </span>
+                                            </div>
+
                                             {/* Precio con control de visibilidad */}
                                             <div className="mb-4">
                                                 <PriceDisplay 

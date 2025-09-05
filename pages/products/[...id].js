@@ -212,6 +212,18 @@ export default function ProductPage({ product }) {
                                     {product.Título}
                                 </h1>
 
+                                {/* Product Code */}
+                                <div className="mb-4">
+                                    <div className="inline-flex items-center gap-1.5 bg-gray-50 border border-gray-200 rounded-md px-2.5 py-1">
+                                        <svg className="w-3 h-3 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 20l4-16m2 16l4-16M6 9h14M4 15h14" />
+                                        </svg>
+                                        <span className="text-xs font-medium text-gray-600">
+                                            COD. <span className="text-gray-800">{product.código || 'N/A'}</span>
+                                        </span>
+                                    </div>
+                                </div>
+
                                 <div className="flex items-center gap-4 mb-8">
                                     <div className="flex items-center">
                                         {[...Array(5)].map((_, i) => (

@@ -332,6 +332,13 @@ export default function Cart() {
                                 {product.Título}
                             </h3>
 
+                            {/* Product Code */}
+                            <div className="flex items-center gap-2 mt-1">
+                                <span className="text-xs text-gray-600">
+                                    COD: <span className="font-medium">{product.código || 'N/A'}</span>
+                                </span>
+                            </div>
+
                             {/* Mostrar color si existe */}
                             {color && (
                                 <div className="flex items-center gap-2 mt-1">
