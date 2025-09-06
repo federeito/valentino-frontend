@@ -40,30 +40,22 @@ export default function Header() {
             {/* Animated background blur effect */}
             <div className="fixed top-0 left-0 w-full h-20 bg-gradient-to-r from-blue-50 via-purple-50 to-pink-50 opacity-30 blur-3xl -z-10" />
             
-            <header className={`bg-white/90 backdrop-blur-xl border-b border-gradient-to-r from-primary/20 to-secondary/20 sticky top-0 z-40 transition-all duration-500 ${
-                isScrolled ? 'shadow-lg shadow-primary/10' : ''
+            <header className={`backdrop-blur-xl border-b border-gradient-to-r from-primary/20 to-secondary/20 sticky top-0 z-40 transition-all duration-500 ${
+                isScrolled ? 'bg-white shadow-lg shadow-primary/10' : 'bg-white/90'
             }`}>
                 <div className="mx-auto flex h-16 max-w-screen-2xl items-center gap-8 px-4 sm:px-6 lg:px-8 text-lg">
                     {/* Logo animado */}
                     <Link className="text-primary flex items-center gap-2 group transition-all duration-300 hover:scale-105" href="/">
                         <span className="sr-only">Home</span>
                         <div className="relative">
-                            <svg 
-                                xmlns="http://www.w3.org/2000/svg" 
-                                fill="none" 
-                                viewBox="0 0 24 24" 
-                                strokeWidth="1.5" 
-                                stroke="currentColor" 
-                                className="size-6 transition-all duration-300 group-hover:rotate-12 group-hover:text-secondary"
-                            >
-                                <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 21v-7.5a.75.75 0 0 1 .75-.75h3a.75.75 0 0 1 .75.75V21m-4.5 0H2.36m11.14 0H18m0 0h3.64m-1.39 0V9.349M3.75 21V9.349m0 0a3.001 3.001 0 0 0 3.75-.615A2.993 2.993 0 0 0 9.75 9.75c.896 0 1.7-.393 2.25-1.016a2.993 2.993 0 0 0 2.25 1.016c.896 0 1.7-.393 2.25-1.015a3.001 3.001 0 0 0 3.75.614m-16.5 0a3.004 3.004 0 0 1-.621-4.72l1.189-1.19A1.5 1.5 0 0 1 5.378 3h13.243a1.5 1.5 0 0 1 1.06.44l1.19 1.189a3 3 0 0 1-.621 4.72M6.75 18h3.75a.75.75 0 0 0 .75-.75V13.5a.75.75 0 0 0-.75-.75H6.75a.75.75 0 0 0-.75.75v3.75c0 .414.336.75.75.75Z" />
-                            </svg>
+                            <img 
+                                src="https://res.cloudinary.com/djuk4a84p/image/upload/v1757197833/logo_valentino_y57cmb.png"
+                                alt="Valentino Paris Logo"
+                                className="h-12 w-auto transition-all duration-300 group-hover:rotate-1"
+                            />
                             {/* Sparkle effect */}
                             <div className="absolute -top-1 -right-1 w-2 h-2 bg-secondary rounded-full animate-ping opacity-75" />
                         </div>
-                        <span className="font-bold bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
-                            Valentino PARIS
-                        </span>
                     </Link>
 
                     <div className="flex flex-1 items-center justify-end md:justify-between">
