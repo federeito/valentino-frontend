@@ -20,6 +20,7 @@ export default function ProductPage({ product }) {
     const [selectedColor, setSelectedColor] = useState(null);
     
     const countInCart = cartProducts.filter(id => id === product._id).length;
+    const productImages = product.Imagenes?.slice(0, 6) || [];
 
     useEffect(() => {
         setIsVisible(true);
@@ -176,33 +177,72 @@ export default function ProductPage({ product }) {
                             <div className={`transform transition-all duration-1000 ${
                                 isVisible ? 'translate-x-0 opacity-100' : '-translate-x-10 opacity-0'
                             }`}>
-                                <div className="aspect-square overflow-hidden rounded-2xl border-4 border-white shadow-2xl bg-gradient-to-br from-gray-50 to-gray-100 mb-6">
+                                {/* Main image display with navigation */}
+                                <div className="relative aspect-square overflow-hidden rounded-2xl border-4 border-white shadow-2xl bg-gradient-to-br from-gray-50 to-gray-100 mb-6 group">
                                     <img 
-                                        src={product.Imagenes[selectedImage]} 
+                                        src={productImages[selectedImage] || product.Imagenes[0]} 
                                         alt={product.Título} 
                                         className="w-full h-full object-contain hover:scale-105 transition-transform duration-500" 
                                     />
+                                    
+                                    {/* Navigation arrows for main image - always show if multiple images */}
+                                    {productImages.length > 1 && (
+                                        <>
+                                            <button
+                                                onClick={() => setSelectedImage(selectedImage === 0 ? productImages.length - 1 : selectedImage - 1)}
+                                                className="absolute left-4 top-1/2 transform -translate-y-1/2 bg-white/90 backdrop-blur-sm rounded-full p-3 opacity-60 hover:opacity-100 transition-all duration-300 hover:bg-white hover:scale-110 shadow-lg z-30"
+                                            >
+                                                <svg className="w-6 h-6 text-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+                                                </svg>
+                                            </button>
+                                            <button
+                                                onClick={() => setSelectedImage(selectedImage === productImages.length - 1 ? 0 : selectedImage + 1)}
+                                                className="absolute right-4 top-1/2 transform -translate-y-1/2 bg-white/90 backdrop-blur-sm rounded-full p-3 opacity-60 hover:opacity-100 transition-all duration-300 hover:bg-white hover:scale-110 shadow-lg z-30"
+                                            >
+                                                <svg className="w-6 h-6 text-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                                                </svg>
+                                            </button>
+                                        </>
+                                    )}
                                 </div>
 
-                                <div className="grid grid-cols-4 gap-3">
-                                    {product.Imagenes.slice(0, 4).map((image, index) => (
-                                        <div 
-                                            key={index}
-                                            className={`aspect-square overflow-hidden rounded-xl cursor-pointer border-3 transition-all duration-300 hover:scale-105 ${
-                                                selectedImage === index 
-                                                    ? 'border-primary shadow-lg shadow-primary/30' 
-                                                    : 'border-gray-200 hover:border-primary/50'
-                                            }`}
-                                            onClick={() => setSelectedImage(index)}
-                                        >
-                                            <img 
-                                                src={image} 
-                                                alt={`${product.Título} - Vista ${index + 1}`} 
-                                                className="w-full h-full object-contain bg-white" 
-                                            />
-                                        </div>
-                                    ))}
-                                </div>
+                                {/* Thumbnails grid - enhanced for up to 6 images */}
+                                {productImages.length > 1 && (
+                                    <div className={`grid gap-2 md:gap-3 ${
+                                        productImages.length <= 3 ? 'grid-cols-3' :
+                                        productImages.length <= 4 ? 'grid-cols-4' :
+                                        productImages.length <= 6 ? 'grid-cols-6' : 'grid-cols-6'
+                                    }`}>
+                                        {productImages.map((image, index) => (
+                                            <div 
+                                                key={index}
+                                                className={`relative aspect-square overflow-hidden rounded-lg cursor-pointer border-3 transition-all duration-300 hover:scale-105 ${
+                                                    selectedImage === index 
+                                                        ? 'border-primary shadow-lg shadow-primary/30 ring-2 ring-primary/50' 
+                                                        : 'border-gray-200 hover:border-primary/50 hover:shadow-md'
+                                                }`}
+                                                onClick={() => setSelectedImage(index)}
+                                            >
+                                                <img 
+                                                    src={image} 
+                                                    alt={`${product.Título} - Vista ${index + 1}`} 
+                                                    className="w-full h-full object-contain bg-white transition-transform duration-300 hover:scale-110" 
+                                                />
+                                            </div>
+                                        ))}
+                                    </div>
+                                )}
+
+                                {/* Show message if only one image */}
+                                {productImages.length === 1 && (
+                                    <div className="text-center py-4">
+                                        <span className="text-sm text-gray-500 bg-gray-100 px-3 py-1 rounded-full">
+                                            1 imagen disponible
+                                        </span>
+                                    </div>
+                                )}
                             </div>
 
                             <div className={`transform transition-all duration-1000 delay-300 ${
