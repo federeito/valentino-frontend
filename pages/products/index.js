@@ -200,7 +200,7 @@ export default function Products({ allProducts = [], categories = [] }) {
                     {filteredProducts.length > 0 ? (
                         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-6">
                             {filteredProducts.map((product, index) => {
-                                const productImages = product.Imagenes?.slice(0, 6) || [];
+                                const productImages = product.Imagenes?.slice(0, 12) || [];
                                 const currentIndex = currentImageIndex[product._id] || 0;
                                 
                                 return (

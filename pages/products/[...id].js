@@ -20,7 +20,7 @@ export default function ProductPage({ product }) {
     const [selectedColor, setSelectedColor] = useState(null);
     
     const countInCart = cartProducts.filter(id => id === product._id).length;
-    const productImages = product.Imagenes?.slice(0, 6) || [];
+    const productImages = product.Imagenes?.slice(0, 12) || [];
 
     useEffect(() => {
         setIsVisible(true);
@@ -265,12 +265,14 @@ export default function ProductPage({ product }) {
                                     )}
                                 </div>
 
-                                {/* Thumbnails grid - enhanced for up to 6 images */}
+                                {/* Thumbnails grid - enhanced for up to 12 images */}
                                 {productImages.length > 1 && (
                                     <div className={`grid gap-2 md:gap-3 ${
                                         productImages.length <= 3 ? 'grid-cols-3' :
                                         productImages.length <= 4 ? 'grid-cols-4' :
-                                        productImages.length <= 6 ? 'grid-cols-6' : 'grid-cols-6'
+                                        productImages.length <= 6 ? 'grid-cols-6' :
+                                        productImages.length <= 8 ? 'grid-cols-4' :
+                                        productImages.length <= 12 ? 'grid-cols-6' : 'grid-cols-6'
                                     }`}>
                                         {productImages.map((image, index) => (
                                             <div 
