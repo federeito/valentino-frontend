@@ -318,6 +318,47 @@ export default function Products({ allProducts = [], categories = [] }) {
                                                     </span>
                                                 </div>
 
+                                                {/* Color availability indicator */}
+                                                {product.colors && product.colors.length > 0 && (
+                                                    <div className="mb-3">
+                                                        <div className="flex items-center gap-2 mb-2">
+                                                            <span className="text-xs font-medium text-gray-600">Colores:</span>
+                                                            <div className="flex gap-1">
+                                                                {product.colors.slice(0, 4).map((color, colorIndex) => {
+                                                                    const isAvailable = color.available !== false;
+                                                                    return (
+                                                                        <div key={colorIndex} className="relative">
+                                                                            <div 
+                                                                                className={`w-4 h-4 rounded-full border border-gray-300 ${
+                                                                                    !isAvailable ? 'filter grayscale opacity-50' : ''
+                                                                                }`}
+                                                                                style={{ backgroundColor: color.code }}
+                                                                                title={`${color.name} - ${isAvailable ? 'Disponible' : 'Agotado'}`}
+                                                                            />
+                                                                            {!isAvailable && (
+                                                                                <div className="absolute inset-0 flex items-center justify-center">
+                                                                                    <div className="w-3 h-0.5 bg-red-500 transform rotate-45" />
+                                                                                    <div className="absolute w-3 h-0.5 bg-red-500 transform -rotate-45" />
+                                                                                </div>
+                                                                            )}
+                                                                        </div>
+                                                                    );
+                                                                })}
+                                                                {product.colors.length > 4 && (
+                                                                    <span className="text-xs text-gray-500 ml-1">
+                                                                        +{product.colors.length - 4}
+                                                                    </span>
+                                                                )}
+                                                            </div>
+                                                        </div>
+                                                        {product.colors.some(color => color.available === false) && (
+                                                            <div className="text-xs text-amber-600 font-medium">
+                                                                ⚠️ Algunos colores agotados
+                                                            </div>
+                                                        )}
+                                                    </div>
+                                                )}
+
                                                 {/* Precio con control de visibilidad */}
                                                 <div className="mb-4">
                                                     <PriceDisplay 

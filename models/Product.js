@@ -9,6 +9,7 @@ const ProductSchema = new Schema({
     colors: [{
         name: { type: String, required: true },
         code: { type: String, required: true, match: /^#[0-9A-Fa-f]{6}$/ },
+        available: { type: Boolean, default: true },
         _id: { type: mongoose.Schema.Types.ObjectId, auto: true }
     }],
     stock: { type: Number, default: 0 }

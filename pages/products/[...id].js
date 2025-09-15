@@ -30,16 +30,29 @@ export default function ProductPage({ product }) {
     }, [product.colors]);
 
     const handleAddToCart = () => {
-        if (product.colors && product.colors.length > 0 && !selectedColor) {
-            toast.error('Por favor selecciona un color', {
-                style: {
-                    background: 'linear-gradient(135deg, #f093fb 0%, #f5576c 100%)',
-                    color: 'white',
-                    borderRadius: '12px',
-                    fontWeight: 'bold'
-                }
-            });
-            return;
+        if (product.colors && product.colors.length > 0) {
+            if (!selectedColor) {
+                toast.error('Por favor selecciona un color', {
+                    style: {
+                        background: 'linear-gradient(135deg, #f093fb 0%, #f5576c 100%)',
+                        color: 'white',
+                        borderRadius: '12px',
+                        fontWeight: 'bold'
+                    }
+                });
+                return;
+            }
+            if (selectedColor.available === false) {
+                toast.error('El color seleccionado no está disponible', {
+                    style: {
+                        background: 'linear-gradient(135deg, #f093fb 0%, #f5576c 100%)',
+                        color: 'white',
+                        borderRadius: '12px',
+                        fontWeight: 'bold'
+                    }
+                });
+                return;
+            }
         }
 
         for (let i = 0; i < quantity; i++) {
@@ -87,34 +100,66 @@ export default function ProductPage({ product }) {
                 </h2>
                 
                 <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3">
-                    {product.colors.map((color, index) => (
-                        <div 
-                            key={index}
-                            onClick={() => setSelectedColor(color)}
-                            className={`relative cursor-pointer group transition-all duration-300 ${
-                                selectedColor && selectedColor.name === color.name
-                                    ? 'ring-4 ring-primary ring-offset-2' 
-                                    : 'hover:ring-2 hover:ring-primary/50 hover:ring-offset-1'
-                            } rounded-xl overflow-hidden`}
-                        >
-                            <div className="bg-white border-2 border-gray-200 rounded-xl p-4 flex flex-col items-center space-y-3 transition-all duration-300 group-hover:shadow-lg">
-                                <div 
-                                    className="w-12 h-12 rounded-full border-4 border-white shadow-lg ring-1 ring-gray-200"
-                                    style={{ backgroundColor: color.code }}
-                                />
-                                <span className="text-sm font-medium text-gray-700 text-center leading-tight">
-                                    {color.name}
-                                </span>
-                                {selectedColor && selectedColor.name === color.name && (
-                                    <div className="absolute -top-2 -right-2 bg-primary rounded-full p-1">
-                                        <svg className="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
-                                        </svg>
+                    {product.colors.map((color, index) => {
+                        const isAvailable = color.available !== false; // Default to true if not specified
+                        const isSelected = selectedColor && selectedColor.name === color.name;
+                        
+                        return (
+                            <div 
+                                key={index}
+                                onClick={() => isAvailable && setSelectedColor(color)}
+                                className={`relative transition-all duration-300 rounded-xl overflow-hidden ${
+                                    isAvailable 
+                                        ? `cursor-pointer group ${
+                                            isSelected
+                                                ? 'ring-4 ring-primary ring-offset-2' 
+                                                : 'hover:ring-2 hover:ring-primary/50 hover:ring-offset-1'
+                                        }`
+                                        : 'cursor-not-allowed opacity-60'
+                                }`}
+                            >
+                                <div className={`bg-white border-2 rounded-xl p-4 flex flex-col items-center space-y-3 transition-all duration-300 ${
+                                    isAvailable 
+                                        ? `border-gray-200 group-hover:shadow-lg ${isSelected ? 'border-primary' : ''}`
+                                        : 'border-gray-300 bg-gray-50'
+                                }`}>
+                                    <div className="relative">
+                                        <div 
+                                            className={`w-12 h-12 rounded-full border-4 border-white shadow-lg ring-1 ring-gray-200 ${
+                                                !isAvailable ? 'filter grayscale' : ''
+                                            }`}
+                                            style={{ backgroundColor: color.code }}
+                                        />
+                                        {!isAvailable && (
+                                            <div className="absolute inset-0 flex items-center justify-center">
+                                                <div className="w-8 h-0.5 bg-red-500 transform rotate-45" />
+                                                <div className="absolute w-8 h-0.5 bg-red-500 transform -rotate-45" />
+                                            </div>
+                                        )}
                                     </div>
-                                )}
+                                    <div className="text-center">
+                                        <span className={`text-sm font-medium text-center leading-tight ${
+                                            isAvailable ? 'text-gray-700' : 'text-gray-500'
+                                        }`}>
+                                            {color.name}
+                                        </span>
+                                        <div className={`text-xs mt-1 font-medium ${
+                                            isAvailable ? 'text-green-600' : 'text-red-500'
+                                        }`}>
+                                            {isAvailable ? 'Disponible' : 'Agotado'}
+                                        </div>
+                                    </div>
+                                    {isSelected && isAvailable && (
+                                        <div className="absolute -top-2 -right-2 bg-primary rounded-full p-1">
+                                            <svg className="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
+                                            </svg>
+                                        </div>
+                                    )}
+                                </div>
                             </div>
-                        </div>
-                    ))}
+                        );
+                    })}
                 </div>
 
                 {selectedColor && (
@@ -127,7 +172,19 @@ export default function ProductPage({ product }) {
                             <span className="text-sm font-medium text-gray-700">
                                 Color seleccionado: <span className="text-primary font-semibold">{selectedColor.name}</span>
                             </span>
+                            <span className="text-xs px-2 py-1 bg-green-100 text-green-700 rounded-full font-medium">
+                                Disponible
+                            </span>
                         </div>
+                    </div>
+                )}
+
+                {/* Show unavailable colors count */}
+                {product.colors.some(color => color.available === false) && (
+                    <div className="mt-3 text-center">
+                        <span className="text-sm text-gray-500">
+                            {product.colors.filter(color => color.available === false).length} color(es) agotado(s)
+                        </span>
                     </div>
                 )}
             </div>
