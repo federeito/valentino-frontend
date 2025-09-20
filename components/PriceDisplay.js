@@ -9,7 +9,8 @@ export const PriceDisplay = ({
     price, 
     className = "", 
     size = "default",
-    showLoginPrompt = true 
+    showLoginPrompt = true,
+    showUnit = true
 }) => {
     const { canViewPrices, isLoading, isLoggedIn } = usePriceVisibility();
 
@@ -21,42 +22,61 @@ export const PriceDisplay = ({
         );
     }
 
-    if (canViewPrices) {
+    // Only show prices if user is logged in AND can view prices
+    if (isLoggedIn && canViewPrices) {
         const textSize = size === "large" ? "text-2xl md:text-4xl" : 
                         size === "small" ? "text-sm" : "text-xl md:text-2xl";
         
         return (
-            <span className={`font-bold bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent ${textSize} ${className}`}>
-                ${formatPrice(price)}
-            </span>
+            <div className={className}>
+                <span className={`font-bold text-gray-800 ${textSize}`}>
+                    ${formatPrice(price)}
+                </span>
+                {showUnit && (
+                    <span className="text-sm text-gray-500 ml-1">c/u</span>
+                )}
+            </div>
         );
     }
 
-    // For product cards, show simplified messages
+    // If not logged in, show enhanced login prompt
     if (!isLoggedIn && showLoginPrompt) {
         return (
             <div className={`${className}`}>
-                <span className="text-sm text-gray-600 italic">
-                    Precio disponible para usuarios registrados
-                </span>
+                <div className="bg-gradient-to-r from-blue-50 to-indigo-50 border-2 border-blue-200 rounded-xl p-3 mb-2">
+                    <div className="flex items-center gap-2 justify-center">
+                        <div className="p-1 bg-blue-100 rounded-full">
+                            <svg className="w-4 h-4 text-blue-600" fill="currentColor" viewBox="0 0 20 20">
+                                <path fillRule="evenodd" d="M18 8a6 6 0 01-7.743 5.743L10 14l-1 1-1 1H6v2H2v-4l4.257-4.257A6 6 0 1118 8zm-6-4a1 1 0 100 2 2 2 0 012 2 1 1 0 102 0 4 4 0 00-4-4z" clipRule="evenodd" />
+                            </svg>
+                        </div>
+                        <div className="text-center">
+                            <div className="text-sm font-semibold text-blue-700">¡Precios Exclusivos!</div>
+                            <div className="text-xs text-blue-600">Precio disponible para usuarios registrados</div>
+                        </div>
+                    </div>
+                </div>
             </div>
         );
     }
 
-    if (isLoggedIn && !canViewPrices) {
-        return (
-            <div className={`${className}`}>
-                <span className="text-sm text-gray-600 italic">
-                    Precio disponible para usuarios registrados
-                </span>
-            </div>
-        );
-    }
-
+    // Default fallback - for logged in but not approved users, don't show duplicate message
     return (
-        <span className={`text-gray-500 italic ${className}`}>
-            Precio disponible para usuarios registrados
-        </span>
+        <div className={`${className}`}>
+            <div className="bg-gradient-to-r from-amber-50 to-orange-50 border-2 border-amber-200 rounded-xl p-3 mb-2">
+                <div className="flex items-center gap-2 justify-center">
+                    <div className="p-1 bg-amber-100 rounded-full">
+                        <svg className="w-4 h-4 text-amber-600" fill="currentColor" viewBox="0 0 20 20">
+                            <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clipRule="evenodd" />
+                        </svg>
+                    </div>
+                    <div className="text-center">
+                        <div className="text-sm font-semibold text-amber-700">Acceso Restringido</div>
+                        <div className="text-xs text-amber-600">Precio disponible para usuarios registrados</div>
+                    </div>
+                </div>
+            </div>
+        </div>
     );
 };
 
@@ -70,18 +90,20 @@ export const CartButton = ({
 }) => {
     const { canViewPrices, isLoggedIn } = usePriceVisibility();
 
-    if (!canViewPrices) {
-        if (!isLoggedIn) {
-            return (
-                <button
-                    onClick={() => signIn('google')}
-                    className={`w-full bg-gradient-to-r from-primary to-secondary text-white px-6 py-3 rounded-xl font-semibold transition-all duration-300 hover:shadow-lg hover:shadow-primary/30 hover:scale-105 active:scale-95 ${className}`}
-                >
-                    Iniciar sesión para comprar
-                </button>
-            );
-        }
-        
+    // If not logged in, show login button
+    if (!isLoggedIn) {
+        return (
+            <button
+                onClick={() => signIn('google')}
+                className={`w-full bg-gradient-to-r from-rose-500 to-pink-600 text-white px-6 py-3 rounded-xl font-semibold transition-all duration-300 hover:shadow-lg hover:shadow-rose-500/30 hover:scale-105 active:scale-95 ${className}`}
+            >
+                Iniciar sesión para comprar
+            </button>
+        );
+    }
+
+    // If logged in but not approved, show pending approval (keep this one as it's the main warning)
+    if (isLoggedIn && !canViewPrices) {
         return (
             <div className="w-full">
                 <div className="bg-yellow-100 border border-yellow-400 text-yellow-700 px-3 py-2 rounded-lg text-sm mb-2">
@@ -116,7 +138,7 @@ export const CartButton = ({
         <button
             onClick={() => onAddToCart(productId, productTitle)}
             disabled={disabled}
-            className={`w-full group/btn relative overflow-hidden rounded-xl bg-gradient-to-r from-primary to-secondary px-6 py-3 text-center text-sm font-bold text-white shadow-lg shadow-primary/25 transition-all duration-300 hover:shadow-xl hover:shadow-primary/40 hover:scale-105 active:scale-95 ${
+            className={`w-full group/btn relative overflow-hidden rounded-xl bg-gradient-to-r from-rose-500 to-pink-600 px-6 py-3 text-center text-sm font-bold text-white shadow-lg shadow-rose-500/25 transition-all duration-300 hover:shadow-xl hover:shadow-rose-500/40 hover:scale-105 active:scale-95 ${
                 disabled ? 'opacity-50 cursor-not-allowed' : ''
             } ${className}`}
         >

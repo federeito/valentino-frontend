@@ -89,7 +89,7 @@ export default function Home({ featuredProducts, newProducts, collectionProduct 
             </div>
 
             {/* Main content with fade-in animation */}
-            <div className={`relative z-10 transform transition-all duration-1000 ${
+            <div className={`relative z-10 transform transition-all duration-1000 font-['Inter',_'Segoe_UI',_'system-ui',_'-apple-system',_sans-serif] ${
                 isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'
             }`}>
                 {/* Hero Section */}
@@ -114,10 +114,10 @@ export default function Home({ featuredProducts, newProducts, collectionProduct 
                     <div className="container mx-auto px-6">
                         {/* Section header */}
                         <div className="text-center mb-16">
-                            <h2 className="text-4xl font-bold bg-gradient-to-r from-slate-700 via-gray-800 to-slate-700 bg-clip-text text-transparent mb-4">
+                            <h2 className="text-4xl font-light bg-gradient-to-r from-slate-700 via-gray-800 to-slate-700 bg-clip-text text-transparent mb-4 tracking-wide font-['Inter',_'system-ui',_sans-serif]">
                                 Nuevos Productos
                             </h2>
-                            <p className="text-gray-600 text-lg max-w-2xl mx-auto">
+                            <p className="text-gray-600 text-lg max-w-2xl mx-auto font-light tracking-wide">
                                 Descubre nuestra última colección de productos seleccionados especialmente para ti
                             </p>
                             <div className="w-24 h-1 bg-gradient-to-r from-pink-300 to-rose-300 mx-auto mt-4 rounded-full"></div>
@@ -144,10 +144,10 @@ export default function Home({ featuredProducts, newProducts, collectionProduct 
                     <div className="container mx-auto px-6">
                         {/* Section header */}
                         <div className="text-center mb-16">
-                            <h2 className="text-4xl font-bold bg-gradient-to-r from-slate-700 via-gray-800 to-slate-700 bg-clip-text text-transparent mb-4">
+                            <h2 className="text-4xl font-light bg-gradient-to-r from-slate-700 via-gray-800 to-slate-700 bg-clip-text text-transparent mb-4 tracking-wide font-['Inter',_'system-ui',_sans-serif]">
                                 Colección Especial
                             </h2>
-                            <p className="text-gray-600 text-lg max-w-2xl mx-auto">
+                            <p className="text-gray-600 text-lg max-w-2xl mx-auto font-light tracking-wide">
                                 Una selección única de productos premium que definen elegancia y estilo
                             </p>
                             <div className="w-24 h-1 bg-gradient-to-r from-purple-300 to-pink-300 mx-auto mt-4 rounded-full"></div>

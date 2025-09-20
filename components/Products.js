@@ -1,27 +1,11 @@
 import { CartContext } from "@/lib/CartContext";
-import { CartButton } from "@/components/PriceDisplay";
+import { CartButton, PriceDisplay } from "@/components/PriceDisplay";
 import Link from "next/link";
 import { useContext, useState, useEffect } from "react";
 import toast from "react-hot-toast";
 
-const formatPrice = (price) => {
-    return price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-};
-
-// Custom price display component with black/gray colors
-const PastelPriceDisplay = ({ price, size = "default" }) => {
-    const sizeClasses = {
-        small: "text-lg",
-        default: "text-xl",
-        large: "text-2xl"
-    };
-
-    return (
-        <div className={`font-bold ${sizeClasses[size]} text-gray-800`}>
-            ${formatPrice(price)}
-        </div>
-    );
-};
+// Remove the custom PastelPriceDisplay component - it bypasses authentication
+// const PastelPriceDisplay = ({ price, size = "default" }) => { ... } // REMOVED
 
 export default function Products({ products }) {
     const { addProduct } = useContext(CartContext);
@@ -62,15 +46,15 @@ export default function Products({ products }) {
                 <div className="absolute bottom-20 right-10 w-40 h-40 bg-gradient-to-br from-pink-200/20 to-rose-200/20 rounded-full blur-2xl animate-pulse" style={{ animationDelay: '1s' }} />
             </div>
 
-            <div className="relative">
+            <div className="relative font-['Inter',_'Segoe_UI',_'system-ui',_'-apple-system',_sans-serif]">
                 <div className="mx-auto px-4 py-12">
                     {/* Título animado */}
                     <div className="text-center mb-12">
-                        <h2 className="text-3xl md:text-4xl font-bold tracking-tight bg-gradient-to-r from-slate-700 via-gray-800 to-slate-700 bg-clip-text text-transparent mb-4">
+                        <h2 className="text-3xl md:text-4xl font-light tracking-wide bg-gradient-to-r from-slate-700 via-gray-800 to-slate-700 bg-clip-text text-transparent mb-4 font-['Inter',_'system-ui',_sans-serif]">
                             Nuestros Últimos Productos
                         </h2>
                         <div className="w-24 h-1 bg-gradient-to-r from-pink-300 to-rose-300 mx-auto rounded-full" />
-                        <p className="text-gray-600 mt-4 text-lg">Descubre nuestra selección exclusiva</p>
+                        <p className="text-gray-600 mt-4 text-lg font-light tracking-wide">Descubre nuestra selección exclusiva</p>
                     </div>
 
                     <div className="mt-6 grid grid-cols-1 gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-5 xl:gap-x-8">
@@ -129,7 +113,7 @@ export default function Products({ products }) {
                                             {/* Información del producto */}
                                             <div className="relative p-4 border-t border-pink-100">
                                                 <Link href={'/products/' + product._id}>
-                                                    <h3 className="text-lg font-semibold text-gray-800 group-hover:text-red-600 transition-colors duration-300 truncate mb-2">
+                                                    <h3 className="text-lg font-normal tracking-wide text-gray-800 group-hover:text-red-600 transition-colors duration-300 truncate mb-2 font-['Inter',_'system-ui',_sans-serif]">
                                                         {product.Título}
                                                     </h3>
                                                 </Link>
@@ -175,23 +159,15 @@ export default function Products({ products }) {
                                                     </div>
                                                 )}
                                                 
-                                                {/* Precio con control de visibilidad - Updated with black/gray colors */}
+                                                {/* Precio con control de visibilidad - Use proper PriceDisplay */}
                                                 <div className="flex items-center justify-between mb-4">
                                                     <div className="flex flex-col">
-                                                        <PastelPriceDisplay 
+                                                        <PriceDisplay 
                                                             price={product.Precio} 
                                                             size="default"
+                                                            className="text-gray-800"
+                                                            showUnit={true}
                                                         />
-                                                        <span className="text-sm text-gray-500">por unidad</span>
-                                                    </div>
-                                                    
-                                                    {/* Rating simulado */}
-                                                    <div className="flex items-center gap-1">
-                                                        {[...Array(5)].map((_, i) => (
-                                                            <svg key={i} className="w-4 h-4 text-yellow-300 fill-current" viewBox="0 0 20 20">
-                                                                <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-                                                            </svg>
-                                                        ))}
                                                     </div>
                                                 </div>
 
@@ -202,7 +178,7 @@ export default function Products({ products }) {
                                                         productTitle={product.Título}
                                                         stock={product.stock}
                                                         onAddToCart={handleAddToCart}
-                                                        className="w-full bg-gradient-to-r from-red-500 to-red-600 hover:from-red-600 hover:to-red-700 text-white font-medium py-2 px-4 rounded-lg transition-all duration-300 hover:shadow-lg hover:shadow-red-500/30 active:scale-95"
+                                                        className="w-full bg-gradient-to-r from-rose-500 to-pink-600 hover:from-rose-600 hover:to-pink-700 text-white font-medium py-2 px-4 rounded-lg transition-all duration-300 hover:shadow-lg hover:shadow-rose-500/30 active:scale-95"
                                                     />
                                                 </div>
                                             </div>
@@ -226,8 +202,8 @@ export default function Products({ products }) {
                                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4" />
                                 </svg>
                             </div>
-                            <h3 className="text-xl font-semibold text-gray-700 mb-2">No hay productos disponibles</h3>
-                            <p className="text-gray-500">Vuelve pronto para ver nuestras novedades</p>
+                            <h3 className="text-xl font-light text-gray-700 mb-2 tracking-wide font-['Inter',_'system-ui',_sans-serif]">No hay productos disponibles</h3>
+                            <p className="text-gray-500 font-light tracking-wide">Vuelve pronto para ver nuestras novedades</p>
                         </div>
                     )}
                 </div>

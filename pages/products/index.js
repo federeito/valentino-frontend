@@ -1,5 +1,5 @@
 import { CartContext } from "@/lib/CartContext";
-import { CartButton } from "@/components/PriceDisplay";
+import { CartButton, PriceDisplay } from "@/components/PriceDisplay";
 import { mongooseconnect } from "@/lib/mongoose";
 import { Product } from "@/models/Product";
 import { Category } from "@/models/Category";
@@ -9,21 +9,6 @@ import toast from "react-hot-toast";
 
 const formatPrice = (price) => {
     return price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-};
-
-// Custom price display component with black/gray colors
-const PastelPriceDisplay = ({ price, size = "default" }) => {
-    const sizeClasses = {
-        small: "text-lg",
-        default: "text-xl",
-        large: "text-2xl"
-    };
-
-    return (
-        <div className={`font-bold ${sizeClasses[size]} text-gray-800`}>
-            ${formatPrice(price)}
-        </div>
-    );
 };
 
 export default function Products({ allProducts = [], categories = [] }) {
@@ -111,15 +96,15 @@ export default function Products({ allProducts = [], categories = [] }) {
                 <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-64 h-64 bg-gradient-to-br from-indigo-200/15 to-blue-200/15 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '1s' }} />
             </div>
 
-            <div className="relative min-h-screen w-full bg-gradient-to-br from-pink-50/30 to-blue-50/30">
+            <div className="relative min-h-screen w-full bg-gradient-to-br from-pink-50/30 to-blue-50/30 font-['Inter',_'Segoe_UI',_'system-ui',_'-apple-system',_sans-serif]">
                 <div className="max-w-7xl mx-auto p-4 sm:p-6">
                     {/* Header con título y estadísticas */}
                     <div className="text-center mb-8 sm:mb-12">
-                        <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold tracking-tight bg-gradient-to-r from-slate-700 via-gray-800 to-slate-700 bg-clip-text text-transparent mb-4">
+                        <h1 className="text-3xl sm:text-4xl md:text-5xl font-light tracking-wide bg-gradient-to-r from-slate-700 via-gray-800 to-slate-700 bg-clip-text text-transparent mb-4 font-['Inter',_'system-ui',_sans-serif]">
                             Todos Nuestros Productos
                         </h1>
                         <div className="w-24 sm:w-32 h-1 bg-gradient-to-r from-pink-300 to-rose-300 mx-auto rounded-full mb-4 sm:mb-6" />
-                        <p className="text-gray-600 text-base sm:text-lg max-w-2xl mx-auto px-4">
+                        <p className="text-gray-600 text-base sm:text-lg max-w-2xl mx-auto px-4 font-light tracking-wide">
                             Explora nuestra completa colección de productos cuidadosamente seleccionados
                         </p>
                         
@@ -303,7 +288,7 @@ export default function Products({ allProducts = [], categories = [] }) {
                                             {/* Información del producto */}
                                             <div className="p-3 sm:p-4 border-t border-pink-100">
                                                 <Link href={`/products/${product._id}`}>
-                                                    <h3 className="text-base sm:text-lg font-semibold text-gray-800 group-hover:text-red-600 transition-colors duration-300 truncate mb-2">
+                                                    <h3 className="text-base sm:text-lg font-normal tracking-wide text-gray-800 group-hover:text-red-600 transition-colors duration-300 truncate mb-2 font-['Inter',_'system-ui',_sans-serif]">
                                                         {product.Título}
                                                     </h3>
                                                 </Link>
@@ -356,13 +341,14 @@ export default function Products({ allProducts = [], categories = [] }) {
                                                     </div>
                                                 )}
 
-                                                {/* Precio con control de visibilidad - Updated with black/gray colors */}
+                                                {/* Precio con control de visibilidad - Use proper PriceDisplay */}
                                                 <div className="mb-4">
-                                                    <PastelPriceDisplay 
+                                                    <PriceDisplay 
                                                         price={product.Precio} 
                                                         size="default"
+                                                        className="text-gray-800"
+                                                        showUnit={true}
                                                     />
-                                                    <span className="text-sm text-gray-500">c/u</span>
                                                 </div>
 
                                                 {/* Botones */}
@@ -391,8 +377,8 @@ export default function Products({ allProducts = [], categories = [] }) {
                                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
                                 </svg>
                             </div>
-                            <h3 className="text-xl sm:text-2xl font-semibold text-gray-700 mb-2 sm:mb-4">No se encontraron productos</h3>
-                            <p className="text-gray-500 mb-4 sm:mb-6 px-4">
+                            <h3 className="text-xl sm:text-2xl font-light text-gray-700 mb-2 sm:mb-4 tracking-wide font-['Inter',_'system-ui',_sans-serif]">No se encontraron productos</h3>
+                            <p className="text-gray-500 mb-4 sm:mb-6 px-4 font-light tracking-wide">
                                 {searchTerm 
                                     ? `No hay productos que coincidan con "${searchTerm}"`
                                     : "No hay productos disponibles con los filtros seleccionados"

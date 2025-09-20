@@ -15,7 +15,7 @@ export default function Collection({ product }) {
 
     if (product) {
         return <>
-            <section className="relative overflow-hidden bg-gradient-to-br from-pink-50/30 to-blue-50/30">
+            <section className="relative overflow-hidden bg-gradient-to-br from-pink-50/30 to-blue-50/30 font-['Inter',_'Segoe_UI',_'system-ui',_'-apple-system',_sans-serif]">
                 {/* Animated background elements - Pastel colors */}
                 <div className="fixed inset-0 overflow-hidden pointer-events-none -z-10">
                     <div className="absolute -top-40 -right-40 w-80 h-80 bg-gradient-to-br from-pink-200/30 to-rose-200/30 rounded-full blur-3xl animate-pulse" />
@@ -26,10 +26,10 @@ export default function Collection({ product }) {
                     <header className={`text-center transform transition-all duration-1000 ${
                         isVisible ? 'translate-y-0 opacity-100' : 'translate-y-10 opacity-0'
                     }`}>
-                        <h2 className="text-xl font-bold bg-gradient-to-r from-slate-700 via-gray-800 to-slate-700 bg-clip-text text-transparent sm:text-3xl">
+                        <h2 className="text-xl font-light bg-gradient-to-r from-slate-700 via-gray-800 to-slate-700 bg-clip-text text-transparent sm:text-3xl tracking-wide font-['Inter',_'system-ui',_sans-serif]">
                             Nueva Colección
                         </h2>
-                        <p className="max-w-lg mx-auto mt-4 text-gray-600">
+                        <p className="max-w-lg mx-auto mt-4 text-gray-600 font-light tracking-wide">
                             Descubre nuestra última colección de productos exclusivos, y mejora tu estilo.
                         </p>
                     </header>
@@ -41,13 +41,13 @@ export default function Collection({ product }) {
                             }`}>
                                 <div className="max-w-md mx-auto text-center lg:text-left">
                                     <header>
-                                        <h2 className="text-xl font-bold text-gray-800 sm:text-3xl group-hover:text-red-600 transition-colors">
+                                        <h2 className="text-xl font-light text-gray-800 sm:text-3xl group-hover:text-red-600 transition-colors tracking-wide font-['Inter',_'system-ui',_sans-serif]">
                                             {product.Título}
                                         </h2>
-                                        <p className="mt-4 text-gray-600">
+                                        <p className="mt-4 text-gray-600 font-light tracking-wide">
                                             {product.Descripción}
                                         </p>
-                                        <div className="mt-4 inline-flex items-center gap-2 bg-gradient-to-r from-red-500 to-red-600 text-white px-6 py-2 rounded-full font-bold shadow-lg shadow-red-500/30">
+                                        <div className="mt-4 inline-flex items-center gap-2 bg-gradient-to-r from-red-500 to-red-600 text-white px-6 py-2 rounded-full font-medium shadow-lg shadow-red-500/30 tracking-wide">
                                             <span className="animate-pulse">💫</span>
                                             <span>$ {formatPrice(product.Precio)} c/u</span>
                                         </div>
@@ -56,7 +56,7 @@ export default function Collection({ product }) {
                                     <Link href={'/products'} 
                                         className="mt-8 inline-flex items-center gap-2 rounded-xl border-2 border-blue-200 bg-white/90 px-8 py-3 
                                         text-md font-medium text-gray-700 transition-all duration-300 hover:bg-blue-50/80 hover:border-blue-300 hover:text-blue-700
-                                        hover:shadow-lg hover:shadow-blue-200/30 active:scale-95">
+                                        hover:shadow-lg hover:shadow-blue-200/30 active:scale-95 tracking-wide">
                                         Comprar Todo
                                         <svg className="w-5 h-5 transition-transform group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />

@@ -17,9 +17,12 @@ export default async function handler(req, res) {
     try {
         const session = await getServerSession(req, res, authOptions);
         
-        if (!session) {
-            return res.status(401).json({ 
-                canViewPrices: false, 
+        // Explicitly handle no session case
+        if (!session || !session.user || !session.user.email) {
+            return res.status(200).json({ 
+                canViewPrices: false,
+                isApproved: false,
+                isAdmin: false,
                 message: 'Not authenticated' 
             });
         }
@@ -54,8 +57,10 @@ export default async function handler(req, res) {
             );
         }
 
+        const canViewPrices = isAdmin || (user.canViewPrices && user.isApproved);
+
         return res.status(200).json({ 
-            canViewPrices: isAdmin || (user.canViewPrices && user.isApproved),
+            canViewPrices: canViewPrices,
             isApproved: isAdmin || user.isApproved,
             isAdmin: isAdmin,
             message: isAdmin ? 'Admin user' : (user.isApproved ? 'User approved' : 'User pending approval')
@@ -64,7 +69,9 @@ export default async function handler(req, res) {
     } catch (error) {
         console.error('Error checking price permission:', error);
         return res.status(500).json({ 
-            canViewPrices: false, 
+            canViewPrices: false,
+            isApproved: false,
+            isAdmin: false,
             message: 'Internal server error' 
         });
     }

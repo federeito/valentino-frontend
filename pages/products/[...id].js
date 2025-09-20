@@ -94,68 +94,68 @@ export default function ProductPage({ product }) {
 
         return (
             <div className="mb-6">
-                <h2 className="text-lg font-semibold text-gray-900 mb-4 flex items-center gap-2">
-                    <span role="img" aria-label="paleta" className="text-xl">🎨</span>
+                <h2 className="text-lg font-normal text-gray-900 mb-4 flex items-center gap-2 tracking-wide font-['Inter',_'system-ui',_sans-serif]">
+                    <span role="img" aria-label="paleta" className="text-lg">🎨</span>
                     Colores Disponibles
                 </h2>
                 
-                <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3">
+                <div className="flex flex-wrap gap-3 mb-4">
                     {product.colors.map((color, index) => {
-                        const isAvailable = color.available !== false; // Default to true if not specified
+                        const isAvailable = color.available !== false;
                         const isSelected = selectedColor && selectedColor.name === color.name;
                         
                         return (
                             <div 
                                 key={index}
                                 onClick={() => isAvailable && setSelectedColor(color)}
-                                className={`relative transition-all duration-300 rounded-xl overflow-hidden ${
+                                className={`relative transition-all duration-300 ${
                                     isAvailable 
                                         ? `cursor-pointer group ${
                                             isSelected
-                                                ? 'ring-4 ring-primary ring-offset-2' 
-                                                : 'hover:ring-2 hover:ring-primary/50 hover:ring-offset-1'
+                                                ? 'scale-110' 
+                                                : 'hover:scale-105'
                                         }`
-                                        : 'cursor-not-allowed opacity-60'
+                                        : 'cursor-not-allowed opacity-50'
                                 }`}
                             >
-                                <div className={`bg-white border-2 rounded-xl p-4 flex flex-col items-center space-y-3 transition-all duration-300 ${
+                                <div className={`flex items-center gap-3 bg-white border rounded-xl px-4 py-3 transition-all duration-300 ${
                                     isAvailable 
-                                        ? `border-gray-200 group-hover:shadow-lg ${isSelected ? 'border-primary' : ''}`
-                                        : 'border-gray-300 bg-gray-50'
+                                        ? `border-gray-200 hover:border-gray-300 hover:shadow-md ${isSelected ? 'border-red-400 shadow-lg shadow-red-200/30' : ''}`
+                                        : 'border-gray-200 bg-gray-50'
                                 }`}>
                                     <div className="relative">
                                         <div 
-                                            className={`w-12 h-12 rounded-full border-4 border-white shadow-lg ring-1 ring-gray-200 ${
+                                            className={`w-6 h-6 rounded-full border-2 border-white shadow-sm ring-1 ring-gray-200 ${
                                                 !isAvailable ? 'filter grayscale' : ''
                                             }`}
                                             style={{ backgroundColor: color.code }}
                                         />
                                         {!isAvailable && (
                                             <div className="absolute inset-0 flex items-center justify-center">
-                                                <div className="w-8 h-0.5 bg-red-500 transform rotate-45" />
-                                                <div className="absolute w-8 h-0.5 bg-red-500 transform -rotate-45" />
+                                                <div className="w-4 h-0.5 bg-red-500 transform rotate-45" />
+                                                <div className="absolute w-4 h-0.5 bg-red-500 transform -rotate-45" />
+                                            </div>
+                                        )}
+                                        {isSelected && isAvailable && (
+                                            <div className="absolute -top-1 -right-1 bg-red-500 rounded-full p-0.5">
+                                                <svg className="w-3 h-3 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
+                                                </svg>
                                             </div>
                                         )}
                                     </div>
-                                    <div className="text-center">
-                                        <span className={`text-sm font-medium text-center leading-tight ${
+                                    <div className="flex flex-col">
+                                        <span className={`text-sm font-light tracking-wide ${
                                             isAvailable ? 'text-gray-700' : 'text-gray-500'
                                         }`}>
                                             {color.name}
                                         </span>
-                                        <div className={`text-xs mt-1 font-medium ${
+                                        <span className={`text-xs font-light ${
                                             isAvailable ? 'text-green-600' : 'text-red-500'
                                         }`}>
                                             {isAvailable ? 'Disponible' : 'Agotado'}
-                                        </div>
+                                        </span>
                                     </div>
-                                    {isSelected && isAvailable && (
-                                        <div className="absolute -top-2 -right-2 bg-primary rounded-full p-1">
-                                            <svg className="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
-                                            </svg>
-                                        </div>
-                                    )}
                                 </div>
                             </div>
                         );
@@ -163,16 +163,16 @@ export default function ProductPage({ product }) {
                 </div>
 
                 {selectedColor && (
-                    <div className="mt-4 bg-gradient-to-r from-primary/10 to-secondary/10 rounded-xl p-4">
+                    <div className="bg-gradient-to-r from-pink-50/50 to-blue-50/50 rounded-xl p-4 border border-pink-100">
                         <div className="flex items-center gap-3">
                             <div 
-                                className="w-6 h-6 rounded-full border-2 border-white shadow-sm"
+                                className="w-5 h-5 rounded-full border-2 border-white shadow-sm ring-1 ring-gray-200"
                                 style={{ backgroundColor: selectedColor.code }}
                             />
-                            <span className="text-sm font-medium text-gray-700">
-                                Color seleccionado: <span className="text-primary font-semibold">{selectedColor.name}</span>
+                            <span className="text-sm font-light text-gray-700 tracking-wide">
+                                Color seleccionado: <span className="text-red-600 font-normal">{selectedColor.name}</span>
                             </span>
-                            <span className="text-xs px-2 py-1 bg-green-100 text-green-700 rounded-full font-medium">
+                            <span className="text-xs px-3 py-1 bg-green-100 text-green-700 rounded-full font-light tracking-wide">
                                 Disponible
                             </span>
                         </div>
@@ -182,7 +182,7 @@ export default function ProductPage({ product }) {
                 {/* Show unavailable colors count */}
                 {product.colors.some(color => color.available === false) && (
                     <div className="mt-3 text-center">
-                        <span className="text-sm text-gray-500">
+                        <span className="text-sm text-gray-500 font-light tracking-wide">
                             {product.colors.filter(color => color.available === false).length} color(es) agotado(s)
                         </span>
                     </div>
@@ -194,17 +194,20 @@ export default function ProductPage({ product }) {
     if (product) {
         return (
             <>
+                {/* Background decorativo - Pastel colors matching other pages */}
                 <div className="fixed inset-0 overflow-hidden pointer-events-none -z-10">
-                    <div className="absolute top-20 left-10 w-96 h-96 bg-gradient-to-br from-blue-100/40 to-purple-100/40 rounded-full blur-3xl animate-pulse" />
-                    <div className="absolute bottom-20 right-10 w-80 h-80 bg-gradient-to-br from-pink-100/40 to-orange-100/40 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '2s' }} />
+                    <div className="absolute inset-0 bg-gradient-to-br from-pink-50/80 via-blue-50/60 to-purple-50/40" />
+                    <div className="absolute top-20 left-10 w-96 h-96 bg-gradient-to-br from-blue-200/25 to-purple-200/25 rounded-full blur-3xl animate-pulse" />
+                    <div className="absolute bottom-20 right-10 w-80 h-80 bg-gradient-to-br from-pink-200/20 to-rose-200/20 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '2s' }} />
+                    <div className="absolute top-1/3 right-1/4 w-64 h-64 bg-gradient-to-br from-indigo-200/15 to-blue-200/15 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '1s' }} />
                 </div>
 
-                <section className="relative mt-20 md:mt-6 px-4 md:px-8 lg:px-12">
+                <section className="relative mt-20 md:mt-6 px-4 md:px-8 lg:px-12 font-['Inter',_'Segoe_UI',_'system-ui',_'-apple-system',_sans-serif]">
                     <div className="max-w-7xl mx-auto">
                         <nav className="flex mb-8" aria-label="Breadcrumb">
                             <ol className="inline-flex items-center space-x-1 md:space-x-3">
                                 <li className="inline-flex items-center">
-                                    <Link href="/" className="inline-flex items-center text-sm font-medium text-gray-700 hover:text-primary">
+                                    <Link href="/" className="inline-flex items-center text-sm font-light text-gray-700 hover:text-primary tracking-wide">
                                         <svg className="w-3 h-3 mr-2.5" fill="currentColor" viewBox="0 0 20 20">
                                             <path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z"></path>
                                         </svg>
@@ -216,7 +219,7 @@ export default function ProductPage({ product }) {
                                         <svg className="w-3 h-3 text-gray-400 mx-1" fill="currentColor" viewBox="0 0 20 20">
                                             <path fillRule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clipRule="evenodd"></path>
                                         </svg>
-                                        <Link href="/products" className="ml-1 text-sm font-medium text-gray-700 hover:text-primary">Productos</Link>
+                                        <Link href="/products" className="ml-1 text-sm font-light text-gray-700 hover:text-primary tracking-wide">Productos</Link>
                                     </div>
                                 </li>
                                 <li aria-current="page">
@@ -224,7 +227,7 @@ export default function ProductPage({ product }) {
                                         <svg className="w-3 h-3 text-gray-400 mx-1" fill="currentColor" viewBox="0 0 20 20">
                                             <path fillRule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clipRule="evenodd"></path>
                                         </svg>
-                                        <span className="ml-1 text-sm font-medium text-gray-500 truncate">{product.Título}</span>
+                                        <span className="ml-1 text-sm font-light text-gray-500 truncate tracking-wide">{product.Título}</span>
                                     </div>
                                 </li>
                             </ol>
@@ -307,7 +310,7 @@ export default function ProductPage({ product }) {
                             <div className={`transform transition-all duration-1000 delay-300 ${
                                 isVisible ? 'translate-x-0 opacity-100' : 'translate-x-10 opacity-0'
                             }`}>
-                                <h1 className="text-3xl md:text-4xl font-bold tracking-tight bg-gradient-to-r from-gray-900 via-primary to-secondary bg-clip-text text-transparent mb-6">
+                                <h1 className="text-2xl md:text-3xl lg:text-4xl font-light tracking-wide bg-gradient-to-r from-slate-700 via-gray-800 to-slate-700 bg-clip-text text-transparent mb-6 font-['Inter',_'system-ui',_sans-serif] leading-tight">
                                     {product.Título}
                                 </h1>
 
@@ -317,48 +320,39 @@ export default function ProductPage({ product }) {
                                         <svg className="w-3 h-3 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 20l4-16m2 16l4-16M6 9h14M4 15h14" />
                                         </svg>
-                                        <span className="text-xs font-medium text-gray-600">
-                                            COD. <span className="text-gray-800">{product.código || 'N/A'}</span>
+                                        <span className="text-xs font-light text-gray-600 tracking-wide">
+                                            COD. <span className="text-gray-800 font-normal">{product.código || 'N/A'}</span>
                                         </span>
                                     </div>
                                 </div>
 
-                                <div className="flex items-center gap-4 mb-8">
-                                    <div className="flex items-center">
-                                        {[...Array(5)].map((_, i) => (
-                                            <svg key={i} className="w-5 h-5 text-yellow-400 fill-current" viewBox="0 0 20 20">
-                                                <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-                                            </svg>
-                                        ))}
-                                        <span className="text-gray-600 text-sm ml-2">(128 reseñas)</span>
-                                    </div>
-                                </div>
-
-                                <div className="bg-gradient-to-r from-primary/10 to-secondary/10 rounded-2xl p-6 mb-8">
+                                <div className="bg-gradient-to-r from-pink-50/50 to-blue-50/50 rounded-2xl p-6 mb-8 border border-pink-100">
                                     <div className="flex items-baseline gap-4">
                                         <PriceDisplay 
                                             price={product.Precio} 
                                             size="large"
+                                            className="!text-gray-800"
+                                            showUnit={false}
                                         />
                                         {canViewPrices && (
-                                            <span className="text-gray-600 text-lg">por unidad</span>
+                                            <span className="text-gray-600 text-lg font-light tracking-wide">por unidad</span>
                                         )}
                                     </div>
                                     {canViewPrices && (
-                                        <p className="text-green-600 font-semibold mt-2">✨ Envío gratis en pedidos mayores a $50,000</p>
+                                        <p className="text-green-600 font-medium mt-2 tracking-wide">✨ Envío gratis en pedidos mayores a $50,000</p>
                                     )}
                                 </div>
 
                                 <ColorSelector />
 
                                 <div className="mb-8">
-                                    <h3 className="text-xl font-semibold text-gray-900 mb-4 flex items-center gap-2">
+                                    <h3 className="text-lg md:text-xl font-normal text-gray-900 mb-4 flex items-center gap-2 tracking-wide font-['Inter',_'system-ui',_sans-serif]">
                                         <svg className="w-5 h-5 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
                                         </svg>
                                         Descripción
                                     </h3>
-                                    <p className="text-gray-700 leading-relaxed text-lg bg-gray-50 p-4 rounded-xl">
+                                    <p className="text-gray-700 leading-relaxed text-lg bg-gray-50 p-4 rounded-xl font-light tracking-wide">
                                         {product.Descripción}
                                     </p>
                                 </div>
@@ -367,7 +361,7 @@ export default function ProductPage({ product }) {
                                     product.stock > 0 ? (
                                         <div className="space-y-6">
                                             <div className="bg-white border-2 border-gray-200 rounded-xl p-6 shadow-lg">
-                                                <label className="block text-sm font-semibold text-gray-700 mb-3">
+                                                <label className="block text-sm font-medium text-gray-700 mb-3 tracking-wide">
                                                     Cantidad a agregar:
                                                 </label>
                                                 <div className="flex items-center gap-4 mb-4">
@@ -383,7 +377,7 @@ export default function ProductPage({ product }) {
                                                         max={product.stock - countInCart} 
                                                         value={quantity}
                                                         onChange={(e) => setQuantity(Math.min(product.stock - countInCart, Math.max(1, parseInt(e.target.value) || 1)))}
-                                                        className="w-20 h-12 text-center text-xl font-bold border-2 border-gray-200 rounded-xl focus:border-primary focus:outline-none"
+                                                        className="w-20 h-12 text-center text-xl font-bold border-2 border-gray-200 rounded-xl focus:border-rose-500 focus:outline-none"
                                                     />
                                                     <button 
                                                         onClick={() => setQuantity(Math.min(product.stock - countInCart, quantity + 1))}
@@ -391,7 +385,7 @@ export default function ProductPage({ product }) {
                                                         className={`w-12 h-12 rounded-xl flex items-center justify-center text-2xl font-bold transition-all duration-300 hover:scale-110 active:scale-95 ${
                                                             quantity >= (product.stock - countInCart)
                                                                 ? 'bg-gray-100 text-gray-400 cursor-not-allowed'
-                                                                : 'bg-gradient-to-r from-primary to-secondary text-white hover:from-primary/80 hover:to-secondary/80'
+                                                                : 'bg-gradient-to-r from-rose-500 to-pink-600 text-white hover:from-rose-600 hover:to-pink-700'
                                                         }`}
                                                     >
                                                         +
@@ -401,10 +395,10 @@ export default function ProductPage({ product }) {
                                                 <button
                                                     onClick={handleAddToCart}
                                                     disabled={quantity > (product.stock - countInCart)}
-                                                    className={`w-full group relative overflow-hidden rounded-xl px-8 py-4 text-lg font-bold transition-all duration-300 ${
+                                                    className={`w-full group relative overflow-hidden rounded-xl px-8 py-4 text-lg font-medium transition-all duration-300 tracking-wide ${
                                                         quantity > (product.stock - countInCart)
                                                             ? 'bg-gray-300 text-gray-500 cursor-not-allowed'
-                                                            : 'bg-gradient-to-r from-primary to-secondary text-white shadow-lg shadow-primary/30 hover:shadow-xl hover:shadow-primary/50 hover:scale-105 active:scale-95'
+                                                            : 'bg-gradient-to-r from-red-800 to-red-900 text-white shadow-lg shadow-red-800/30 hover:shadow-xl hover:shadow-red-800/50 hover:scale-105 active:scale-95'
                                                     }`}
                                                 >
                                                     <span className="relative z-10 flex items-center justify-center gap-3">
@@ -438,10 +432,10 @@ export default function ProductPage({ product }) {
                                                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
                                                     </svg>
                                                 </div>
-                                                <h3 className="text-xl font-bold text-red-800 mb-2">
+                                                <h3 className="text-xl font-light text-red-800 mb-2 tracking-wide font-['Inter',_'system-ui',_sans-serif]">
                                                     ¡Producto Agotado!
                                                 </h3>
-                                                <p className="text-red-600">
+                                                <p className="text-red-600 font-light tracking-wide">
                                                     Este producto no está disponible en este momento.
                                                 </p>
                                             </div>
@@ -459,8 +453,8 @@ export default function ProductPage({ product }) {
                                     </div>
                                 )}
 
-                                <div className="mt-8 bg-gradient-to-r from-gray-50 to-blue-50 rounded-2xl p-6">
-                                    <h3 className="text-lg font-semibold text-gray-900 mb-4 flex items-center gap-2">
+                                <div className="mt-8 bg-gradient-to-r from-gray-50 to-blue-50 rounded-2xl p-6 border border-gray-100">
+                                    <h3 className="text-lg font-normal text-gray-900 mb-4 flex items-center gap-2 tracking-wide font-['Inter',_'system-ui',_sans-serif]">
                                         <svg className="w-5 h-5 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
                                         </svg>
@@ -469,33 +463,33 @@ export default function ProductPage({ product }) {
                                     <ul className="space-y-3">
                                         <li className="flex items-center gap-3 text-gray-700">
                                             <div className="w-2 h-2 bg-green-500 rounded-full"></div>
-                                            <span>Envío gratuito en compras mayores a $50,000</span>
+                                            <span className="font-light tracking-wide">Envío gratuito en compras mayores a $50,000</span>
                                         </li>
                                         <li className="flex items-center gap-3 text-gray-700">
                                             <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
-                                            <span>Garantía de 1 año</span>
+                                            <span className="font-light tracking-wide">Garantía de 1 año</span>
                                         </li>
                                         <li className="flex items-center gap-3 text-gray-700">
                                             <div className="w-2 h-2 bg-purple-500 rounded-full"></div>
-                                            <span>Devoluciones fáciles hasta 30 días</span>
+                                            <span className="font-light tracking-wide">Devoluciones fáciles hasta 30 días</span>
                                         </li>
                                         <li className="flex items-center gap-3 text-gray-700">
                                             <div className="w-2 h-2 bg-orange-500 rounded-full"></div>
-                                            <span>Soporte técnico 24/7</span>
+                                            <span className="font-light tracking-wide">Soporte técnico 24/7</span>
                                         </li>
                                     </ul>
                                 </div>
 
                                 <div className="flex gap-4 mt-8">
-                                    <button className="flex-1 border-2 border-gray-300 rounded-xl px-6 py-3 text-gray-700 font-semibold hover:border-primary hover:text-primary transition-all duration-300 flex items-center justify-center gap-2">
+                                    <button className="flex-1 border-2 border-gray-300 rounded-xl px-6 py-3 text-gray-700 font-medium hover:border-rose-500 hover:text-rose-600 transition-all duration-300 flex items-center justify-center gap-2 tracking-wide">
                                         <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
                                         </svg>
                                         Favoritos
                                     </button>
-                                    <button className="flex-1 border-2 border-gray-300 rounded-xl px-6 py-3 text-gray-700 font-semibold hover:border-primary hover:text-primary transition-all duration-300 flex items-center justify-center gap-2">
+                                    <button className="flex-1 border-2 border-gray-300 rounded-xl px-6 py-3 text-gray-700 font-medium hover:border-rose-500 hover:text-rose-600 transition-all duration-300 flex items-center justify-center gap-2 tracking-wide">
                                         <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.367 2.684 3 3 0 00-5.367-2.684z" />
+                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.367 2.684 3 3 0 00-5.367-2.684z" />
                                         </svg>
                                         Compartir
                                     </button>

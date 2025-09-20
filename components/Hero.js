@@ -46,7 +46,7 @@ export default function Hero({ product, secondProduct }) {
                     <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-gradient-to-br from-purple-200/30 to-lavender-200/30 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '2s' }} />
                 </div>
 
-                <div className="relative overflow-hidden my-8 md:my-14 bg-gradient-to-br from-pink-50/50 to-blue-50/50">
+                <div className="relative overflow-hidden my-8 md:my-14 bg-gradient-to-br from-pink-50/50 to-blue-50/50 font-['Inter',_'Segoe_UI',_'system-ui',_'-apple-system',_sans-serif]">
                     <div className="lg:py-40 min-h-[500px] lg:min-h-[650px] relative">
                         {/* Grid pattern overlay */}
                         <div className="absolute inset-0 bg-grid-pattern opacity-5" />
@@ -63,7 +63,7 @@ export default function Hero({ product, secondProduct }) {
                                 </div>
 
                                 {/* Título - Pastel gradient */}
-                                <h1 className={`text-3xl sm:text-4xl md:text-5xl font-bold tracking-tight my-3 bg-gradient-to-r from-slate-700 via-gray-800 to-slate-700 bg-clip-text text-transparent transform transition-all duration-1000 delay-300 ${
+                                <h1 className={`text-3xl sm:text-4xl md:text-5xl font-light tracking-wide my-3 bg-gradient-to-r from-slate-700 via-gray-800 to-slate-700 bg-clip-text text-transparent transform transition-all duration-1000 delay-300 font-['Inter',_'system-ui',_sans-serif] ${
                                     isVisible ? 'translate-y-0 opacity-100' : 'translate-y-5 opacity-0'
                                 }`}>
                                     {product.Título}
@@ -73,7 +73,7 @@ export default function Hero({ product, secondProduct }) {
                                 <div className={`relative transform transition-all duration-1000 delay-500 ${
                                     isVisible ? 'translate-y-0 opacity-100' : 'translate-y-5 opacity-0'
                                 }`}>
-                                    <p className="line-clamp-3 text-base sm:text-lg text-gray-600 leading-relaxed mb-6 sm:mb-8 relative z-10 px-4 sm:px-0">
+                                    <p className="line-clamp-3 text-base sm:text-lg text-gray-600 leading-relaxed mb-6 sm:mb-8 relative z-10 px-4 sm:px-0 font-light tracking-wide">
                                         {product.Descripción}
                                     </p>
                                     <div className="absolute bottom-0 left-1/2 sm:left-0 w-20 h-1 bg-gradient-to-r from-pink-300 to-rose-300 rounded-full transform -translate-x-1/2 sm:translate-x-0" />
@@ -85,7 +85,7 @@ export default function Hero({ product, secondProduct }) {
                                 }`}>
                                     <button 
                                         type="button" 
-                                        className="group relative overflow-hidden rounded-xl border-2 border-red-500 bg-gradient-to-r from-red-500 to-red-600 px-8 py-4 text-center text-lg font-bold text-white shadow-2xl shadow-red-500/25 transition-all duration-300 hover:shadow-3xl hover:shadow-red-500/40 hover:scale-105 active:scale-95"
+                                        className="group relative overflow-hidden rounded-xl border-2 border-red-500 bg-gradient-to-r from-red-500 to-red-600 px-8 py-4 text-center text-lg font-medium text-white shadow-2xl shadow-red-500/25 transition-all duration-300 hover:shadow-3xl hover:shadow-red-500/40 hover:scale-105 active:scale-95 tracking-wide"
                                         onClick={addItemToCart}
                                     >
                                         <span className="relative z-10 flex items-center gap-2">
@@ -113,7 +113,7 @@ export default function Hero({ product, secondProduct }) {
 
                                     <Link 
                                         href={'/products'} 
-                                        className="group relative rounded-xl border-2 border-blue-200 bg-white/90 backdrop-blur-sm px-8 py-4 text-center text-lg font-bold text-gray-700 shadow-lg transition-all duration-300 hover:border-blue-300 hover:shadow-xl hover:shadow-blue-200/30 hover:scale-105 hover:bg-blue-50/50 active:scale-95"
+                                        className="group relative rounded-xl border-2 border-blue-200 bg-white/90 backdrop-blur-sm px-8 py-4 text-center text-lg font-medium text-gray-700 shadow-lg transition-all duration-300 hover:border-blue-300 hover:shadow-xl hover:shadow-blue-200/30 hover:scale-105 hover:bg-blue-50/50 active:scale-95 tracking-wide"
                                     >
                                         <span className="flex items-center gap-2">
                                             <svg className="w-5 h-5 transition-transform group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -125,7 +125,7 @@ export default function Hero({ product, secondProduct }) {
                                 </div>
 
                                 {/* Features - Pastel colors */}
-                                <div className={`hidden sm:flex gap-6 mt-12 text-sm text-gray-500 transform transition-all duration-1000 delay-900 ${
+                                <div className={`hidden sm:flex gap-6 mt-12 text-sm text-gray-500 font-light tracking-wide transform transition-all duration-1000 delay-900 ${
                                     isVisible ? 'translate-y-0 opacity-100' : 'translate-y-5 opacity-0'
                                 }`}>
                                     <div className="flex items-center gap-2">
