@@ -47,17 +47,8 @@ export default function Products({ products }) {
             </div>
 
             <div className="relative font-['Inter',_'Segoe_UI',_'system-ui',_'-apple-system',_sans-serif]">
-                <div className="mx-auto px-4 py-12">
-                    {/* Título animado */}
-                    <div className="text-center mb-12">
-                        <h2 className="text-3xl md:text-4xl font-light tracking-wide bg-gradient-to-r from-slate-700 via-gray-800 to-slate-700 bg-clip-text text-transparent mb-4 font-['Inter',_'system-ui',_sans-serif]">
-                            Nuestros Últimos Productos
-                        </h2>
-                        <div className="w-24 h-1 bg-gradient-to-r from-pink-300 to-rose-300 mx-auto rounded-full" />
-                        <p className="text-gray-600 mt-4 text-lg font-light tracking-wide">Descubre nuestra selección exclusiva</p>
-                    </div>
-
-                    <div className="mt-6 grid grid-cols-1 gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-5 xl:gap-x-8">
+                <div className="mx-auto px-4">
+                    <div className="grid grid-cols-1 gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-5 xl:gap-x-8">
                         {products?.length > 0 && products.map((product, index) => {
                             const productImages = product.Imagenes?.slice(0, 12) || [];
                             

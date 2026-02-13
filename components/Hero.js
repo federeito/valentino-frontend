@@ -11,15 +11,12 @@ export default function Hero({ product, secondProduct }) {
     useEffect(() => {
         setIsVisible(true);
         
-        // Cambio automático de imágenes para ambos productos
         const interval = setInterval(() => {
             const totalImages = (product?.Imagenes?.length || 0) + (secondProduct?.Imagenes?.length || 0);
             if (totalImages > 1) {
-                setCurrentImageIndex((prev) => 
-                    (prev + 1) % totalImages
-                );
+                setCurrentImageIndex((prev) => (prev + 1) % totalImages);
             }
-        }, 3000);
+        }, 4000);
 
         return () => clearInterval(interval);
     }, [product, secondProduct]);
@@ -28,238 +25,170 @@ export default function Hero({ product, secondProduct }) {
         addProduct(product._id);
         toast.success('¡Producto añadido al carrito!', {
             style: {
-                background: 'linear-gradient(135deg, #a78bfa 0%, #c084fc 100%)',
+                background: 'linear-gradient(135deg, #dc2626 0%, #ef4444 100%)',
                 color: 'white',
                 borderRadius: '12px',
-                fontWeight: 'bold'
-            }
+                padding: '16px',
+                fontWeight: '600'
+            },
+            iconTheme: {
+                primary: '#fff',
+                secondary: '#dc2626',
+            },
         });
     }
 
     if (product) {
         return (
-            <>
-                {/* Animated background elements - Pastel colors */}
-                <div className="fixed inset-0 overflow-hidden pointer-events-none -z-10">
-                    <div className="absolute -top-40 -right-40 w-80 h-80 bg-gradient-to-br from-pink-200/40 to-rose-200/40 rounded-full blur-3xl animate-pulse" />
-                    <div className="absolute -bottom-40 -left-40 w-80 h-80 bg-gradient-to-br from-blue-200/40 to-indigo-200/40 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '1s' }} />
-                    <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-gradient-to-br from-purple-200/30 to-lavender-200/30 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '2s' }} />
-                </div>
+            <div className="relative bg-gradient-to-br from-gray-50 via-white to-red-50/30 overflow-hidden">
+                {/* Subtle background pattern */}
+                <div className="absolute inset-0 opacity-[0.03]" style={{
+                    backgroundImage: `radial-gradient(circle at 1px 1px, #dc2626 1px, transparent 0)`,
+                    backgroundSize: '40px 40px'
+                }} />
+                
+                <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-12 lg:py-20">
+                    <div className="grid lg:grid-cols-2 gap-12 lg:gap-16 items-center">
+                        {/* Content */}
+                        <div className={`space-y-8 transform transition-all duration-1000 ${
+                            isVisible ? 'translate-x-0 opacity-100' : '-translate-x-10 opacity-0'
+                        }`}>
+                            {/* Badge */}
+                            <div className="inline-flex items-center gap-2 bg-gradient-to-r from-red-500 to-pink-500 text-white px-5 py-2.5 rounded-full text-sm font-bold shadow-lg shadow-red-500/25">
+                                <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                                    <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                                </svg>
+                                50% de Descuento
+                                <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                                    <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                                </svg>
+                            </div>
 
-                <div className="relative overflow-hidden my-8 md:my-14 bg-gradient-to-br from-pink-50/50 to-blue-50/50 font-['Inter',_'Segoe_UI',_'system-ui',_'-apple-system',_sans-serif]">
-                    <div className="lg:py-40 min-h-[500px] lg:min-h-[650px] relative">
-                        {/* Grid pattern overlay */}
-                        <div className="absolute inset-0 bg-grid-pattern opacity-5" />
-                        
-                        <div className="relative mx-auto sm:static px-4 sm:px-6 lg:px-8">
-                            <div className={`sm:max-w-xl text-center sm:text-start transform transition-all duration-1000 ${
-                                isVisible ? 'translate-x-0 opacity-100' : '-translate-x-10 opacity-0'
-                            }`}>
-                                {/* Discount badge - Red for brand consistency */}
-                                <div className="inline-flex items-center gap-2 bg-gradient-to-r from-red-500 to-red-600 text-white px-4 sm:px-6 py-2 sm:py-3 rounded-full font-bold text-base sm:text-lg mb-4 sm:mb-6 shadow-lg shadow-red-500/30 animate-bounce">
-                                    <span className="animate-pulse">🔥</span>
-                                    <span className="hidden sm:inline">Al</span> 50% Off
-                                    <span className="animate-pulse">✨</span>
-                                </div>
-
-                                {/* Título - Pastel gradient */}
-                                <h1 className={`text-3xl sm:text-4xl md:text-5xl font-light tracking-wide my-3 bg-gradient-to-r from-slate-700 via-gray-800 to-slate-700 bg-clip-text text-transparent transform transition-all duration-1000 delay-300 font-['Inter',_'system-ui',_sans-serif] ${
-                                    isVisible ? 'translate-y-0 opacity-100' : 'translate-y-5 opacity-0'
-                                }`}>
+                            {/* Title */}
+                            <div className="space-y-4">
+                                <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-gray-900 leading-tight tracking-tight">
                                     {product.Título}
                                 </h1>
+                                <div className="w-20 h-1 bg-gradient-to-r from-red-500 to-pink-500 rounded-full" />
+                            </div>
 
-                                {/* Descripción */}
-                                <div className={`relative transform transition-all duration-1000 delay-500 ${
-                                    isVisible ? 'translate-y-0 opacity-100' : 'translate-y-5 opacity-0'
-                                }`}>
-                                    <p className="line-clamp-3 text-base sm:text-lg text-gray-600 leading-relaxed mb-6 sm:mb-8 relative z-10 px-4 sm:px-0 font-light tracking-wide">
-                                        {product.Descripción}
-                                    </p>
-                                    <div className="absolute bottom-0 left-1/2 sm:left-0 w-20 h-1 bg-gradient-to-r from-pink-300 to-rose-300 rounded-full transform -translate-x-1/2 sm:translate-x-0" />
+                            {/* Description */}
+                            <p className="text-lg text-gray-600 leading-relaxed max-w-xl">
+                                {product.Descripción}
+                            </p>
+
+                            {/* CTA Buttons */}
+                            <div className="flex flex-col sm:flex-row gap-4 pt-4">
+                                <button 
+                                    onClick={addItemToCart}
+                                    className="group relative overflow-hidden bg-gradient-to-r from-red-600 to-red-700 text-white px-8 py-4 rounded-xl font-semibold shadow-lg shadow-red-500/30 hover:shadow-xl hover:shadow-red-500/40 transition-all duration-300 hover:scale-105 active:scale-95"
+                                >
+                                    <span className="relative z-10 flex items-center justify-center gap-2">
+                                        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
+                                        </svg>
+                                        Añadir al Carrito
+                                    </span>
+                                    <div className="absolute inset-0 bg-gradient-to-r from-red-700 to-red-800 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                                </button>
+
+                                <Link 
+                                    href="/products"
+                                    className="group flex items-center justify-center gap-2 px-8 py-4 rounded-xl font-semibold text-gray-700 bg-white border-2 border-gray-200 hover:border-red-500 hover:text-red-600 transition-all duration-300 hover:scale-105 active:scale-95"
+                                >
+                                    Ver Todo
+                                    <svg className="w-5 h-5 transition-transform group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
+                                    </svg>
+                                </Link>
+                            </div>
+
+                            {/* Features */}
+                            <div className="flex flex-wrap gap-6 pt-6 border-t border-gray-200">
+                                {[
+                                    { icon: '🚚', text: 'Envío Gratis' },
+                                    { icon: '🔒', text: 'Pago Seguro' },
+                                    { icon: '↩️', text: 'Devolución Fácil' }
+                                ].map((feature, i) => (
+                                    <div key={i} className="flex items-center gap-2 text-sm text-gray-600">
+                                        <span className="text-lg">{feature.icon}</span>
+                                        <span className="font-medium">{feature.text}</span>
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
+
+                        {/* Images Gallery */}
+                        <div className={`relative transform transition-all duration-1000 delay-300 ${
+                            isVisible ? 'translate-x-0 opacity-100' : 'translate-x-10 opacity-0'
+                        }`}>
+                            {/* Mobile Carousel */}
+                            <div className="lg:hidden">
+                                <div className="relative aspect-square rounded-2xl overflow-hidden shadow-2xl">
+                                    <img
+                                        src={product.Imagenes[currentImageIndex % product.Imagenes.length]}
+                                        alt={product.Título}
+                                        className="w-full h-full object-cover"
+                                    />
+                                    <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent" />
                                 </div>
-
-                                {/* Botones - Red primary, pastel secondary */}
-                                <div className={`flex flex-col sm:flex-row gap-4 sm:gap-6 mt-6 sm:mt-10 items-stretch sm:items-center transform transition-all duration-1000 delay-700 ${
-                                    isVisible ? 'translate-y-0 opacity-100' : 'translate-y-5 opacity-0'
-                                }`}>
-                                    <button 
-                                        type="button" 
-                                        className="group relative overflow-hidden rounded-xl border-2 border-red-500 bg-gradient-to-r from-red-500 to-red-600 px-8 py-4 text-center text-lg font-medium text-white shadow-2xl shadow-red-500/25 transition-all duration-300 hover:shadow-3xl hover:shadow-red-500/40 hover:scale-105 active:scale-95 tracking-wide"
-                                        onClick={addItemToCart}
-                                    >
-                                        <span className="relative z-10 flex items-center gap-2">
-                                            <svg 
-                                                xmlns="http://www.w3.org/2000/svg" 
-                                                width="24" 
-                                                height="24" 
-                                                viewBox="0 0 24 24" 
-                                                fill="none" 
-                                                stroke="currentColor" 
-                                                strokeWidth="2" 
-                                                strokeLinecap="round" 
-                                                strokeLinejoin="round" 
-                                                className="w-5 h-5 transition-transform group-hover:rotate-12"
-                                            >
-                                                <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
-                                                <path d="M6.331 8h11.339a2 2 0 0 1 1.977 2.304l-1.255 8.152a3 3 0 0 1 -2.966 2.544h-6.852a3 3 0 0 1 -2.965 -2.544l-1.255 -8.152a2 2 0 0 1 1.977 -2.304z" />
-                                                <path d="M9 11v-5a3 3 0 0 1 6 0v5" />
-                                            </svg>
-                                            Añadir al Carrito
-                                        </span>
-                                        {/* Shimmer effect */}
-                                        <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/25 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-700" />
-                                    </button>
-
-                                    <Link 
-                                        href={'/products'} 
-                                        className="group relative rounded-xl border-2 border-blue-200 bg-white/90 backdrop-blur-sm px-8 py-4 text-center text-lg font-medium text-gray-700 shadow-lg transition-all duration-300 hover:border-blue-300 hover:shadow-xl hover:shadow-blue-200/30 hover:scale-105 hover:bg-blue-50/50 active:scale-95 tracking-wide"
-                                    >
-                                        <span className="flex items-center gap-2">
-                                            <svg className="w-5 h-5 transition-transform group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 11H5m0 0l4-4m-4 4l4 4" />
-                                            </svg>
-                                            Todos los Productos
-                                        </span>
-                                    </Link>
-                                </div>
-
-                                {/* Features - Pastel colors */}
-                                <div className={`hidden sm:flex gap-6 mt-12 text-sm text-gray-500 font-light tracking-wide transform transition-all duration-1000 delay-900 ${
-                                    isVisible ? 'translate-y-0 opacity-100' : 'translate-y-5 opacity-0'
-                                }`}>
-                                    <div className="flex items-center gap-2">
-                                        <div className="w-2 h-2 bg-green-300 rounded-full animate-pulse" />
-                                        <span>Envío gratis</span>
-                                    </div>
-                                    <div className="flex items-center gap-2">
-                                        <div className="w-2 h-2 bg-blue-300 rounded-full animate-pulse" />
-                                        <span>Garantía 1 año</span>
-                                    </div>
-                                    <div className="flex items-center gap-2">
-                                        <div className="w-2 h-2 bg-purple-300 rounded-full animate-pulse" />
-                                        <span>Devoluciones fáciles</span>
-                                    </div>
+                                
+                                {/* Thumbnails */}
+                                <div className="flex gap-2 mt-4 overflow-x-auto pb-2">
+                                    {product.Imagenes.map((img, i) => (
+                                        <button
+                                            key={i}
+                                            onClick={() => setCurrentImageIndex(i)}
+                                            className={`flex-shrink-0 w-20 h-20 rounded-lg overflow-hidden border-2 transition-all ${
+                                                currentImageIndex === i ? 'border-red-500 scale-110' : 'border-gray-200'
+                                            }`}
+                                        >
+                                            <img src={img} alt="" className="w-full h-full object-cover" />
+                                        </button>
+                                    ))}
                                 </div>
                             </div>
 
-                            {/* Galería de imágenes */}
-                            <div className="mt-8 lg:mt-0 lg:block lg:absolute transform sm:left-1/2 sm:top-0 sm:translate-x-8 lg:left-1/2 lg:top-1/2 lg:-translate-y-1/2 lg:translate-x-8">
-                                {/* Versión móvil del carousel */}
-                                <div className="block lg:hidden overflow-x-auto pb-4 -mx-4">
-                                    <div className="flex gap-4 px-4">
-                                        {product.Imagenes.map((imagen, index) => (
-                                            <div
-                                                key={`product1-${index}`}
-                                                className="flex-shrink-0 w-64 h-72 relative rounded-xl overflow-hidden shadow-lg shadow-pink-200/30 border border-pink-100"
-                                            >
-                                                <img
-                                                    src={imagen}
-                                                    alt={`${product.Título} - Imagen ${index + 1}`}
-                                                    className="h-full w-full object-cover object-center"
-                                                />
-                                                <div className="absolute inset-0 bg-gradient-to-t from-pink-200/20 to-transparent" />
-                                            </div>
-                                        ))}
-                                        {/* Second product images */}
-                                        {secondProduct?.Imagenes?.map((imagen, index) => (
-                                            <div
-                                                key={`product2-${index}`}
-                                                className="flex-shrink-0 w-64 h-72 relative rounded-xl overflow-hidden shadow-lg shadow-blue-200/30 border border-blue-100"
-                                            >
-                                                <img
-                                                    src={imagen}
-                                                    alt={`${secondProduct.Título} - Imagen ${index + 1}`}
-                                                    className="h-full w-full object-cover object-center"
-                                                />
-                                                <div className="absolute inset-0 bg-gradient-to-t from-blue-200/20 to-transparent" />
-                                            </div>
-                                        ))}
+                            {/* Desktop Grid */}
+                            <div className="hidden lg:grid grid-cols-2 gap-4">
+                                {product.Imagenes.slice(0, 2).map((img, i) => (
+                                    <div
+                                        key={`p1-${i}`}
+                                        className={`relative aspect-square rounded-2xl overflow-hidden shadow-xl transition-all duration-500 hover:scale-105 ${
+                                            currentImageIndex === i ? 'ring-4 ring-red-500' : ''
+                                        }`}
+                                    >
+                                        <img src={img} alt={product.Título} className="w-full h-full object-cover" />
+                                        <div className="absolute inset-0 bg-gradient-to-t from-black/10 to-transparent opacity-0 hover:opacity-100 transition-opacity" />
                                     </div>
-                                </div>
+                                ))}
+                                {secondProduct?.Imagenes?.slice(0, 2).map((img, i) => {
+                                    const idx = product.Imagenes.length + i;
+                                    return (
+                                        <div
+                                            key={`p2-${i}`}
+                                            className={`relative aspect-square rounded-2xl overflow-hidden shadow-xl transition-all duration-500 hover:scale-105 ${
+                                                currentImageIndex === idx ? 'ring-4 ring-red-500' : ''
+                                            }`}
+                                        >
+                                            <img src={img} alt={secondProduct.Título} className="w-full h-full object-cover" />
+                                            <div className="absolute inset-0 bg-gradient-to-t from-black/10 to-transparent opacity-0 hover:opacity-100 transition-opacity" />
+                                        </div>
+                                    );
+                                })}
+                            </div>
 
-                                {/* Versión desktop de la galería */}
-                                <div className="hidden lg:block">
-                                    <div className="flex items-center space-x-6 md:space-x-8">
-                                        {/* Left column - First product */}
-                                        <div className="grid flex-shrink-0 grid-cols-1 gap-y-12">
-                                            {product.Imagenes.slice(0, 2).map((imagen, index) => (
-                                                <div 
-                                                    key={`desktop-product1-${index}`}
-                                                    className={`w-72 h-80 overflow-hidden rounded-2xl border-4 border-white shadow-2xl shadow-pink-200/30 transform transition-all duration-500 hover:scale-110 hover:rotate-3 hover:shadow-3xl ${
-                                                        currentImageIndex === index ? 'ring-4 ring-red-400 animate-pulse' : ''
-                                                    }`}
-                                                    style={{
-                                                        transform: `rotate(${2 + index * 2}deg) translate(${index * 4}px, ${index * 8}px)`,
-                                                        animationDelay: `${index * 0.2}s`
-                                                    }}
-                                                >
-                                                    <img 
-                                                        src={imagen} 
-                                                        alt={`${product.Título} - Imagen ${index + 1}`} 
-                                                        className="h-full w-full object-cover object-center transition-transform duration-700 hover:scale-105" 
-                                                    />
-                                                    <div className="absolute inset-0 bg-gradient-to-t from-pink-200/20 via-transparent to-transparent opacity-0 hover:opacity-100 transition-opacity duration-300" />
-                                                </div>
-                                            ))}
-                                        </div>
-                                        
-                                        {/* Right column - Second product */}
-                                        <div className="grid flex-shrink-0 grid-cols-1 gap-y-12">
-                                            {secondProduct?.Imagenes?.slice(0, 2).map((imagen, index) => {
-                                                const adjustedIndex = (product?.Imagenes?.length || 0) + index;
-                                                return (
-                                                    <div 
-                                                        key={`desktop-product2-${index}`}
-                                                        className={`w-72 h-80 overflow-hidden rounded-2xl border-4 border-white shadow-2xl shadow-blue-200/30 transform transition-all duration-500 hover:scale-110 hover:rotate-3 hover:shadow-3xl ${
-                                                            currentImageIndex === adjustedIndex ? 'ring-4 ring-blue-400 animate-pulse' : ''
-                                                        }`}
-                                                        style={{
-                                                            transform: `rotate(${-2 + index * 2}deg) translate(${-index * 4}px, ${-index * 8}px)`,
-                                                            animationDelay: `${(index + 2) * 0.2}s`
-                                                        }}
-                                                    >
-                                                        <img 
-                                                            src={imagen} 
-                                                            alt={`${secondProduct.Título} - Imagen ${index + 1}`} 
-                                                            className="h-full w-full object-cover object-center transition-transform duration-700 hover:scale-105" 
-                                                        />
-                                                        <div className="absolute inset-0 bg-gradient-to-t from-blue-200/20 via-transparent to-transparent opacity-0 hover:opacity-100 transition-opacity duration-300" />
-                                                    </div>
-                                                );
-                                            })}
-                                        </div>
-                                    </div>
-                                    
-                                    {/* Floating elements - Pastel colors */}
-                                    <div className="absolute -top-10 -left-10 w-20 h-20 bg-gradient-to-br from-pink-200/30 to-rose-200/30 rounded-full blur-xl animate-float" />
-                                    <div className="absolute -bottom-10 -right-10 w-16 h-16 bg-gradient-to-br from-blue-200/30 to-indigo-200/30 rounded-full blur-xl animate-float" style={{ animationDelay: '1s' }} />
+                            {/* Floating badge */}
+                            <div className="absolute -top-4 -right-4 bg-white rounded-full p-4 shadow-xl hidden lg:block">
+                                <div className="text-center">
+                                    <div className="text-2xl font-bold text-red-600">50%</div>
+                                    <div className="text-xs text-gray-600">OFF</div>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
-
-                <style jsx>{`
-                    @keyframes float {
-                        0%, 100% { transform: translateY(0px) rotate(0deg); }
-                        50% { transform: translateY(-10px) rotate(180deg); }
-                    }
-                    
-                    .animate-float {
-                        animation: float 4s ease-in-out infinite;
-                    }
-                    
-                    .bg-grid-pattern {
-                        background-image: radial-gradient(circle, #f1f5f9 1px, transparent 1px);
-                        background-size: 30px 30px;
-                    }
-                    
-                    .shadow-3xl {
-                        box-shadow: 0 35px 60px -12px rgba(0, 0, 0, 0.25);
-                    }
-                `}</style>
-            </>
+            </div>
         );
     }
     
