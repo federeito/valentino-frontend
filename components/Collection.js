@@ -18,35 +18,35 @@ export default function Collection({ product }) {
             <section className="relative overflow-hidden bg-gradient-to-br from-pink-50/30 to-blue-50/30 font-['Inter',_'Segoe_UI',_'system-ui',_'-apple-system',_sans-serif]">
                 {/* Animated background elements - Pastel colors */}
                 <div className="fixed inset-0 overflow-hidden pointer-events-none -z-10">
-                    <div className="absolute -top-40 -right-40 w-80 h-80 bg-gradient-to-br from-pink-200/30 to-rose-200/30 rounded-full blur-3xl animate-pulse" />
-                    <div className="absolute -bottom-40 -left-40 w-80 h-80 bg-gradient-to-br from-blue-200/30 to-indigo-200/30 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '1s' }} />
+                    <div className="absolute -top-20 sm:-top-40 -right-20 sm:-right-40 w-40 sm:w-80 h-40 sm:h-80 bg-gradient-to-br from-pink-200/30 to-rose-200/30 rounded-full blur-3xl animate-pulse" />
+                    <div className="absolute -bottom-20 sm:-bottom-40 -left-20 sm:-left-40 w-40 sm:w-80 h-40 sm:h-80 bg-gradient-to-br from-blue-200/30 to-indigo-200/30 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '1s' }} />
                 </div>
 
-                <div className="max-w-screen-2xl mx-auto pb-16 lg:pb-20">
-                    <div className="grid grid-cols-1 gap-4 lg:grid-cols-3 lg:items-stretch">
-                        <div className={`group relative p-6 backdrop-blur-sm bg-white/90 rounded-2xl shadow-xl shadow-pink-200/20 border border-pink-100 transition-all duration-500 hover:shadow-2xl hover:shadow-pink-300/30 transform ${
+                <div className="max-w-screen-2xl mx-auto px-3 sm:px-4 md:px-6 lg:px-8 pb-12 sm:pb-16 lg:pb-20">
+                    <div className="grid grid-cols-1 gap-4 sm:gap-6 lg:grid-cols-3 lg:items-stretch">
+                        <div className={`group relative p-4 sm:p-6 backdrop-blur-sm bg-white/90 rounded-xl sm:rounded-2xl shadow-xl shadow-pink-200/20 border border-pink-100 transition-all duration-500 hover:shadow-2xl hover:shadow-pink-300/30 transform ${
                             isVisible ? 'translate-x-0 opacity-100' : '-translate-x-10 opacity-0'
                         }`}>
                             <div className="max-w-md mx-auto text-center lg:text-left">
                                 <header>
-                                    <h2 className="text-xl font-light text-gray-800 sm:text-3xl group-hover:text-red-600 transition-colors tracking-wide font-['Inter',_'system-ui',_sans-serif]">
+                                    <h2 className="text-lg sm:text-xl md:text-2xl lg:text-3xl font-light text-gray-800 group-hover:text-red-600 transition-colors tracking-wide font-['Inter',_'system-ui',_sans-serif] leading-tight">
                                         {product.Título}
                                     </h2>
-                                    <p className="mt-4 text-gray-600 font-light tracking-wide">
+                                    <p className="mt-3 sm:mt-4 text-sm sm:text-base text-gray-600 font-light tracking-wide leading-relaxed">
                                         {product.Descripción}
                                     </p>
-                                    <div className="mt-4 inline-flex items-center gap-2 bg-gradient-to-r from-red-500 to-red-600 text-white px-6 py-2 rounded-full font-medium shadow-lg shadow-red-500/30 tracking-wide">
+                                    <div className="mt-3 sm:mt-4 inline-flex items-center gap-2 bg-gradient-to-r from-red-500 to-red-600 text-white px-4 sm:px-6 py-2 rounded-full font-medium shadow-lg shadow-red-500/30 tracking-wide text-sm sm:text-base">
                                         <span className="animate-pulse">💫</span>
                                         <span>$ {formatPrice(product.Precio)} c/u</span>
                                     </div>
                                 </header>
 
                                 <Link href={'/products'} 
-                                    className="mt-8 inline-flex items-center gap-2 rounded-xl border-2 border-blue-200 bg-white/90 px-8 py-3 
-                                    text-md font-medium text-gray-700 transition-all duration-300 hover:bg-blue-50/80 hover:border-blue-300 hover:text-blue-700
+                                    className="mt-6 sm:mt-8 inline-flex items-center gap-2 rounded-xl border-2 border-blue-200 bg-white/90 px-6 sm:px-8 py-2.5 sm:py-3 
+                                    text-sm sm:text-md font-medium text-gray-700 transition-all duration-300 hover:bg-blue-50/80 hover:border-blue-300 hover:text-blue-700
                                     hover:shadow-lg hover:shadow-blue-200/30 active:scale-95 tracking-wide">
                                     Comprar Todo
-                                    <svg className="w-5 h-5 transition-transform group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <svg className="w-4 h-4 sm:w-5 sm:h-5 transition-transform group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
                                     </svg>
                                 </Link>
@@ -56,10 +56,10 @@ export default function Collection({ product }) {
                         <div className={`lg:col-span-2 transform transition-all duration-1000 delay-300 ${
                             isVisible ? 'translate-x-0 opacity-100' : 'translate-x-10 opacity-0'
                         }`}>
-                            <ul className="grid grid-cols-2 gap-4">
+                            <ul className="grid grid-cols-2 gap-3 sm:gap-4">
                                 {product.Imagenes.slice(0, 2).map((imagen, index) => (
                                     <li key={index}>
-                                        <div className="relative group overflow-hidden rounded-2xl border border-white shadow-lg shadow-blue-200/20">
+                                        <div className="relative group overflow-hidden rounded-xl sm:rounded-2xl border border-white shadow-lg shadow-blue-200/20">
                                             <img 
                                                 src={imagen} 
                                                 alt={`product-${index}`} 
@@ -74,7 +74,7 @@ export default function Collection({ product }) {
                     </div>
                 </div>
             </section>
-            <div className="mt-20 lg:mt-32">
+            <div className="mt-12 sm:mt-16 lg:mt-20 xl:mt-32">
                 <Footer />
             </div>
             <style jsx>{`

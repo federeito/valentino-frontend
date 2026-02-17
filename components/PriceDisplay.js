@@ -52,7 +52,7 @@ export const PriceDisplay = ({
                         </div>
                         <div className="text-center">
                             <div className="text-sm font-semibold text-blue-700">¡Precios Exclusivos!</div>
-                            <div className="text-xs text-blue-600">Precio disponible para usuarios registrados</div>
+                            <div className="text-xs text-blue-600">Iniciá sesión o registrate</div>
                         </div>
                     </div>
                 </div>
@@ -71,7 +71,6 @@ export const PriceDisplay = ({
                         </svg>
                     </div>
                     <div className="text-center">
-                        <div className="text-sm font-semibold text-amber-700">Acceso Restringido</div>
                         <div className="text-xs text-amber-600">Precio disponible para usuarios registrados</div>
                     </div>
                 </div>

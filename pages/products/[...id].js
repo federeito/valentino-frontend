@@ -1,6 +1,7 @@
 import { CartContext } from "@/lib/CartContext";
 import { PriceDisplay, CartButton } from "@/components/PriceDisplay";
 import { usePriceVisibility } from "@/lib/PriceVisibilityContext";
+import PromoBanner from "@/components/PromoBanner";
 import { mongooseconnect } from "@/lib/mongoose";
 import { Product } from "@/models/Product";
 import Link from "next/link";
@@ -194,6 +195,7 @@ export default function ProductPage({ product }) {
     if (product) {
         return (
             <>
+                <PromoBanner />
                 {/* Background decorativo - Pastel colors matching other pages */}
                 <div className="fixed inset-0 overflow-hidden pointer-events-none -z-10">
                     <div className="absolute inset-0 bg-gradient-to-br from-pink-50/80 via-blue-50/60 to-purple-50/40" />
@@ -202,7 +204,7 @@ export default function ProductPage({ product }) {
                     <div className="absolute top-1/3 right-1/4 w-64 h-64 bg-gradient-to-br from-indigo-200/15 to-blue-200/15 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '1s' }} />
                 </div>
 
-                <section className="relative mt-20 md:mt-6 px-4 md:px-8 lg:px-12 font-['Inter',_'Segoe_UI',_'system-ui',_'-apple-system',_sans-serif]">
+                <section className="relative mt-4 md:mt-6 px-4 md:px-8 lg:px-12 font-['Inter',_'Segoe_UI',_'system-ui',_'-apple-system',_sans-serif]">
                     <div className="max-w-7xl mx-auto">
                         <nav className="flex mb-8" aria-label="Breadcrumb">
                             <ol className="inline-flex items-center space-x-1 md:space-x-3">

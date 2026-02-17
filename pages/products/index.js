@@ -1,17 +1,20 @@
 import { CartContext } from "@/lib/CartContext";
 import { CartButton, PriceDisplay } from "@/components/PriceDisplay";
+import PromoBanner from "@/components/PromoBanner";
 import { mongooseconnect } from "@/lib/mongoose";
 import { Product } from "@/models/Product";
 import { Category } from "@/models/Category";
 import Link from "next/link";
 import { useContext, useState, useEffect, useCallback } from "react";
 import toast from "react-hot-toast";
+import { useRouter } from "next/router";
 
 const formatPrice = (price) => {
     return price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 };
 
 export default function Products({ allProducts = [], categories = [] }) {
+    const router = useRouter();
     const { addProduct } = useContext(CartContext);
     const [visibleProducts, setVisibleProducts] = useState([]);
     const [hoveredProduct, setHoveredProduct] = useState(null);
@@ -20,7 +23,22 @@ export default function Products({ allProducts = [], categories = [] }) {
     const [searchTerm, setSearchTerm] = useState('');
     const [selectedCategory, setSelectedCategory] = useState('');
     const [currentPage, setCurrentPage] = useState(1);
+    const [showActions, setShowActions] = useState({}); // New state for showing actions
     const productsPerPage = 24; // Mobile: 2 columns × 12 rows = 24, Desktop: 4 columns × 6 rows = 24
+
+    // Set category from URL query parameter
+    useEffect(() => {
+        if (router.query.category) {
+            const categoryName = decodeURIComponent(router.query.category);
+            // Find the category ID by name
+            const foundCategory = categories.find(cat => 
+                cat.name.toLowerCase() === categoryName.toLowerCase()
+            );
+            if (foundCategory) {
+                setSelectedCategory(foundCategory._id);
+            }
+        }
+    }, [router.query.category, categories]);
 
     const getFilteredProducts = useCallback(() => {
         let filtered = allProducts || [];
@@ -110,6 +128,7 @@ export default function Products({ allProducts = [], categories = [] }) {
 
     return (
         <>
+            <PromoBanner />
             {/* Background decorativo - Pastel colors */}
             <div className="fixed inset-0 overflow-hidden pointer-events-none -z-10">
                 <div className="absolute top-32 left-20 w-96 h-96 bg-gradient-to-br from-blue-200/20 to-purple-200/20 rounded-full blur-3xl animate-pulse" />
@@ -138,81 +157,73 @@ export default function Products({ allProducts = [], categories = [] }) {
                         </div>
                     </div>
 
-                    {/* Barra de búsqueda y filtros - Responsive */}
-                    <div className="bg-white/90 backdrop-blur-sm rounded-2xl shadow-lg shadow-pink-200/20 border border-pink-100 p-4 sm:p-6 mb-6 sm:mb-8">
-                        <div className="space-y-4">
-                            {/* Barra de búsqueda - Full width on mobile */}
-                            <div className="relative w-full">
+                    {/* Barra de búsqueda y filtros - Minimalist Compact Design */}
+                    <div className="bg-white/80 backdrop-blur-md rounded-xl shadow-md border border-gray-100 p-3 sm:p-4 mb-6">
+                        <div className="flex flex-col sm:flex-row gap-2 sm:gap-3">
+                            {/* Barra de búsqueda - Compact */}
+                            <div className="relative flex-1 min-w-0">
                                 <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                                    <svg className="h-5 w-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <svg className="h-4 w-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
                                     </svg>
                                 </div>
                                 <input
                                     type="text"
-                                    placeholder="Buscar productos..."
+                                    placeholder="Buscar..."
                                     value={searchTerm}
                                     onChange={(e) => setSearchTerm(e.target.value)}
-                                    className="block w-full pl-10 pr-3 py-3 border-2 border-pink-200 rounded-xl leading-5 bg-white placeholder-gray-500 focus:outline-none focus:placeholder-gray-400 focus:ring-2 focus:ring-red-500 focus:border-red-500 transition-all duration-300"
+                                    className="block w-full pl-9 pr-3 py-2 border border-gray-200 rounded-lg text-sm bg-white placeholder-gray-400 focus:outline-none focus:ring-1 focus:ring-red-400 focus:border-red-400 transition-all"
                                 />
                             </div>
 
-                            {/* Filtros - Stack on mobile, side by side on larger screens */}
-                            <div className="flex flex-col sm:flex-row gap-3 sm:gap-4">
-                                <div className="flex-1">
-                                    <label className="block text-sm font-medium text-gray-700 mb-1 sm:hidden">Categoría</label>
-                                    <select
-                                        value={selectedCategory}
-                                        onChange={(e) => setSelectedCategory(e.target.value)}
-                                        className="w-full px-3 sm:px-4 py-2 sm:py-3 border-2 border-blue-200 rounded-xl bg-white text-sm sm:text-base focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-red-500 transition-all duration-300"
-                                    >
-                                        <option value="">Todas las categorías</option>
-                                        {Array.isArray(categories) && categories.map(category => (
-                                            <option key={category._id} value={category._id}>
-                                                {category.name}
-                                            </option>
-                                        ))}
-                                    </select>
-                                </div>
-                                <div className="flex-1">
-                                    <label className="block text-sm font-medium text-gray-700 mb-1 sm:hidden">Ordenar por</label>
-                                    <select
-                                        value={sortBy}
-                                        onChange={(e) => setSortBy(e.target.value)}
-                                        className="w-full px-3 sm:px-4 py-2 sm:py-3 border-2 border-purple-200 rounded-xl bg-white text-sm sm:text-base focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-red-500 transition-all duration-300"
-                                    >
-                                        <option value="newest">Más nuevos</option>
-                                        <option value="price-low">Precio: Menor a mayor</option>
-                                        <option value="price-high">Precio: Mayor a menor</option>
-                                        <option value="name">Nombre A-Z</option>
-                                    </select>
-                                </div>
+                            {/* Filtros - Compact horizontal layout */}
+                            <div className="flex gap-2 sm:gap-3">
+                                <select
+                                    value={selectedCategory}
+                                    onChange={(e) => setSelectedCategory(e.target.value)}
+                                    className="flex-1 sm:w-40 px-3 py-2 border border-gray-200 rounded-lg bg-white text-sm focus:outline-none focus:ring-1 focus:ring-red-400 focus:border-red-400 transition-all"
+                                >
+                                    <option value="">Todas</option>
+                                    {Array.isArray(categories) && categories.map(category => (
+                                        <option key={category._id} value={category._id}>
+                                            {category.name}
+                                        </option>
+                                    ))}
+                                </select>
+                                <select
+                                    value={sortBy}
+                                    onChange={(e) => setSortBy(e.target.value)}
+                                    className="flex-1 sm:w-40 px-3 py-2 border border-gray-200 rounded-lg bg-white text-sm focus:outline-none focus:ring-1 focus:ring-red-400 focus:border-red-400 transition-all"
+                                >
+                                    <option value="newest">Más nuevos</option>
+                                    <option value="price-low">Precio ↑</option>
+                                    <option value="price-high">Precio ↓</option>
+                                    <option value="name">A-Z</option>
+                                </select>
                             </div>
                         </div>
 
-                        {/* Resultados de búsqueda con paginación */}
-                        <div className="mt-4 text-xs sm:text-sm text-gray-600 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2">
-                            <div>
-                                {searchTerm && (
-                                    <span>Resultados para <strong>&ldquo;{searchTerm}&rdquo;</strong>: </span>
-                                )}
-                                <span className="font-semibold">{filteredProducts.length} producto(s) encontrado(s)</span>
-                                {totalPages > 1 && (
-                                    <span className="ml-2">
-                                        (Página {currentPage} de {totalPages})
-                                    </span>
+                        {/* Resultados - Ultra compact */}
+                        {(searchTerm || selectedCategory || filteredProducts.length !== allProducts.length) && (
+                            <div className="mt-2 pt-2 border-t border-gray-100 flex items-center justify-between text-xs text-gray-500">
+                                <span>
+                                    {filteredProducts.length} producto{filteredProducts.length !== 1 ? 's' : ''}
+                                    {totalPages > 1 && ` • Pág. ${currentPage}/${totalPages}`}
+                                </span>
+                                {(searchTerm || selectedCategory) && (
+                                    <button
+                                        onClick={() => {
+                                            setSearchTerm('');
+                                            setSelectedCategory('');
+                                            setCurrentPage(1);
+                                        }}
+                                        className="text-red-500 hover:text-red-600 font-medium transition-colors"
+                                    >
+                                        Limpiar
+                                    </button>
                                 )}
                             </div>
-                            {totalPages > 1 && (
-                                <div className="text-xs text-gray-500">
-                                    Mostrando {startIndex + 1}-{Math.min(endIndex, filteredProducts.length)} de {filteredProducts.length}
-                                    <div className="mt-1 text-xs text-gray-400">
-                                        <span className="sm:hidden">Móvil: 2 columnas × hasta 12 filas</span>
-                                        <span className="hidden sm:inline">Escritorio: 4 columnas × hasta 6 filas</span>
-                                    </div>
-                                </div>
-                            )}
-                        </div>
+                        )}
                     </div>
 
                     {/* Grid de productos - Mobile: 2 columns, Desktop: up to 4 columns */}
@@ -390,13 +401,75 @@ export default function Products({ allProducts = [], categories = [] }) {
                                                         />
                                                     </div>
 
-                                                    {/* Botones */}
-                                                    <CartButton
-                                                        productId={product._id}
-                                                        productTitle={product.Título}
-                                                        stock={product.stock}
-                                                        onAddToCart={handleAddToCart}
-                                                    />
+                                                    {/* Botones - Icon trigger with expandable actions */}
+                                                    {!product.stock ? (
+                                                        // Out of stock - show disabled button directly
+                                                        <button
+                                                            disabled
+                                                            className="w-full py-2.5 sm:py-3 rounded-lg font-semibold text-sm sm:text-base bg-gray-200 text-gray-500 cursor-not-allowed"
+                                                        >
+                                                            Sin Stock
+                                                        </button>
+                                                    ) : !showActions[product._id] ? (
+                                                        // In stock - show shopping bag icon circular and compact
+                                                        <button
+                                                            onClick={() => setShowActions(prev => ({ ...prev, [product._id]: true }))}
+                                                            className="w-12 h-12 sm:w-14 sm:h-14 mx-auto bg-gray-600 text-white rounded-full font-semibold hover:bg-black transition-all duration-300 hover:scale-110 flex items-center justify-center"
+                                                        >
+                                                            <svg className="w-5 h-5 sm:w-6 sm:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
+                                                            </svg>
+                                                        </button>
+                                                    ) : (
+                                                        // Expanded actions
+                                                        <div className="space-y-2">
+                                                            {product.colors && product.colors.length > 1 ? (
+                                                                <Link href={`/products/${product._id}`}>
+                                                                    <button className="w-full bg-pink-50 border-2 border-pink-300 text-pink-600 py-2 sm:py-2.5 rounded-lg font-semibold text-xs sm:text-sm hover:bg-pink-100 hover:border-pink-400 hover:text-pink-700 hover:shadow-lg hover:shadow-pink-300/30 transition-all duration-300 flex items-center justify-center gap-2">
+                                                                        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 21a4 4 0 01-4-4V5a2 2 0 012-2h4a2 2 0 012 2v12a4 4 0 01-4 4zm0 0h12a2 2 0 002-2v-4a2 2 0 00-2-2h-2.343M11 7.343l1.657-1.657a2 2 0 012.828 0l2.829 2.829a2 2 0 010 2.828l-8.486 8.485M7 17h.01" />
+                                                                        </svg>
+                                                                        Seleccionar color
+                                                                    </button>
+                                                                </Link>
+                                                            ) : (
+                                                                <button
+                                                                    onClick={() => {
+                                                                        handleAddToCart(product._id, product.Título);
+                                                                        setShowActions(prev => ({ ...prev, [product._id]: false }));
+                                                                    }}
+                                                                    className="w-full group/btn relative overflow-hidden rounded-xl bg-gradient-to-r from-rose-500 to-pink-600 py-2 sm:py-2.5 text-center text-xs sm:text-sm font-bold text-white shadow-lg shadow-rose-500/25 transition-all duration-300 hover:shadow-xl hover:shadow-rose-500/40 hover:scale-105 active:scale-95"
+                                                                >
+                                                                    <span className="relative z-10 flex items-center justify-center gap-2">
+                                                                        <svg 
+                                                                            xmlns="http://www.w3.org/2000/svg" 
+                                                                            width="24" 
+                                                                            height="24" 
+                                                                            viewBox="0 0 24 24" 
+                                                                            fill="none" 
+                                                                            stroke="currentColor" 
+                                                                            strokeWidth="2" 
+                                                                            strokeLinecap="round" 
+                                                                            strokeLinejoin="round" 
+                                                                            className="w-4 h-4 transition-transform group-hover/btn:rotate-12"
+                                                                        >
+                                                                            <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                                                                            <path d="M6.331 8h11.339a2 2 0 0 1 1.977 2.304l-1.255 8.152a3 3 0 0 1 -2.966 2.544h-6.852a3 3 0 0 1 -2.965 -2.544l-1.255 -8.152a2 2 0 0 1 1.977 -2.304z" />
+                                                                            <path d="M9 11v-5a3 3 0 0 1 6 0v5" />
+                                                                        </svg>
+                                                                        Agregar al carrito
+                                                                    </span>
+                                                                    <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/25 to-transparent -translate-x-full group-hover/btn:translate-x-full transition-transform duration-700" />
+                                                                </button>
+                                                            )}
+                                                            <Link href={`/products/${product._id}`}>
+                                                                <button className="w-full bg-white border border-gray-300 text-gray-700 py-2 sm:py-2.5 rounded-lg font-medium text-xs sm:text-sm hover:bg-gray-50 transition-all duration-300 flex items-center justify-center gap-2">
+                                                                    Ver más detalles
+                                                                </button>
+                                                            </Link>
+                                                        </div>
+                                                    )}
+
                                                 </div>
 
                                                 {/* Glow effect on hover - Pastel */}

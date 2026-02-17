@@ -37,12 +37,12 @@ export default function Header() {
 
     return (
         <>
-            <div className="h-16" />
+            <div className="h-[92px]" /> {/* 28px banner + 64px header */}
             
-            <header className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
+            <header className={`fixed top-7 left-0 right-0 z-50 transition-all duration-500 ${
                 isScrolled 
-                    ? 'bg-white/95 backdrop-blur-xl shadow-lg shadow-black/5' 
-                    : 'bg-white/80 backdrop-blur-md'
+                    ? 'bg-white shadow-lg shadow-black/5' 
+                    : 'bg-white'
             }`}>
                 {/* Top accent line */}
                 <div className="absolute top-0 left-0 w-full h-0.5 bg-gradient-to-r from-transparent via-red-500 to-transparent opacity-60" />
@@ -51,7 +51,7 @@ export default function Header() {
                     <div className="flex h-16 items-center justify-between">
                         {/* Logo */}
                         <Link href="/" className="group transition-all duration-300 hover:scale-105">
-                            <div className="relative">
+                            <div className="relative px-2 py-1 bg-white rounded-lg">
                                 <img 
                                     src="https://res.cloudinary.com/djuk4a84p/image/upload/v1757197833/logo_valentino_y57cmb.png"
                                     alt="Valentino Paris"
@@ -81,6 +81,55 @@ export default function Header() {
                                         </Link>
                                     </li>
                                 ))}
+                                
+                                {/* Línea Económica - Special Link */}
+                                <li>
+                                    <Link 
+                                        href="/products?category=Linea%20Economica"
+                                        className="relative flex items-center gap-1.5 px-3 py-1.5 ml-2 bg-gradient-to-r from-green-500 to-emerald-600 text-white font-bold rounded-full hover:from-green-600 hover:to-emerald-700 transition-all duration-300 shadow-md hover:shadow-lg transform hover:scale-105 group"
+                                    >
+                                        {/* Tag Icon */}
+                                        <svg 
+                                            xmlns="http://www.w3.org/2000/svg" 
+                                            className="w-4 h-4 group-hover:rotate-12 transition-transform duration-300" 
+                                            fill="none" 
+                                            viewBox="0 0 24 24" 
+                                            stroke="currentColor" 
+                                            strokeWidth="2"
+                                        >
+                                            <path strokeLinecap="round" strokeLinejoin="round" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z" />
+                                        </svg>
+                                        <span className="text-xs uppercase tracking-wide font-extrabold">
+                                            Linea Economica
+                                        </span>
+                                        <span className="text-[10px] bg-yellow-400 text-green-900 px-1.5 py-0.5 rounded-full font-extrabold shadow-sm">
+                                            AHORRO
+                                        </span>
+                                        
+                                        {/* Elegant Tooltip/Banner on hover */}
+                                        <div className="absolute top-full left-1/2 transform -translate-x-1/2 mt-3 w-72 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 z-50">
+                                            <div className="bg-white/95 backdrop-blur-md px-5 py-4 rounded-xl shadow-2xl border border-gray-200/50">
+                                                <div className="text-center space-y-2">
+                                                    <div className="flex items-center justify-center gap-2">
+                                                        <div className="w-8 h-[1px] bg-gradient-to-r from-transparent to-gray-300"></div>
+                                                        <span className="text-xs font-semibold text-gray-500 uppercase tracking-widest">
+                                                            Oferta Exclusiva
+                                                        </span>
+                                                        <div className="w-8 h-[1px] bg-gradient-to-l from-transparent to-gray-300"></div>
+                                                    </div>
+                                                    <div className="text-lg font-bold text-gray-800 tracking-tight">
+                                                        2×1 en Línea Económica
+                                                    </div>
+                                                    <div className="text-sm text-gray-600 font-medium">
+                                                        A partir de <span className="text-emerald-700 font-bold">72 unidades</span>
+                                                    </div>
+                                                </div>
+                                                {/* Subtle arrow pointing up */}
+                                                <div className="absolute -top-1.5 left-1/2 transform -translate-x-1/2 w-3 h-3 bg-white border-l border-t border-gray-200/50 rotate-45"></div>
+                                            </div>
+                                        </div>
+                                    </Link>
+                                </li>
                             </ul>
                         </nav>
 
@@ -183,6 +232,40 @@ export default function Header() {
                                 {link.label}
                             </Link>
                         ))}
+                        
+                        {/* Línea Económica - Mobile */}
+                        <Link
+                            href="/products?category=Linea%20Economica"
+                            onClick={() => setIsMobileMenuOpen(false)}
+                            className="relative flex items-center justify-between px-4 py-3 rounded-lg bg-gradient-to-r from-green-500 to-emerald-600 text-white shadow-md hover:from-green-600 hover:to-emerald-700 transition-all duration-300 group"
+                        >
+                            <div className="flex items-center gap-2">
+                                <svg 
+                                    xmlns="http://www.w3.org/2000/svg" 
+                                    className="w-5 h-5" 
+                                    fill="none" 
+                                    viewBox="0 0 24 24" 
+                                    stroke="currentColor" 
+                                    strokeWidth="2"
+                                >
+                                    <path strokeLinecap="round" strokeLinejoin="round" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z" />
+                                </svg>
+                                <span className="text-sm font-extrabold uppercase tracking-wide">
+                                    Línea Económica
+                                </span>
+                            </div>
+                            <span className="text-xs bg-yellow-400 text-green-900 px-2 py-1 rounded-full font-extrabold shadow-sm">
+                                AHORRO
+                            </span>
+                            
+                            {/* Mobile promo badge - elegant version */}
+                            <div className="absolute -top-2 -right-2 bg-white text-gray-700 px-2 py-1 rounded-lg shadow-lg border border-gray-200 z-10">
+                                <div className="text-[9px] font-bold uppercase tracking-wide">
+                                    2×1 · 72u+
+                                </div>
+                            </div>
+                        </Link>
+                        
                         {!session && (
                             <Link
                                 href="/"

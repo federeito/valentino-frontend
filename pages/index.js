@@ -1,6 +1,7 @@
 import Collection from "@/components/Collection";
 import Hero from "@/components/Hero";
 import Products from "@/components/Products";
+import PromoBanner from "@/components/PromoBanner";
 import { mongooseconnect } from "@/lib/mongoose";
 import { Product } from "@/models/Product";
 import { useEffect, useState } from "react";
@@ -14,6 +15,7 @@ export default function Home({ featuredProducts, newProducts, collectionProduct 
 
     return (
         <>
+            <PromoBanner />
             {/* Subtle background */}
             <div className="fixed inset-0 -z-10 bg-gradient-to-br from-gray-50 via-white to-red-50/20" />
             
@@ -24,37 +26,37 @@ export default function Home({ featuredProducts, newProducts, collectionProduct 
                 <Hero product={featuredProducts[0]} secondProduct={featuredProducts[1]} />
 
                 {/* Products Section */}
-                <section className="py-12 lg:py-16">
-                    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                        <div className="text-center mb-8">
-                            <h2 className="text-3xl lg:text-4xl font-bold text-gray-900 mb-4">
+                <section className="py-8 sm:py-10 lg:py-16">
+                    <div className="max-w-7xl mx-auto px-3 sm:px-4 md:px-6 lg:px-8">
+                        <div className="text-center mb-6 sm:mb-8">
+                            <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-gray-900 mb-3 sm:mb-4 px-4">
                                 Nuevos Productos
                             </h2>
-                            <p className="text-lg text-gray-600 max-w-2xl mx-auto">
+                            <p className="text-base sm:text-lg text-gray-600 max-w-2xl mx-auto px-4">
                             Descubrí nuestra última colección, seleccionada especialmente para potenciar tu negocio
                             </p>
-                            <div className="w-20 h-1 bg-gradient-to-r from-red-500 to-pink-500 mx-auto mt-6 rounded-full" />
+                            <div className="w-16 sm:w-20 h-1 bg-gradient-to-r from-red-500 to-pink-500 mx-auto mt-4 sm:mt-6 rounded-full" />
                         </div>
                         <Products products={newProducts} />
                     </div>
                 </section>
 
                 {/* Divider */}
-                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+                <div className="max-w-7xl mx-auto px-3 sm:px-4 md:px-6 lg:px-8 py-4 sm:py-6">
                     <div className="border-t border-gray-200" />
                 </div>
 
                 {/* Collection Section */}
-                <section className="py-12 lg:py-16">
-                    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                        <div className="text-center mb-8">
-                            <h2 className="text-3xl lg:text-4xl font-bold text-gray-900 mb-4">
+                <section className="py-8 sm:py-10 lg:py-16">
+                    <div className="max-w-7xl mx-auto px-3 sm:px-4 md:px-6 lg:px-8">
+                        <div className="text-center mb-6 sm:mb-8">
+                            <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-gray-900 mb-3 sm:mb-4 px-4">
                                 Colección Especial
                             </h2>
-                            <p className="text-lg text-gray-600 max-w-2xl mx-auto">
+                            <p className="text-base sm:text-lg text-gray-600 max-w-2xl mx-auto px-4">
                             Productos exclusivos que combinan elegancia y distinción
                             </p>
-                            <div className="w-20 h-1 bg-gradient-to-r from-red-500 to-pink-500 mx-auto mt-6 rounded-full" />
+                            <div className="w-16 sm:w-20 h-1 bg-gradient-to-r from-red-500 to-pink-500 mx-auto mt-4 sm:mt-6 rounded-full" />
                         </div>
                         <Collection product={collectionProduct} />
                     </div>
