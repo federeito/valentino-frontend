@@ -167,7 +167,7 @@ export default function Header() {
 
                             {/* Account */}
                             {session ? (
-                                <div className="flex items-center gap-2 pl-3 border-l border-gray-200">
+                                <Link href="/account" className="flex items-center gap-2 pl-3 border-l border-gray-200">
                                     <div className="relative h-9 w-9 group">
                                         <img 
                                             src={session.user.image} 
@@ -176,10 +176,10 @@ export default function Header() {
                                         />
                                         <div className="absolute inset-0 rounded-full bg-gradient-to-tr from-red-500/10 to-pink-500/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
                                     </div>
-                                </div>
+                                </Link>
                             ) : (
                                 <Link
-                                    href="/"
+                                    href="/account"
                                     className="hidden sm:inline-flex items-center gap-2 px-4 py-2 text-sm font-medium text-gray-700 border border-gray-200 rounded-lg hover:border-red-500 hover:text-red-600 hover:bg-red-50/50 transition-all duration-300"
                                 >
                                     <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -268,7 +268,7 @@ export default function Header() {
                         
                         {!session && (
                             <Link
-                                href="/"
+                                href="/account"
                                 className="block px-4 py-3 rounded-lg text-sm font-medium text-gray-600 hover:bg-gray-50 hover:text-red-600 transition-all duration-300"
                             >
                                 Mi Cuenta
