@@ -160,12 +160,13 @@ export default function Footer() {
                                     className="h-14 sm:h-16 w-auto opacity-80 hover:opacity-100 transition-opacity duration-300"
                                 />
                                 <a 
-                                    href="http://qr.afip.gob.ar/?qr=DeqIP-_x9TW55DSx__qnXg,," 
-                                    target="_F960AFIPInfo"
+                                    href="https://res.cloudinary.com/djuk4a84p/image/upload/v1771525227/F960_dgp5a6.jpg" 
+                                    target="_blank"
+                                    rel="noopener noreferrer"
                                     className="opacity-80 hover:opacity-100 transition-opacity duration-300"
                                 >
                                     <img 
-                                        src="http://www.afip.gob.ar/images/f960/DATAWEB.jpg" 
+                                        src="https://www.afip.gob.ar/images/f960/DATAWEB.jpg" 
                                         alt="Data Fiscal"
                                         className="h-14 sm:h-16 w-auto"
                                         border="0"
