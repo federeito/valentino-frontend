@@ -17,7 +17,7 @@ export default function Footer() {
             }} />
             
             <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-10 lg:py-12 xl:py-16">
-                <div className={`grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-8 lg:gap-10 xl:gap-12 transform transition-all duration-1000 ${
+                <div className={`grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-6 sm:gap-8 lg:gap-10 xl:gap-12 transform transition-all duration-1000 ${
                     isVisible ? 'translate-y-0 opacity-100' : 'translate-y-10 opacity-0'
                 }`}>
                     {/* Brand Column */}
@@ -26,7 +26,7 @@ export default function Footer() {
                             Valentino Paris
                         </h3>
                         <p className="text-gray-600 text-xs sm:text-sm leading-relaxed max-w-xs mx-auto sm:mx-0">
-                            Accesorios para el cabello al por mayor. Novedades, tendencias y stock permanente para tu negocio.
+                            Accesorios para el cabello al por mayor. Novedades, tendencias y amplio stock para tu negocio.
                         </p>
                         
                         {/* Social Icons */}
@@ -142,6 +142,37 @@ export default function Footer() {
                                 </Link>
                             </li>
                         </ul>
+                    </div>
+
+                    {/* Compra Segura Column */}
+                    <div className="space-y-3 sm:space-y-4 text-center sm:text-left">
+                        <h3 className="text-xs sm:text-sm font-bold text-red-600 uppercase tracking-wider">
+                            Compra 100% Segura
+                        </h3>
+                        <div className="space-y-2">
+                            <p className="text-gray-600 text-xs sm:text-sm leading-relaxed">
+                                Nuestro sitio tiene toda la seguridad para tu compra
+                            </p>
+                            <div className="flex gap-4 items-center justify-center sm:justify-start pt-2">
+                                <img 
+                                    src="https://letsencrypt.org/images/le-logo-standard.png" 
+                                    alt="Let's Encrypt" 
+                                    className="h-14 sm:h-16 w-auto opacity-80 hover:opacity-100 transition-opacity duration-300"
+                                />
+                                <a 
+                                    href="http://qr.afip.gob.ar/?qr=DeqIP-_x9TW55DSx__qnXg,," 
+                                    target="_F960AFIPInfo"
+                                    className="opacity-80 hover:opacity-100 transition-opacity duration-300"
+                                >
+                                    <img 
+                                        src="http://www.afip.gob.ar/images/f960/DATAWEB.jpg" 
+                                        alt="Data Fiscal"
+                                        className="h-14 sm:h-16 w-auto"
+                                        border="0"
+                                    />
+                                </a>
+                            </div>
+                        </div>
                     </div>
                 </div>
 
