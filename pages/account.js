@@ -1,6 +1,6 @@
 import { signIn, signOut, useSession } from 'next-auth/react';
 import { useState, useEffect } from 'react';
-import { FaGoogle, FaInstagram, FaUser, FaSignOutAlt, FaEnvelope } from 'react-icons/fa';
+import { FaGoogle, FaFacebook, FaUser, FaSignOutAlt, FaEnvelope } from 'react-icons/fa';
 
 export default function Account() {
     const { data: session, status } = useSession();
@@ -147,13 +147,13 @@ export default function Account() {
                                 Continuar con Google
                             </button>
 
-                            {/* Instagram Sign In */}
+                            {/* Facebook Sign In */}
                             <button
-                                onClick={() => signIn('instagram', { callbackUrl: '/account' })}
-                                className="w-full flex items-center justify-center gap-3 px-6 py-4 bg-gradient-to-r from-purple-500 via-pink-500 to-orange-500 text-white font-semibold rounded-lg hover:from-purple-600 hover:via-pink-600 hover:to-orange-600 transform hover:scale-105 transition-all duration-200 shadow-md hover:shadow-lg"
+                                onClick={() => signIn('facebook', { callbackUrl: '/account' })}
+                                className="w-full flex items-center justify-center gap-3 px-6 py-4 bg-[#1877F2] text-white font-semibold rounded-lg hover:bg-[#166FE5] transform hover:scale-105 transition-all duration-200 shadow-md hover:shadow-lg"
                             >
-                                <FaInstagram className="text-xl" />
-                                Continuar con Instagram
+                                <FaFacebook className="text-xl" />
+                                Continuar con Facebook
                             </button>
                         </div>
 

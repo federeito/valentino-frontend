@@ -1,6 +1,6 @@
 import NextAuth from 'next-auth'
 import GoogleProvider from 'next-auth/providers/google'
-import InstagramProvider from 'next-auth/providers/instagram'
+import FacebookProvider from 'next-auth/providers/facebook'
 
 export const authOptions = {
   providers: [
@@ -15,9 +15,9 @@ export const authOptions = {
         }
       }
     }),
-    InstagramProvider({
-      clientId: process.env.INSTAGRAM_CLIENT_ID,
-      clientSecret: process.env.INSTAGRAM_CLIENT_SECRET,
+    FacebookProvider({
+      clientId: process.env.FACEBOOK_ID,
+      clientSecret: process.env.FACEBOOK_SECRET,
     }),
   ],
   
