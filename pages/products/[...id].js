@@ -173,9 +173,6 @@ export default function ProductPage({ product }) {
                             <span className="text-sm font-light text-gray-700 tracking-wide">
                                 Color seleccionado: <span className="text-red-600 font-normal">{selectedColor.name}</span>
                             </span>
-                            <span className="text-xs px-3 py-1 bg-green-100 text-green-700 rounded-full font-light tracking-wide">
-                                Disponible
-                            </span>
                         </div>
                     </div>
                 )}
@@ -204,7 +201,7 @@ export default function ProductPage({ product }) {
                     <div className="absolute top-1/3 right-1/4 w-64 h-64 bg-gradient-to-br from-indigo-200/15 to-blue-200/15 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '1s' }} />
                 </div>
 
-                <section className="relative mt-4 md:mt-6 px-4 md:px-8 lg:px-12 font-['Inter',_'Segoe_UI',_'system-ui',_'-apple-system',_sans-serif]">
+                <section className="relative mt-4 md:mt-6 px-4 md:px-8 lg:px-12 pb-8 md:pb-10 lg:pb-12 xl:pb-16 font-['Inter',_'Segoe_UI',_'system-ui',_'-apple-system',_sans-serif]">
                     <div className="max-w-7xl mx-auto">
                         <nav className="flex mb-8" aria-label="Breadcrumb">
                             <ol className="inline-flex items-center space-x-1 md:space-x-3">
@@ -454,33 +451,6 @@ export default function ProductPage({ product }) {
                                         />
                                     </div>
                                 )}
-
-                                <div className="mt-8 bg-gradient-to-r from-gray-50 to-blue-50 rounded-2xl p-6 border border-gray-100">
-                                    <h3 className="text-lg font-normal text-gray-900 mb-4 flex items-center gap-2 tracking-wide font-['Inter',_'system-ui',_sans-serif]">
-                                        <svg className="w-5 h-5 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-                                        </svg>
-                                        Beneficios
-                                    </h3>
-                                    <ul className="space-y-3">
-                                        <li className="flex items-center gap-3 text-gray-700">
-                                            <div className="w-2 h-2 bg-green-500 rounded-full"></div>
-                                            <span className="font-light tracking-wide">Envío gratuito en compras mayores a $50,000</span>
-                                        </li>
-                                        <li className="flex items-center gap-3 text-gray-700">
-                                            <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
-                                            <span className="font-light tracking-wide">Garantía de 1 año</span>
-                                        </li>
-                                        <li className="flex items-center gap-3 text-gray-700">
-                                            <div className="w-2 h-2 bg-purple-500 rounded-full"></div>
-                                            <span className="font-light tracking-wide">Devoluciones fáciles hasta 30 días</span>
-                                        </li>
-                                        <li className="flex items-center gap-3 text-gray-700">
-                                            <div className="w-2 h-2 bg-orange-500 rounded-full"></div>
-                                            <span className="font-light tracking-wide">Soporte técnico 24/7</span>
-                                        </li>
-                                    </ul>
-                                </div>
 
                                 <div className="flex gap-4 mt-8">
                                     <button className="flex-1 border-2 border-gray-300 rounded-xl px-6 py-3 text-gray-700 font-medium hover:border-rose-500 hover:text-rose-600 transition-all duration-300 flex items-center justify-center gap-2 tracking-wide">

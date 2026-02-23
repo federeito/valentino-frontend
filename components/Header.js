@@ -99,28 +99,28 @@ export default function Header() {
                                         >
                                             <path strokeLinecap="round" strokeLinejoin="round" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z" />
                                         </svg>
-                                        <span className="text-xs uppercase tracking-wide font-extrabold">
+                                        <span className="text-xs uppercase tracking-wide font-extrabold whitespace-nowrap">
                                             Linea Economica
                                         </span>
-                                        <span className="text-[10px] bg-yellow-400 text-green-900 px-1.5 py-0.5 rounded-full font-extrabold shadow-sm">
+                                        <span className="text-[10px] bg-yellow-400 text-green-900 px-1.5 py-0.5 rounded-full font-extrabold shadow-sm whitespace-nowrap">
                                             AHORRO
                                         </span>
                                         
-                                        {/* Elegant Tooltip/Banner on hover */}
-                                        <div className="absolute top-full left-1/2 transform -translate-x-1/2 mt-3 w-72 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 z-50">
-                                            <div className="bg-white/95 backdrop-blur-md px-5 py-4 rounded-xl shadow-2xl border border-gray-200/50">
-                                                <div className="text-center space-y-2">
+                                        {/* Elegant Tooltip/Banner on hover - Desktop only */}
+                                        <div className="hidden lg:block absolute top-full left-1/2 transform -translate-x-1/2 mt-3 w-64 xl:w-72 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 z-50 pointer-events-none">
+                                            <div className="bg-white/95 backdrop-blur-md px-4 xl:px-5 py-3 xl:py-4 rounded-xl shadow-2xl border border-gray-200/50">
+                                                <div className="text-center space-y-1.5 xl:space-y-2">
                                                     <div className="flex items-center justify-center gap-2">
-                                                        <div className="w-8 h-[1px] bg-gradient-to-r from-transparent to-gray-300"></div>
-                                                        <span className="text-xs font-semibold text-gray-500 uppercase tracking-widest">
+                                                        <div className="w-6 xl:w-8 h-[1px] bg-gradient-to-r from-transparent to-gray-300"></div>
+                                                        <span className="text-[10px] xl:text-xs font-semibold text-gray-500 uppercase tracking-widest whitespace-nowrap">
                                                             Oferta Exclusiva
                                                         </span>
-                                                        <div className="w-8 h-[1px] bg-gradient-to-l from-transparent to-gray-300"></div>
+                                                        <div className="w-6 xl:w-8 h-[1px] bg-gradient-to-l from-transparent to-gray-300"></div>
                                                     </div>
-                                                    <div className="text-lg font-bold text-gray-800 tracking-tight">
+                                                    <div className="text-base xl:text-lg font-bold text-gray-800 tracking-tight">
                                                         2×1 en Línea Económica
                                                     </div>
-                                                    <div className="text-sm text-gray-600 font-medium">
+                                                    <div className="text-xs xl:text-sm text-gray-600 font-medium">
                                                         A partir de <span className="text-emerald-700 font-bold">72 unidades</span>
                                                     </div>
                                                 </div>
@@ -237,31 +237,39 @@ export default function Header() {
                         <Link
                             href="/products?category=Linea%20Economica"
                             onClick={() => setIsMobileMenuOpen(false)}
-                            className="relative flex items-center justify-between px-4 py-3 rounded-lg bg-gradient-to-r from-green-500 to-emerald-600 text-white shadow-md hover:from-green-600 hover:to-emerald-700 transition-all duration-300 group"
+                            className="relative block px-4 py-3 rounded-lg bg-gradient-to-r from-green-500 to-emerald-600 text-white shadow-md active:from-green-600 active:to-emerald-700 transition-all duration-300"
                         >
-                            <div className="flex items-center gap-2">
-                                <svg 
-                                    xmlns="http://www.w3.org/2000/svg" 
-                                    className="w-5 h-5" 
-                                    fill="none" 
-                                    viewBox="0 0 24 24" 
-                                    stroke="currentColor" 
-                                    strokeWidth="2"
-                                >
-                                    <path strokeLinecap="round" strokeLinejoin="round" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z" />
-                                </svg>
-                                <span className="text-sm font-extrabold uppercase tracking-wide">
-                                    Línea Económica
+                            <div className="flex items-center justify-between gap-3">
+                                <div className="flex items-center gap-2 min-w-0 flex-1">
+                                    <svg 
+                                        xmlns="http://www.w3.org/2000/svg" 
+                                        className="w-5 h-5 flex-shrink-0" 
+                                        fill="none" 
+                                        viewBox="0 0 24 24" 
+                                        stroke="currentColor" 
+                                        strokeWidth="2"
+                                    >
+                                        <path strokeLinecap="round" strokeLinejoin="round" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z" />
+                                    </svg>
+                                    <span className="text-sm font-extrabold uppercase tracking-wide truncate">
+                                        Línea Económica
+                                    </span>
+                                </div>
+                                <span className="text-xs bg-yellow-400 text-green-900 px-2 py-1 rounded-full font-extrabold shadow-sm whitespace-nowrap flex-shrink-0">
+                                    AHORRO
                                 </span>
                             </div>
-                            <span className="text-xs bg-yellow-400 text-green-900 px-2 py-1 rounded-full font-extrabold shadow-sm">
-                                AHORRO
-                            </span>
                             
-                            {/* Mobile promo badge - elegant version */}
-                            <div className="absolute -top-2 -right-2 bg-white text-gray-700 px-2 py-1 rounded-lg shadow-lg border border-gray-200 z-10">
-                                <div className="text-[9px] font-bold uppercase tracking-wide">
-                                    2×1 · 72u+
+                            {/* Mobile promo info - Below the button content */}
+                            <div className="mt-2 pt-2 border-t border-white/20">
+                                <div className="flex items-center justify-center gap-2 text-white/90">
+                                    <div className="text-xs font-bold">
+                                        Oferta 2×1
+                                    </div>
+                                    <div className="w-1 h-1 rounded-full bg-white/60"></div>
+                                    <div className="text-xs">
+                                        Desde 72 unidades
+                                    </div>
                                 </div>
                             </div>
                         </Link>

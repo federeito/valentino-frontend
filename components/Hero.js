@@ -3,26 +3,76 @@ import Link from "next/link";
 import { useContext, useState, useEffect } from "react";
 import toast from "react-hot-toast";
 
-export default function Hero({ product, secondProduct }) {
+export default function Hero({ product, secondProduct, featuredProducts = [] }) {
     const { addProduct } = useContext(CartContext);
-    const [isVisible, setIsVisible] = useState(false);
-    const [currentImageIndex, setCurrentImageIndex] = useState(0);
+    const [currentSlide, setCurrentSlide] = useState(0);
+    const [isAnimating, setIsAnimating] = useState(false);
+    const [progress, setProgress] = useState(0);
+
+    // Cloudinary promotional images
+    const cloudinarySlides = [
+        {
+            _id: 'cloudinary-1',
+            images: [
+                'https://res.cloudinary.com/djuk4a84p/image/upload/v1771850485/1_c2bcoc.jpg',
+                'https://res.cloudinary.com/djuk4a84p/image/upload/v1771850496/2_i7caob.jpg'
+            ],
+            isPromo: true
+        },
+        {
+            _id: 'cloudinary-2',
+            images: [
+                'https://res.cloudinary.com/djuk4a84p/image/upload/v1771645925/foto1_kuje4u.jpg',
+                'https://res.cloudinary.com/djuk4a84p/image/upload/v1771645925/foto2_ef7hxd.jpg'
+            ],
+            isPromo: true
+        }
+    ];
+
+    // Combine products and cloudinary images
+    const productSlides = featuredProducts.length > 0 ? featuredProducts : [product, secondProduct].filter(Boolean);
+    const slides = [...productSlides, ...cloudinarySlides];
+    const currentSlide_item = slides[currentSlide];
+    const currentProduct = currentSlide_item?.isPromo ? productSlides[0] : currentSlide_item;
 
     useEffect(() => {
-        setIsVisible(true);
+        let progressValue = 0;
         
-        const interval = setInterval(() => {
-            const totalImages = (product?.Imagenes?.length || 0) + (secondProduct?.Imagenes?.length || 0);
-            if (totalImages > 1) {
-                setCurrentImageIndex((prev) => (prev + 1) % totalImages);
+        const progressInterval = setInterval(() => {
+            progressValue += (100 / 50); // 5000ms / 100 steps
+            if (progressValue >= 100) {
+                progressValue = 100;
             }
-        }, 4000);
+            setProgress(progressValue);
+        }, 100);
 
-        return () => clearInterval(interval);
-    }, [product, secondProduct]);
+        const slideInterval = setInterval(() => {
+            if (!isAnimating) {
+                setIsAnimating(true);
+                setProgress(0);
+                progressValue = 0;
+                setCurrentSlide((prev) => (prev + 1) % slides.length);
+                setTimeout(() => setIsAnimating(false), 700);
+            }
+        }, 5000);
+
+        return () => {
+            clearInterval(progressInterval);
+            clearInterval(slideInterval);
+        };
+    }, [currentSlide, slides.length, isAnimating]);
+
+    function goToSlide(index) {
+        if (!isAnimating && index !== currentSlide) {
+            setIsAnimating(true);
+            setProgress(0);
+            setCurrentSlide(index);
+            setTimeout(() => setIsAnimating(false), 700);
+        }
+    }
 
     function addItemToCart() {
-        addProduct(product._id);
+        addProduct(currentProduct._id);
         toast.success('¡Producto añadido al carrito!', {
             style: {
                 background: 'linear-gradient(135deg, #dc2626 0%, #ef4444 100%)',
@@ -38,168 +88,192 @@ export default function Hero({ product, secondProduct }) {
         });
     }
 
-    if (product) {
-        return (
-            <div className="relative bg-gradient-to-br from-gray-50 via-white to-red-50/30 overflow-hidden">
-                {/* Subtle background pattern */}
-                <div className="absolute inset-0 opacity-[0.03]" style={{
-                    backgroundImage: `radial-gradient(circle at 1px 1px, #dc2626 1px, transparent 0)`,
-                    backgroundSize: '40px 40px'
-                }} />
-                
-                <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-8 sm:py-12 lg:py-20">
-                    <div className="grid lg:grid-cols-2 gap-8 lg:gap-12 xl:gap-16 items-center">
-                        {/* Content */}
-                        <div className={`space-y-6 sm:space-y-8 transform transition-all duration-1000 ${
-                            isVisible ? 'translate-x-0 opacity-100' : '-translate-x-10 opacity-0'
-                        }`}>
-                            {/* Badge */}
-                            <div className="inline-flex items-center gap-2 bg-gradient-to-r from-red-500 to-pink-500 text-white px-4 sm:px-5 py-2 sm:py-2.5 rounded-full text-xs sm:text-sm font-bold shadow-lg shadow-red-500/25">
-                                <svg className="w-3 h-3 sm:w-4 sm:h-4" fill="currentColor" viewBox="0 0 20 20">
-                                    <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-                                </svg>
-                                50% de Descuento
-                                <svg className="w-3 h-3 sm:w-4 sm:h-4" fill="currentColor" viewBox="0 0 20 20">
-                                    <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-                                </svg>
-                            </div>
+    if (!currentProduct) return null;
 
-                            {/* Title */}
-                            <div className="space-y-3 sm:space-y-4">
-                                <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-gray-900 leading-tight tracking-tight">
-                                    {product.Título}
-                                </h1>
-                                <div className="w-16 sm:w-20 h-1 bg-gradient-to-r from-red-500 to-pink-500 rounded-full" />
-                            </div>
+    return (
+        <div className="relative bg-gradient-to-br from-gray-50 via-white to-red-50/30 overflow-hidden">
+            {/* Subtle background pattern */}
+            <div className="absolute inset-0 opacity-[0.03]" style={{
+                backgroundImage: `radial-gradient(circle at 1px 1px, #dc2626 1px, transparent 0)`,
+                backgroundSize: '40px 40px'
+            }} />
 
-                            {/* Description */}
-                            <p className="text-base sm:text-lg text-gray-600 leading-relaxed max-w-xl">
-                                {product.Descripción}
-                            </p>
-
-                            {/* CTA Buttons */}
-                            <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 pt-2 sm:pt-4">
-                                <button 
-                                    onClick={addItemToCart}
-                                    className="group relative overflow-hidden bg-gradient-to-r from-red-600 to-red-700 text-white px-6 sm:px-8 py-3 sm:py-4 rounded-xl font-semibold shadow-lg shadow-red-500/30 hover:shadow-xl hover:shadow-red-500/40 transition-all duration-300 hover:scale-105 active:scale-95 text-sm sm:text-base"
-                                >
-                                    <span className="relative z-10 flex items-center justify-center gap-2">
-                                        <svg className="w-4 h-4 sm:w-5 sm:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
-                                        </svg>
-                                        Añadir al Carrito
-                                    </span>
-                                    <div className="absolute inset-0 bg-gradient-to-r from-red-700 to-red-800 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-                                </button>
-
-                                <Link 
-                                    href="/products"
-                                    className="group flex items-center justify-center gap-2 px-6 sm:px-8 py-3 sm:py-4 rounded-xl font-semibold text-gray-700 bg-white border-2 border-gray-200 hover:border-red-500 hover:text-red-600 transition-all duration-300 hover:scale-105 active:scale-95 text-sm sm:text-base"
-                                >
-                                    Ver Todo
-                                    <svg className="w-4 h-4 sm:w-5 sm:h-5 transition-transform group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
-                                    </svg>
-                                </Link>
-                            </div>
-
-                            {/* Features */}
-                            <div className="flex flex-wrap gap-4 sm:gap-6 pt-4 sm:pt-6 border-t border-gray-200">
-                                {[
-                                    { icon: '🚚', text: 'Envío Gratis' },
-                                    { icon: '🔒', text: 'Pago Seguro' },
-                                ].map((feature, i) => (
-                                    <div key={i} className="flex items-center gap-2 text-xs sm:text-sm text-gray-600">
-                                        <span className="text-base sm:text-lg">{feature.icon}</span>
-                                        <span className="font-medium">{feature.text}</span>
-                                    </div>
+            {/* Carousel Container */}
+            <div className="relative">
+                <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-8 sm:py-12 lg:py-20">
+                    {/* Check if current slide is promotional */}
+                    {currentSlide_item?.isPromo ? (
+                        /* Full-width promotional image */
+                        <div className="relative">
+                            <div className="relative w-full h-[350px] sm:h-[450px] lg:h-[550px] rounded-2xl overflow-hidden shadow-2xl bg-white">
+                                {slides.map((slide, index) => (
+                                    slide.isPromo && (
+                                        <div
+                                            key={slide._id}
+                                            className={`absolute inset-0 transition-all duration-700 ${
+                                                index === currentSlide
+                                                    ? 'opacity-100 scale-100'
+                                                    : 'opacity-0 scale-105'
+                                            }`}
+                                        >
+                                            {/* Side by side images */}
+                                            <div className="flex h-full gap-0">
+                                                {slide.images.map((img, imgIndex) => (
+                                                    <div key={imgIndex} className="flex-1 h-full">
+                                                        <img
+                                                            src={img}
+                                                            alt={`Promotional Image ${imgIndex + 1}`}
+                                                            className="w-full h-full object-cover"
+                                                        />
+                                                    </div>
+                                                ))}
+                                            </div>
+                                        </div>
+                                    )
                                 ))}
+                                <div className="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-transparent" />
+                                
+                                {/* CTA Button Overlay */}
+                                <div className="absolute bottom-8 sm:bottom-12 left-0 right-0 flex justify-center">
+                                    <div className="text-center px-4">
+                                        <Link 
+                                            href="/products"
+                                            className="inline-flex items-center justify-center gap-2 px-6 sm:px-8 py-3 sm:py-4 rounded-xl font-semibold text-gray-900 bg-white/95 backdrop-blur-md shadow-xl hover:shadow-2xl hover:bg-white transition-all duration-300 hover:scale-105 active:scale-95 text-sm sm:text-base border border-gray-200/50"
+                                        >
+                                            Explorar la Colección
+                                            <svg className="w-4 h-4 sm:w-5 sm:h-5 transition-transform group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
+                                            </svg>
+                                        </Link>
+                                    </div>
+                                </div>
                             </div>
                         </div>
-
-                        {/* Images Gallery */}
-                        <div className={`relative transform transition-all duration-1000 delay-300 ${
-                            isVisible ? 'translate-x-0 opacity-100' : 'translate-x-10 opacity-0'
-                        }`}>
-                            {/* Mobile Carousel */}
-                            <div className="lg:hidden">
-                                <div className="relative aspect-square rounded-xl sm:rounded-2xl overflow-hidden shadow-2xl">
-                                    <img
-                                        src={product.Imagenes[currentImageIndex % product.Imagenes.length]}
-                                        alt={product.Título}
-                                        className="w-full h-full object-cover"
-                                    />
-                                    <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent" />
-                                </div>
-                                
-                                {/* Thumbnails */}
-                                <div className="flex gap-2 mt-3 sm:mt-4 overflow-x-auto pb-2 scrollbar-hide">
-                                    {product.Imagenes.map((img, i) => (
-                                        <button
-                                            key={i}
-                                            onClick={() => setCurrentImageIndex(i)}
-                                            className={`flex-shrink-0 w-16 h-16 sm:w-20 sm:h-20 rounded-lg overflow-hidden border-2 transition-all ${
-                                                currentImageIndex === i ? 'border-red-500 scale-110' : 'border-gray-200'
-                                            }`}
-                                        >
-                                            <img src={img} alt="" className="w-full h-full object-cover" />
-                                        </button>
-                                    ))}
-                                </div>
-                            </div>
-
-                            {/* Desktop Grid */}
-                            <div className="hidden lg:grid grid-cols-2 gap-4">
-                                {product.Imagenes.slice(0, 2).map((img, i) => (
-                                    <div
-                                        key={`p1-${i}`}
-                                        className={`relative aspect-square rounded-2xl overflow-hidden shadow-xl transition-all duration-500 hover:scale-105 ${
-                                            currentImageIndex === i ? 'ring-4 ring-red-500' : ''
-                                        }`}
-                                    >
-                                        <img src={img} alt={product.Título} className="w-full h-full object-cover" />
-                                        <div className="absolute inset-0 bg-gradient-to-t from-black/10 to-transparent opacity-0 hover:opacity-100 transition-opacity" />
-                                    </div>
-                                ))}
-                                {secondProduct?.Imagenes?.slice(0, 2).map((img, i) => {
-                                    const idx = product.Imagenes.length + i;
+                    ) : (
+                        /* Product layout with content and image */
+                        <div className="grid lg:grid-cols-2 gap-8 lg:gap-12 xl:gap-16 items-center">
+                            {/* Content - Animated */}
+                            <div className="space-y-6 sm:space-y-8 relative z-10">
+                                {slides.map((slide, index) => {
+                                    if (slide.isPromo) return null;
+                                    
                                     return (
                                         <div
-                                            key={`p2-${i}`}
-                                            className={`relative aspect-square rounded-2xl overflow-hidden shadow-xl transition-all duration-500 hover:scale-105 ${
-                                                currentImageIndex === idx ? 'ring-4 ring-red-500' : ''
+                                            key={slide._id}
+                                            className={`transition-all duration-700 ${
+                                                index === currentSlide
+                                                    ? 'opacity-100 translate-x-0'
+                                                    : 'opacity-0 translate-x-10 absolute inset-0 pointer-events-none'
                                             }`}
                                         >
-                                            <img src={img} alt={secondProduct.Título} className="w-full h-full object-cover" />
-                                            <div className="absolute inset-0 bg-gradient-to-t from-black/10 to-transparent opacity-0 hover:opacity-100 transition-opacity" />
+                                            {/* Title */}
+                                            <div className="space-y-3 sm:space-y-4">
+                                                <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-gray-900 leading-tight tracking-tight">
+                                                    {slide.Título}
+                                                </h1>
+                                                <div className="w-16 sm:w-20 h-1 bg-gradient-to-r from-red-500 to-pink-500 rounded-full" />
+                                            </div>
+
+                                            {/* Description */}
+                                            <p className="text-base sm:text-lg text-gray-600 leading-relaxed max-w-xl mt-6">
+                                                {slide.Descripción}
+                                            </p>
+
+                                            {/* CTA Buttons */}
+                                            <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 pt-6">
+                                                <button 
+                                                    onClick={addItemToCart}
+                                                    className="group relative overflow-hidden bg-gradient-to-r from-red-600 to-red-700 text-white px-6 sm:px-8 py-3 sm:py-4 rounded-xl font-semibold shadow-lg shadow-red-500/30 hover:shadow-xl hover:shadow-red-500/40 transition-all duration-300 hover:scale-105 active:scale-95 text-sm sm:text-base"
+                                                >
+                                                    <span className="relative z-10 flex items-center justify-center gap-2">
+                                                        <svg className="w-4 h-4 sm:w-5 sm:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
+                                                        </svg>
+                                                        Añadir al Carrito
+                                                    </span>
+                                                    <div className="absolute inset-0 bg-gradient-to-r from-red-700 to-red-800 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                                                </button>
+
+                                                <Link 
+                                                    href="/products"
+                                                    className="group flex items-center justify-center gap-2 px-6 sm:px-8 py-3 sm:py-4 rounded-xl font-semibold text-gray-700 bg-white border-2 border-gray-200 hover:border-red-500 hover:text-red-600 transition-all duration-300 hover:scale-105 active:scale-95 text-sm sm:text-base"
+                                                >
+                                                    Ver Todo
+                                                    <svg className="w-4 h-4 sm:w-5 sm:h-5 transition-transform group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
+                                                    </svg>
+                                                </Link>
+                                            </div>
+
+                                            {/* Features */}
+                                            <div className="flex flex-wrap gap-4 sm:gap-6 pt-6 border-t border-gray-200 mt-8">
+                                                {[
+                                                    { icon: '🚚', text: 'Envío Gratis' },
+                                                    { icon: '🔒', text: 'Pago Seguro' },
+                                                ].map((feature, i) => (
+                                                    <div key={i} className="flex items-center gap-2 text-xs sm:text-sm text-gray-600">
+                                                        <span className="text-base sm:text-lg">{feature.icon}</span>
+                                                        <span className="font-medium">{feature.text}</span>
+                                                    </div>
+                                                ))}
+                                            </div>
                                         </div>
                                     );
                                 })}
                             </div>
 
-                            {/* Floating badge */}
-                            <div className="absolute -top-4 -right-4 bg-white rounded-full p-3 sm:p-4 shadow-xl hidden lg:block">
-                                <div className="text-center">
-                                    <div className="text-xl sm:text-2xl font-bold text-red-600">50%</div>
-                                    <div className="text-xs text-gray-600">OFF</div>
+                            {/* Image - Animated */}
+                            <div className="relative">
+                                <div className="relative aspect-square rounded-2xl overflow-hidden shadow-2xl">
+                                    {slides.map((slide, index) => (
+                                        !slide.isPromo && (
+                                            <img
+                                                key={slide._id}
+                                                src={slide.Imagenes?.[0]}
+                                                alt={slide.Título}
+                                                className={`absolute inset-0 w-full h-full object-cover transition-all duration-700 ${
+                                                    index === currentSlide
+                                                        ? 'opacity-100 scale-100'
+                                                        : 'opacity-0 scale-105'
+                                                }`}
+                                            />
+                                        )
+                                    ))}
+                                    <div className="absolute inset-0 bg-gradient-to-t from-black/10 to-transparent" />
                                 </div>
                             </div>
                         </div>
-                    </div>
-                </div>
+                    )}
 
-                <style jsx>{`
-                    .scrollbar-hide::-webkit-scrollbar {
-                        display: none;
-                    }
-                    .scrollbar-hide {
-                        -ms-overflow-style: none;
-                        scrollbar-width: none;
-                    }
-                `}</style>
+                    {/* Progress Indicators - Samsung Style */}
+                    {slides.length > 1 && (
+                        <div className="flex justify-center gap-2 sm:gap-3 mt-8 sm:mt-12">
+                            {slides.map((_, index) => (
+                                <button
+                                    key={index}
+                                    onClick={() => goToSlide(index)}
+                                    className="relative h-1 rounded-full overflow-hidden transition-all duration-300 group"
+                                    style={{ width: index === currentSlide ? '48px' : '24px' }}
+                                    aria-label={`Go to slide ${index + 1}`}
+                                >
+                                    <div className="absolute inset-0 bg-gray-300" />
+                                    {index === currentSlide ? (
+                                        <div 
+                                            className="absolute inset-0 bg-gradient-to-r from-red-500 to-pink-500"
+                                            style={{ 
+                                                width: `${progress}%`,
+                                                transition: 'width 0.1s linear'
+                                            }}
+                                        />
+                                    ) : (
+                                        <div className="absolute inset-0 bg-gradient-to-r from-red-500 to-pink-500 opacity-0 group-hover:opacity-50 transition-opacity duration-300" />
+                                    )}
+                                </button>
+                            ))}
+                        </div>
+                    )}
+                </div>
             </div>
-        );
-    }
-    
-    return null;
+        </div>
+    );
 }

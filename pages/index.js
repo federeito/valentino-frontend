@@ -23,7 +23,7 @@ export default function Home({ featuredProducts, newProducts, collectionProduct 
                 isVisible ? 'opacity-100' : 'opacity-0'
             }`}>
                 {/* Hero Section */}
-                <Hero product={featuredProducts[0]} secondProduct={featuredProducts[1]} />
+                <Hero featuredProducts={featuredProducts} />
 
                 {/* Products Section */}
                 <section className="py-8 sm:py-10 lg:py-16">
@@ -75,18 +75,20 @@ export default function Home({ featuredProducts, newProducts, collectionProduct 
 export async function getServerSideProps() {
     await mongooseconnect();
 
-    const featuredId1 = '68ab98dc13094de877cadfdd';
+    const featuredId1 = '68ab998313094de877cae019';
     const featuredId2 = '68ab993013094de877cadff7';
+    const featuredId3 = '68aba14f06a44779c3754538'; // Add third featured product
     const collectionId = '68aba14f06a44779c3754538';
 
     const featuredProduct1 = await Product.findById(featuredId1);
     const featuredProduct2 = await Product.findById(featuredId2);
+    const featuredProduct3 = await Product.findById(featuredId3);
     const collectionProduct = await Product.findById(collectionId);
     const newProducts = await Product.find({}, null, { sort: { '_id': -1 }, limit: 5 });
 
     return {
         props: {
-            featuredProducts: JSON.parse(JSON.stringify([featuredProduct1, featuredProduct2])),
+            featuredProducts: JSON.parse(JSON.stringify([featuredProduct1, featuredProduct2, featuredProduct3].filter(Boolean))),
             newProducts: JSON.parse(JSON.stringify(newProducts)),
             collectionProduct: JSON.parse(JSON.stringify(collectionProduct)),
         }
