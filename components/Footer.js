@@ -44,7 +44,7 @@ export default function Footer() {
                                 </svg>
                             </a>
                             <a
-                                href="https://www.instagram.com/soledadaccesorios"
+                                href="https://instagram.com/soledadaccesorios"
                                 target="_blank"
                                 rel="noreferrer"
                                 className="w-8 h-8 sm:w-9 sm:h-9 rounded-full bg-white border border-gray-200 flex items-center justify-center text-gray-500 hover:border-red-500 hover:text-red-600 hover:bg-red-50 transition-all duration-300 active:scale-95"

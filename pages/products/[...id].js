@@ -484,7 +484,7 @@ export default function ProductPage({ product }) {
                                             </svg>
                                         </a>
                                         <a
-                                            href="https://www.instagram.com/soledadaccesorios"
+                                            href="https://instagram.com/soledadaccesorios"
                                             target="_blank"
                                             rel="noreferrer"
                                             className="w-12 h-12 rounded-full bg-white border-2 border-gray-300 flex items-center justify-center text-gray-700 hover:border-red-500 hover:text-red-600 hover:bg-red-50 transition-all duration-300 active:scale-95"
