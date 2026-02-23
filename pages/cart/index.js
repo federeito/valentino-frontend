@@ -661,37 +661,271 @@ export default function Cart() {
                     </div>
                 </div>
                 <div className="md:w-2/5 mt-6 md:mt-8">
-                    <header className="text-start flex flex-col w-full mb-3">
-                        <h1 className="text-xl font-bold text-gray-900 sm:text-3xl">
-                            Información del Comprador
-                        </h1>
-                        <p className="mt-2 text-sm md:text-base text-gray-600">Complete sus datos para continuar con la compra</p>
-                    </header>
-                    <div className="mx-auto max-w-lg p-4 md:p-5 border shadow-md my-2 md:my-3 bg-white rounded-lg">
-                        <div className="space-y-3">
-                            <div className="grid grid-cols-6 gap-2 md:gap-3">
-                                <div className="col-span-6">
-                                    <label className="mb-1 block text-md font-medium text-gray-700">Email</label>
-                                    <input
-                                        type="email"
-                                        className="block w-full rounded-md p-3 border border-gray-300"
-                                        value={guestEmail}
-                                        onChange={e => setGuestEmail(e.target.value)}
-                                        placeholder="tu@email.com"
-                                    />
+                    <div className="mx-auto max-w-lg">
+                        <header className="text-left flex flex-col w-full mb-3">
+                            <h1 className="text-xl font-bold text-gray-900 sm:text-3xl">
+                                Información del Comprador
+                            </h1>
+                            <p className="mt-2 text-sm md:text-base text-gray-600">Complete sus datos para continuar con la compra</p>
+                        </header>
+                        <div className="p-4 md:p-5 border shadow-md my-2 md:my-3 bg-white rounded-lg">
+                            <div className="space-y-3">
+                                <div className="grid grid-cols-6 gap-2 md:gap-3">
+                                    <div className="col-span-6">
+                                        <label className="mb-1 block text-md font-medium text-gray-700">Email</label>
+                                        <input
+                                            type="email"
+                                            className="block w-full rounded-md p-3 border border-gray-300"
+                                            value={guestEmail}
+                                            onChange={e => setGuestEmail(e.target.value)}
+                                            placeholder="tu@email.com"
+                                        />
+                                    </div>
+                                    <div className="col-span-6">
+                                        <label className="mb-1 block text-md font-medium text-gray-700">Nombre Completo</label>
+                                        <input
+                                            type="text"
+                                            className="block w-full rounded-md p-3 border border-gray-300"
+                                            value={guestName}
+                                            onChange={e => setGuestName(e.target.value)}
+                                            placeholder="Tu nombre completo"
+                                        />
+                                    </div>
+                                    {guestInfoComplete && (
+                                        <>
+                                            <div className="col-span-6">
+                                                <label className="mb-1 block text-sm md:text-md font-medium text-gray-700">Dirección</label>
+                                                <div className="grid grid-cols-6 gap-2">
+                                                    <div className="col-span-4">
+                                                        <input
+                                                            type="text"
+                                                            className={`block p-3 border w-full rounded-md ${
+                                                                addressErrors.street ? 'border-red-500' : 'border-gray-300'
+                                                            }`}
+                                                            placeholder="Nombre de la calle"
+                                                            value={address.street}
+                                                            onChange={ev => {
+                                                                const value = ev.target.value;
+                                                                const error = validateAddress('street', value);
+                                                                setAddressErrors(prev => ({...prev, street: error}));
+                                                                setAddress(prev => ({...prev, street: value}));
+                                                            }}
+                                                            required
+                                                        />
+                                                        {addressErrors.street && (
+                                                            <p className="text-red-500 text-xs mt-1">{addressErrors.street}</p>
+                                                        )}
+                                                    </div>
+                                                    <div className="col-span-2">
+                                                        <input
+                                                            type="text"
+                                                            className={`block p-3 border w-full rounded-md ${
+                                                                addressErrors.number ? 'border-red-500' : 'border-gray-300'
+                                                            }`}
+                                                            placeholder="Número"
+                                                            value={address.number}
+                                                            onChange={ev => {
+                                                                const value = ev.target.value;
+                                                                const error = validateAddress('number', value);
+                                                                setAddressErrors(prev => ({...prev, number: error}));
+                                                                setAddress(prev => ({...prev, number: value}));
+                                                            }}
+                                                            required
+                                                        />
+                                                        {addressErrors.number && (
+                                                            <p className="text-red-500 text-xs mt-1">{addressErrors.number}</p>
+                                                        )}
+                                                    </div>
+                                                    <div className="col-span-3">
+                                                        <input
+                                                            type="text"
+                                                            className="block p-3 border w-full rounded-md border-gray-300"
+                                                            placeholder="Piso (opcional)"
+                                                            value={address.floor}
+                                                            onChange={ev => setAddress(prev => ({...prev, floor: ev.target.value}))}
+                                                        />
+                                                    </div>
+                                                    <div className="col-span-3">
+                                                        <input
+                                                            type="text"
+                                                            className="block p-3 border w-full rounded-md border-gray-300"
+                                                            placeholder="Departamento (opcional)"
+                                                            value={address.apartment}
+                                                            onChange={ev => setAddress(prev => ({...prev, apartment: ev.target.value}))}
+                                                        />
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div className="col-span-6 sm:col-span-3">
+                                                <label htmlFor="example10" className="mb-1 block text-md font-medium text-gray-700">Ciudad</label>
+                                                <input type="text" id="example10" className="block p-3 border w-full rounded-md border-gray-300 shadow-sm focus:border-primary-400 focus:ring focus:ring-primary-200 focus:ring-opacity-50 disabled:cursor-not-allowed disabled:bg-gray-50 disabled:text-gray-500" placeholder=""
+                                                    value={city}
+                                                    onChange={ev => setCity(ev.target.value)}
+                                                />
+                                            </div>
+                                            <div className="col-span-4 sm:col-span-2">
+                                                <label htmlFor="example11" className="mb-1 block text-md font-medium text-gray-700">Región/Provincia</label>
+                                                <input type="text" id="example11" className="block p-3 border w-full rounded-md border-gray-300 shadow-sm focus:border-primary-400 focus:ring focus:ring-primary-200 focus:ring-opacity-50 disabled:cursor-not-allowed disabled:bg-gray-50 disabled:text-gray-500" placeholder=""
+                                                    value={state}
+                                                    onChange={ev => setState(ev.target.value)}
+                                                />
+                                            </div>
+                                            <div className="col-span-2 sm:col-span-1">
+                                                <label htmlFor="example12" className="mb-1 block text-md font-medium text-gray-700">C.P.</label>
+                                                <input type="text" id="example12" className="block p-3 border w-full rounded-md border-gray-300 shadow-sm focus:border-primary-400 focus:ring focus:ring-primary-200 focus:ring-opacity-50 disabled:cursor-not-allowed disabled:bg-gray-50 disabled:text-gray-500" placeholder=""
+                                                    value={zip}
+                                                    onChange={ev => setZip(ev.target.value)}
+                                                />
+                                            </div>
+
+                                            <div className="col-span-6 mt-2">
+                                                {!isCartValid && (
+                                                    <p className="text-xs md:text-sm text-red-500 font-bold mb-2">
+                                                        Hay productos en el carrito con stock insuficiente. Por favor, ajusta las cantidades.
+                                                    </p>
+                                                )}
+                                                {!meetsMinimumPurchase && cartProducts.length > 0 && (
+                                                    <div className="bg-yellow-50 border-l-4 border-yellow-400 p-3 mb-3 rounded">
+                                                        <p className="text-xs md:text-sm text-yellow-800">
+                                                            <span className="font-semibold">Compra mínima:</span> ${formatPrice(MINIMUM_PURCHASE)}. 
+                                                            <span className="block sm:inline sm:ml-1 mt-1 sm:mt-0">Te faltan ${formatPrice(MINIMUM_PURCHASE - total)} para alcanzar el mínimo.</span>
+                                                        </p>
+                                                    </div>
+                                                )}
+                                                <div className="flex gap-2 flex-col sm:flex-row">
+                                                    <button
+                                                        onClick={() => setPaymentMethod('mercadopago')}
+                                                        disabled={!isCartValid || cartProducts.length === 0 || !formComplete || !meetsMinimumPurchase}
+                                                        className={`flex-1 rounded p-2 text-xs md:text-sm transition border-2 h-[60px] md:h-[70px] flex items-center justify-center
+                                                            ${paymentMethod === 'mercadopago' ? 'border-purple-600 bg-secondary' : 'border-gray-300 bg-gray-100'}
+                                                            ${(!isCartValid || cartProducts.length === 0 || !formComplete || !meetsMinimumPurchase) ? 'bg-gray-300 text-gray-500 cursor-not-allowed' : ''}
+                                                        `}
+                                                    >
+                                                        <img
+                                                            src="https://res.cloudinary.com/djuk4a84p/image/upload/v1755571794/MP_RGB_HANDSHAKE_color_horizontal_l0i6d8.svg"
+                                                            alt="Mercado Pago"
+                                                            className="h-[35px] md:h-[45px] w-auto mx-auto"
+                                                        />
+                                                    </button>
+                                                    <button
+                                                        onClick={() => setPaymentMethod('transfer')}
+                                                        disabled={!isCartValid || cartProducts.length === 0 || !formComplete || !meetsMinimumPurchase}
+                                                        className={`flex-1 rounded p-2 text-xs md:text-sm transition border-2 font-bold
+                                                            ${paymentMethod === 'transfer' ? 'border-purple-600 bg-secondary' : 'border-gray-300 bg-gray-100'}
+                                                            ${(!isCartValid || cartProducts.length === 0 || !formComplete || !meetsMinimumPurchase) ? 'bg-gray-300 text-gray-500 cursor-not-allowed' : ''}
+                                                        `}
+                                                    >
+                                                        Transferencia Bancaria
+                                                    </button>
+                                                </div>
+                                                <button
+                                                    onClick={paymentMethod === 'mercadopago' ? mpCheckout : transferCheckout}
+                                                    disabled={!isCartValid || cartProducts.length === 0 || !formComplete || !meetsMinimumPurchase}
+                                                    className={`mt-4 block rounded px-4 py-3 md:px-5 md:py-3 w-full transition font-bold text-sm md:text-base
+                                                    ${(!isCartValid || cartProducts.length === 0 || !formComplete || !meetsMinimumPurchase) ? 'bg-gray-300 text-gray-500 cursor-not-allowed' : 'bg-primary text-white hover:bg-purple-300'}`}
+                                                >
+                                                    {!formComplete ? 'Complete todos los campos para continuar' :
+                                                        !meetsMinimumPurchase ? `Compra mínima: $${formatPrice(MINIMUM_PURCHASE)}` :
+                                                        paymentMethod === 'mercadopago' ?
+                                                            'Proceder al Pago con Mercado Pago' :
+                                                            'Confirmar Pedido (Pagar con Transferencia)'}
+                                                </button>
+                                            </div>
+                                        </>
+                                    )}
                                 </div>
-                                <div className="col-span-6">
-                                    <label className="mb-1 block text-md font-medium text-gray-700">Nombre Completo</label>
-                                    <input
-                                        type="text"
-                                        className="block w-full rounded-md p-3 border border-gray-300"
-                                        value={guestName}
-                                        onChange={e => setGuestName(e.target.value)}
-                                        placeholder="Tu nombre completo"
-                                    />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        );
+    }
+
+    if (session) {
+        return (
+            <section className="flex justify-between max-md:flex-col md:space-x-4 px-2 md:px-4 pb-4 max-w-[1600px] mx-auto">
+                <div className="md:w-3/5">
+                    <div className="mt-6 md:mt-8">
+                        <header className="text-left flex justify-between w-full mb-4">
+                            <h1 className="text-xl font-bold text-gray-900 sm:text-3xl">
+                                Tu Carrito
+                            </h1>
+                        </header>
+                        {!products?.length ? (
+                            <p className="my-6 text-center">Tu Carrito Está Vacío.</p>
+                        ) : (
+                            <>
+                                {renderCartProducts()}
+                                <div className="mt-8 flex justify-end border-t border-gray-100 pt-6">
+                                    <div className="w-full max-w-md space-y-4">
+                                        <dl className="space-y-2 text-sm md:text-md text-text">
+                                            <div className="flex justify-end text-red-500 border-b pb-2 mb-3">
+                                                <button onClick={deleteCart} className="text-sm hover:underline">Borrar Carrito</button>
+                                            </div>
+                                            <div className="flex justify-between text-base md:text-lg font-semibold">
+                                                <dt>Total</dt>
+                                                <dd>$ {formatPrice(total)}</dd>
+                                            </div>
+                                        </dl>
+                                        <div className="flex justify-end">
+                                            <Link
+                                                className="group flex items-center justify-between gap-3 rounded-lg border border-primary bg-primary px-4 py-2.5 md:px-5 md:py-3 transition-colors hover:bg-transparent focus:ring focus:outline-none w-full sm:w-auto"
+                                                href="/products"
+                                            >
+                                                <span className="font-medium text-sm md:text-base text-white transition-colors group-hover:text-primary">
+                                                    Continuar Comprando
+                                                </span>
+                                                <span className="shrink-0 rounded-full border border-current bg-white p-1.5 md:p-2 text-primary">
+                                                    <svg
+                                                        className="w-4 h-4 md:w-5 md:h-5 rtl:rotate-180"
+                                                        xmlns="http://www.w3.org/2000/svg"
+                                                        fill="none"
+                                                        viewBox="0 0 24 24"
+                                                        stroke="currentColor"
+                                                    >
+                                                        <path
+                                                            strokeLinecap="round"
+                                                            strokeLinejoin="round"
+                                                            strokeWidth="2"
+                                                            d="M17 8l4 4m0 0l-4 4m4-4H3"
+                                                        />
+                                                    </svg>
+                                                </span>
+                                            </Link>
+                                        </div>
+                                    </div>
                                 </div>
-                                {guestInfoComplete && (
-                                    <>
+                            </>
+                        )}
+                    </div>
+                </div>
+                {!products?.length ? (
+                    ''
+                ) : (
+                    <div className="md:w-2/5 mt-6 md:mt-8">
+                        <div className="mx-auto max-w-lg">
+                            <header className="text-left flex flex-col w-full mb-3">
+                                <h1 className="text-xl font-bold text-gray-900 sm:text-3xl">
+                                    Detalles de Envío
+                                </h1>
+                                <p className="mt-2 text-sm md:text-base text-gray-600">Utilizamos los Datos de su Cuenta para el Envío.</p>
+                            </header>
+                            <div className="p-4 md:p-5 border shadow-md my-2 md:my-3 bg-white rounded-lg">
+                                <div className="space-y-3">
+                                    <div className="grid grid-cols-6 gap-2 md:gap-3">
+                                        <div className="col-span-6">
+                                            <label htmlFor="example7" className="mb-1 block text-md font-medium text-gray-700">Email</label>
+                                            <input type="email" id="example7" className="block w-full rounded-md p-3 border border-gray-300 shadow-sm focus:border-primary-400 focus:ring focus:ring-primary-200 focus:ring-opacity-50 disabled:cursor-not-allowed disabled:bg-gray-50 disabled:text-gray-500" placeholder="tu@correo.com"
+                                                value={session.user.email}
+                                            />
+                                        </div>
+                                        <div className="col-span-6">
+                                            <label htmlFor="example8" className="mb-1 block text-md font-medium text-gray-700">Nombre Completo</label>
+                                            <input type="text" id="example8" className="block w-full rounded-md p-3 border border-gray-300 shadow-sm focus:border-primary-400 focus:ring focus:ring-primary-200 focus:ring-opacity-50 disabled:cursor-not-allowed disabled:bg-gray-50 disabled:text-gray-500" placeholder="tu@correo.com"
+                                                value={session.user.name}
+                                            />
+                                        </div>
                                         <div className="col-span-6">
                                             <label className="mb-1 block text-sm md:text-md font-medium text-gray-700">Dirección</label>
                                             <div className="grid grid-cols-6 gap-2">
@@ -830,236 +1064,6 @@ export default function Cart() {
                                                         'Confirmar Pedido (Pagar con Transferencia)'}
                                             </button>
                                         </div>
-                                    </>
-                                )}
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </section>
-        );
-    }
-
-    if (session) {
-        return (
-            <section className="flex justify-between max-md:flex-col md:space-x-4 px-2 md:px-4 pb-4 max-w-[1600px] mx-auto">
-                <div className="md:w-3/5">
-                    <div className="mt-6 md:mt-8">
-                        <header className="text-left flex justify-between w-full mb-4">
-                            <h1 className="text-xl font-bold text-gray-900 sm:text-3xl">
-                                Tu Carrito
-                            </h1>
-                        </header>
-                        {!products?.length ? (
-                            <p className="my-6 text-center">Tu Carrito Está Vacío.</p>
-                        ) : (
-                            <>
-                                {renderCartProducts()}
-                                <div className="mt-8 flex justify-end border-t border-gray-100 pt-6">
-                                    <div className="w-full max-w-md space-y-4">
-                                        <dl className="space-y-2 text-sm md:text-md text-text">
-                                            <div className="flex justify-end text-red-500 border-b pb-2 mb-3">
-                                                <button onClick={deleteCart} className="text-sm hover:underline">Borrar Carrito</button>
-                                            </div>
-                                            <div className="flex justify-between text-base md:text-lg font-semibold">
-                                                <dt>Total</dt>
-                                                <dd>$ {formatPrice(total)}</dd>
-                                            </div>
-                                        </dl>
-                                        <div className="flex justify-end">
-                                            <Link
-                                                className="group flex items-center justify-between gap-3 rounded-lg border border-primary bg-primary px-4 py-2.5 md:px-5 md:py-3 transition-colors hover:bg-transparent focus:ring focus:outline-none w-full sm:w-auto"
-                                                href="/products"
-                                            >
-                                                <span className="font-medium text-sm md:text-base text-white transition-colors group-hover:text-primary">
-                                                    Continuar Comprando
-                                                </span>
-                                                <span className="shrink-0 rounded-full border border-current bg-white p-1.5 md:p-2 text-primary">
-                                                    <svg
-                                                        className="w-4 h-4 md:w-5 md:h-5 rtl:rotate-180"
-                                                        xmlns="http://www.w3.org/2000/svg"
-                                                        fill="none"
-                                                        viewBox="0 0 24 24"
-                                                        stroke="currentColor"
-                                                    >
-                                                        <path
-                                                            strokeLinecap="round"
-                                                            strokeLinejoin="round"
-                                                            strokeWidth="2"
-                                                            d="M17 8l4 4m0 0l-4 4m4-4H3"
-                                                        />
-                                                    </svg>
-                                                </span>
-                                            </Link>
-                                        </div>
-                                    </div>
-                                </div>
-                            </>
-                        )}
-                    </div>
-                </div>
-                {!products?.length ? (
-                    ''
-                ) : (
-                    <div className="md:w-2/5 mt-6 md:mt-8">
-                        <header className="text-start flex flex-col w-full mb-3">
-                            <h1 className="text-xl font-bold text-gray-900 sm:text-3xl">
-                                Detalles de Envío
-                            </h1>
-                            <p className="mt-2 text-sm md:text-base text-gray-600">Utilizamos los Datos de su Cuenta para el Envío.</p>
-                        </header>
-                        <div className="mx-auto max-w-lg p-4 md:p-5 border shadow-md my-2 md:my-3 bg-white rounded-lg">
-                            <div className="space-y-3">
-                                <div className="grid grid-cols-6 gap-2 md:gap-3">
-                                    <div className="col-span-6">
-                                        <label htmlFor="example7" className="mb-1 block text-md font-medium text-gray-700">Email</label>
-                                        <input type="email" id="example7" className="block w-full rounded-md p-3 border border-gray-300 shadow-sm focus:border-primary-400 focus:ring focus:ring-primary-200 focus:ring-opacity-50 disabled:cursor-not-allowed disabled:bg-gray-50 disabled:text-gray-500" placeholder="tu@correo.com"
-                                            value={session.user.email}
-                                        />
-                                    </div>
-                                    <div className="col-span-6">
-                                        <label htmlFor="example8" className="mb-1 block text-md font-medium text-gray-700">Nombre Completo</label>
-                                        <input type="text" id="example8" className="block w-full rounded-md p-3 border border-gray-300 shadow-sm focus:border-primary-400 focus:ring focus:ring-primary-200 focus:ring-opacity-50 disabled:cursor-not-allowed disabled:bg-gray-50 disabled:text-gray-500" placeholder="tu@correo.com"
-                                            value={session.user.name}
-                                        />
-                                    </div>
-                                    <div className="col-span-6">
-                                        <label className="mb-1 block text-sm md:text-md font-medium text-gray-700">Dirección</label>
-                                        <div className="grid grid-cols-6 gap-2">
-                                            <div className="col-span-4">
-                                                <input
-                                                    type="text"
-                                                    className={`block p-3 border w-full rounded-md ${
-                                                        addressErrors.street ? 'border-red-500' : 'border-gray-300'
-                                                    }`}
-                                                    placeholder="Nombre de la calle"
-                                                    value={address.street}
-                                                    onChange={ev => {
-                                                        const value = ev.target.value;
-                                                        const error = validateAddress('street', value);
-                                                        setAddressErrors(prev => ({...prev, street: error}));
-                                                        setAddress(prev => ({...prev, street: value}));
-                                                    }}
-                                                    required
-                                                />
-                                                {addressErrors.street && (
-                                                    <p className="text-red-500 text-xs mt-1">{addressErrors.street}</p>
-                                                )}
-                                            </div>
-                                            <div className="col-span-2">
-                                                <input
-                                                    type="text"
-                                                    className={`block p-3 border w-full rounded-md ${
-                                                        addressErrors.number ? 'border-red-500' : 'border-gray-300'
-                                                    }`}
-                                                    placeholder="Número"
-                                                    value={address.number}
-                                                    onChange={ev => {
-                                                        const value = ev.target.value;
-                                                        const error = validateAddress('number', value);
-                                                        setAddressErrors(prev => ({...prev, number: error}));
-                                                        setAddress(prev => ({...prev, number: value}));
-                                                    }}
-                                                    required
-                                                />
-                                                {addressErrors.number && (
-                                                    <p className="text-red-500 text-xs mt-1">{addressErrors.number}</p>
-                                                )}
-                                            </div>
-                                            <div className="col-span-3">
-                                                <input
-                                                    type="text"
-                                                    className="block p-3 border w-full rounded-md border-gray-300"
-                                                    placeholder="Piso (opcional)"
-                                                    value={address.floor}
-                                                    onChange={ev => setAddress(prev => ({...prev, floor: ev.target.value}))}
-                                                />
-                                            </div>
-                                            <div className="col-span-3">
-                                                <input
-                                                    type="text"
-                                                    className="block p-3 border w-full rounded-md border-gray-300"
-                                                    placeholder="Departamento (opcional)"
-                                                    value={address.apartment}
-                                                    onChange={ev => setAddress(prev => ({...prev, apartment: ev.target.value}))}
-                                                />
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div className="col-span-6 sm:col-span-3">
-                                        <label htmlFor="example10" className="mb-1 block text-md font-medium text-gray-700">Ciudad</label>
-                                        <input type="text" id="example10" className="block p-3 border w-full rounded-md border-gray-300 shadow-sm focus:border-primary-400 focus:ring focus:ring-primary-200 focus:ring-opacity-50 disabled:cursor-not-allowed disabled:bg-gray-50 disabled:text-gray-500" placeholder=""
-                                            value={city}
-                                            onChange={ev => setCity(ev.target.value)}
-                                        />
-                                    </div>
-                                    <div className="col-span-4 sm:col-span-2">
-                                        <label htmlFor="example11" className="mb-1 block text-md font-medium text-gray-700">Región/Provincia</label>
-                                        <input type="text" id="example11" className="block p-3 border w-full rounded-md border-gray-300 shadow-sm focus:border-primary-400 focus:ring focus:ring-primary-200 focus:ring-opacity-50 disabled:cursor-not-allowed disabled:bg-gray-50 disabled:text-gray-500" placeholder=""
-                                            value={state}
-                                            onChange={ev => setState(ev.target.value)}
-                                        />
-                                    </div>
-                                    <div className="col-span-2 sm:col-span-1">
-                                        <label htmlFor="example12" className="mb-1 block text-md font-medium text-gray-700">C.P.</label>
-                                        <input type="text" id="example12" className="block p-3 border w-full rounded-md border-gray-300 shadow-sm focus:border-primary-400 focus:ring focus:ring-primary-200 focus:ring-opacity-50 disabled:cursor-not-allowed disabled:bg-gray-50 disabled:text-gray-500" placeholder=""
-                                            value={zip}
-                                            onChange={ev => setZip(ev.target.value)}
-                                        />
-                                    </div>
-
-                                    <div className="col-span-6 mt-2">
-                                        {!isCartValid && (
-                                            <p className="text-xs md:text-sm text-red-500 font-bold mb-2">
-                                                Hay productos en el carrito con stock insuficiente. Por favor, ajusta las cantidades.
-                                            </p>
-                                        )}
-                                        {!meetsMinimumPurchase && cartProducts.length > 0 && (
-                                            <div className="bg-yellow-50 border-l-4 border-yellow-400 p-3 mb-3 rounded">
-                                                <p className="text-xs md:text-sm text-yellow-800">
-                                                    <span className="font-semibold">Compra mínima:</span> ${formatPrice(MINIMUM_PURCHASE)}. 
-                                                    <span className="block sm:inline sm:ml-1 mt-1 sm:mt-0">Te faltan ${formatPrice(MINIMUM_PURCHASE - total)} para alcanzar el mínimo.</span>
-                                                </p>
-                                            </div>
-                                        )}
-                                        <div className="flex gap-2 flex-col sm:flex-row">
-                                            <button
-                                                onClick={() => setPaymentMethod('mercadopago')}
-                                                disabled={!isCartValid || cartProducts.length === 0 || !formComplete || !meetsMinimumPurchase}
-                                                className={`flex-1 rounded p-2 text-xs md:text-sm transition border-2 h-[60px] md:h-[70px] flex items-center justify-center
-                                                    ${paymentMethod === 'mercadopago' ? 'border-purple-600 bg-secondary' : 'border-gray-300 bg-gray-100'}
-                                                    ${(!isCartValid || cartProducts.length === 0 || !formComplete || !meetsMinimumPurchase) ? 'bg-gray-300 text-gray-500 cursor-not-allowed' : ''}
-                                                `}
-                                            >
-                                                <img
-                                                    src="https://res.cloudinary.com/djuk4a84p/image/upload/v1755571794/MP_RGB_HANDSHAKE_color_horizontal_l0i6d8.svg"
-                                                    alt="Mercado Pago"
-                                                    className="h-[35px] md:h-[45px] w-auto mx-auto"
-                                                />
-                                            </button>
-                                            <button
-                                                onClick={() => setPaymentMethod('transfer')}
-                                                disabled={!isCartValid || cartProducts.length === 0 || !formComplete || !meetsMinimumPurchase}
-                                                className={`flex-1 rounded p-2 text-xs md:text-sm transition border-2 font-bold
-                                                    ${paymentMethod === 'transfer' ? 'border-purple-600 bg-secondary' : 'border-gray-300 bg-gray-100'}
-                                                    ${(!isCartValid || cartProducts.length === 0 || !formComplete || !meetsMinimumPurchase) ? 'bg-gray-300 text-gray-500 cursor-not-allowed' : ''}
-                                                `}
-                                            >
-                                                Transferencia Bancaria
-                                            </button>
-                                        </div>
-                                        <button
-                                            onClick={paymentMethod === 'mercadopago' ? mpCheckout : transferCheckout}
-                                            disabled={!isCartValid || cartProducts.length === 0 || !formComplete || !meetsMinimumPurchase}
-                                            className={`mt-4 block rounded px-4 py-3 md:px-5 md:py-3 w-full transition font-bold text-sm md:text-base
-                                            ${(!isCartValid || cartProducts.length === 0 || !formComplete || !meetsMinimumPurchase) ? 'bg-gray-300 text-gray-500 cursor-not-allowed' : 'bg-primary text-white hover:bg-purple-300'}`}
-                                        >
-                                            {!formComplete ? 'Complete todos los campos para continuar' :
-                                                !meetsMinimumPurchase ? `Compra mínima: $${formatPrice(MINIMUM_PURCHASE)}` :
-                                                paymentMethod === 'mercadopago' ?
-                                                    'Proceder al Pago con Mercado Pago' :
-                                                    'Confirmar Pedido (Pagar con Transferencia)'}
-                                        </button>
                                     </div>
                                 </div>
                             </div>
