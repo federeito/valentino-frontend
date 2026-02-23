@@ -11,6 +11,9 @@ const formatPrice = (price) => {
     return price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 };
 
+// Minimum purchase amount constant
+const MINIMUM_PURCHASE = 300000;
+
 // Función actualizada para manejar tanto el formato anterior (strings) como el nuevo (objetos con colores)
 const countOfId = (id, cartProducts, color = null) => {
     return cartProducts.filter(item => {
@@ -159,6 +162,11 @@ export default function Cart() {
         return calculatedTotal;
     }, [uniqueProducts, products, getProductCount, cartProducts]);
 
+    // Check if total meets minimum purchase requirement
+    const meetsMinimumPurchase = useMemo(() => {
+        return total >= MINIMUM_PURCHASE;
+    }, [total]);
+
     // Efecto para cargar productos - solo se ejecuta cuando cambian los uniqueIds
     useEffect(() => {
         if (uniqueIds.length > 0) {
@@ -259,6 +267,10 @@ export default function Cart() {
             toast.error('Por favor complete todos los campos del formulario');
             return;
         }
+        if (!meetsMinimumPurchase) {
+            toast.error(`El monto mínimo de compra es de $${formatPrice(MINIMUM_PURCHASE)}`);
+            return;
+        }
         if (paymentMethod !== 'mercadopago') return;
 
         try {
@@ -284,6 +296,10 @@ export default function Cart() {
     async function transferCheckout() {
         if (!formComplete) {
             toast.error('Por favor complete todos los campos del formulario');
+            return;
+        }
+        if (!meetsMinimumPurchase) {
+            toast.error(`El monto mínimo de compra es de $${formatPrice(MINIMUM_PURCHASE)}`);
             return;
         }
         if (paymentMethod !== 'transfer') return;
@@ -325,10 +341,10 @@ export default function Cart() {
         return (
             <div className="mt-8" key={`${product._id}-${color?.name || 'default'}`}>
                 <ul className="space-y-4">
-                    <li className="flex items-center gap-2 md:gap-4 justify-between flex-wrap sm:flex-nowrap">
-                        <img src={product.Imagenes[0]} alt="cart image" className="h-16 w-16 object-cover rounded-lg" />
-                        <div className="min-w-[200px] flex-grow">
-                            <h3 className="text-sm md:text-md text-text">
+                    <li className="flex items-start gap-3 md:gap-4 justify-between flex-wrap">
+                        <img src={product.Imagenes[0]} alt="cart image" className="h-16 w-16 object-cover rounded-lg flex-shrink-0" />
+                        <div className="min-w-[150px] flex-grow">
+                            <h3 className="text-sm md:text-md text-text font-medium">
                                 {product.Título}
                             </h3>
 
@@ -353,14 +369,53 @@ export default function Cart() {
                             )}
 
                             <dl className="mt-1 space-y-px text-sm md:text-md text-text">
-                                <p>$ {formatPrice(quantity * product.Precio)}</p>
+                                <p className="font-semibold">$ {formatPrice(quantity * product.Precio)}</p>
                             </dl>
+
+                            {/* Quantity controls for mobile - below product info */}
+                            <div className="flex items-center gap-2 mt-3 sm:hidden">
+                                <button
+                                    onClick={() => decreaseProduct(product._id, color)}
+                                    type="button"
+                                    className="h-9 w-9 flex items-center justify-center text-gray-600 transition hover:opacity-75 border border-gray-300 rounded">
+                                    -
+                                </button>
+
+                                <input
+                                    type="number"
+                                    id="Quantity"
+                                    value={quantity}
+                                    readOnly
+                                    className="h-9 w-14 rounded border text-primary text-base font-bold border-gray-300 text-center [-moz-appearance:_textfield] [&::-webkit-inner-spin-button]:m-0 [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:m-0 [&::-webkit-outer-spin-button]:appearance-none"
+                                />
+                                <button
+                                    onClick={() => increaseProduct(product._id, product.stock, color)}
+                                    type="button"
+                                    disabled={isAtStockLimit}
+                                    className={`h-9 w-9 flex items-center justify-center text-gray-600 transition hover:opacity-75 border border-gray-300 rounded ${isAtStockLimit ? 'bg-gray-300 cursor-not-allowed' : ''}`}>
+                                    +
+                                </button>
+                            </div>
+
+                            {/* Status messages */}
+                            {isOverstocked && (
+                                <p className="text-xs text-red-500 font-bold mt-2">
+                                    ¡Excede el stock disponible!
+                                </p>
+                            )}
+                            {!isOverstocked && isAtStockLimit && (
+                                <p className="text-xs text-orange-500 font-bold mt-2">
+                                    Límite de stock alcanzado.
+                                </p>
+                            )}
                         </div>
-                        <div className="flex items-center gap-2 mt-2 sm:mt-0">
+
+                        {/* Quantity controls for desktop - on the right */}
+                        <div className="hidden sm:flex items-center gap-2">
                             <button
                                 onClick={() => decreaseProduct(product._id, color)}
                                 type="button"
-                                className="h-10 w10 leading-10 text-gray-600 transition hover:opacity-75 border">
+                                className="h-10 w-10 flex items-center justify-center text-gray-600 transition hover:opacity-75 border border-gray-300 rounded">
                                 -
                             </button>
 
@@ -369,26 +424,16 @@ export default function Cart() {
                                 id="Quantity"
                                 value={quantity}
                                 readOnly
-                                className="h-10 w16 rounded border text-primary text-lg font-bold border-gray-200 text-center [-moz-appearance:_textfield] sm:text-md [&::-webkit-inner-spin-button]:m-0 [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:m-0 [&::-webkit-outer-spin-button]:appearance-none"
+                                className="h-10 w-16 rounded border text-primary text-lg font-bold border-gray-300 text-center [-moz-appearance:_textfield] [&::-webkit-inner-spin-button]:m-0 [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:m-0 [&::-webkit-outer-spin-button]:appearance-none"
                             />
                             <button
                                 onClick={() => increaseProduct(product._id, product.stock, color)}
                                 type="button"
                                 disabled={isAtStockLimit}
-                                className={`h-10 w10 leading-10 text-gray-600 transition hover:opacity-75 border ${isAtStockLimit ? 'bg-gray-300 cursor-not-allowed' : ''}`}>
+                                className={`h-10 w-10 flex items-center justify-center text-gray-600 transition hover:opacity-75 border border-gray-300 rounded ${isAtStockLimit ? 'bg-gray-300 cursor-not-allowed' : ''}`}>
                                 +
                             </button>
                         </div>
-                        {isOverstocked && (
-                            <p className="text-xs text-red-500 font-bold mt-1">
-                                ¡Excede el stock disponible!
-                            </p>
-                        )}
-                        {!isOverstocked && isAtStockLimit && (
-                            <p className="text-xs text-orange-500 font-bold mt-1">
-                                Límite de stock alcanzado.
-                            </p>
-                        )}
                     </li>
                 </ul>
             </div>
@@ -561,10 +606,10 @@ export default function Cart() {
         return (
             <section className="flex justify-between max-md:flex-col md:space-x-4 px-2 md:px-4 pb-4 max-w-[1600px] mx-auto">
                 <div className="md:w-3/5">
-                    <div className="mt-8 md:mt-6">
-                        <header className="text-left flex justify-between w-full">
+                    <div className="mt-6 md:mt-8">
+                        <header className="text-left flex justify-between w-full mb-4">
                             <h1 className="text-xl font-bold text-gray-900 sm:text-3xl">
-                                Tú Carrito
+                                Tu Carrito
                             </h1>
                         </header>
                         {!products?.length ? (
@@ -572,28 +617,28 @@ export default function Cart() {
                         ) : (
                             <>
                                 {renderCartProducts()}
-                                <div className="mt-8 flex justify-end border-t border-gray-100 pt-8">
-                                    <div className="max-w-md space-y-4">
-                                        <dl className="space-y-1 text-md text-text">
-                                            <div className="flex justify-end text-red-500 border-b mb-3">
-                                                <button onClick={deleteCart}>Borrar Carrito</button>
+                                <div className="mt-8 flex justify-end border-t border-gray-100 pt-6">
+                                    <div className="w-full max-w-md space-y-4">
+                                        <dl className="space-y-2 text-sm md:text-md text-text">
+                                            <div className="flex justify-end text-red-500 border-b pb-2 mb-3">
+                                                <button onClick={deleteCart} className="text-sm hover:underline">Borrar Carrito</button>
                                             </div>
-                                            <div className="flex justify-between">
+                                            <div className="flex justify-between text-base md:text-lg font-semibold">
                                                 <dt>Total</dt>
-                                                <dd> ${formatPrice(total)}</dd>
+                                                <dd>$ {formatPrice(total)}</dd>
                                             </div>
                                         </dl>
                                         <div className="flex justify-end">
                                             <Link
-                                                className="group flex items-center justify-between gap-4 rounded-lg border border-primary bg-primary px-5 py-3 transition-colors hover:bg-transparent focus:ring focus:outline-none"
+                                                className="group flex items-center justify-between gap-3 rounded-lg border border-primary bg-primary px-4 py-2.5 md:px-5 md:py-3 transition-colors hover:bg-transparent focus:ring focus:outline-none w-full sm:w-auto"
                                                 href="/products"
                                             >
-                                                <span className="font-medium text-white transition-colors group-hover:text-primary">
+                                                <span className="font-medium text-sm md:text-base text-white transition-colors group-hover:text-primary">
                                                     Continuar Comprando
                                                 </span>
-                                                <span className="shrink-0 rounded-full border border-current bg-white p-2 text-primary">
+                                                <span className="shrink-0 rounded-full border border-current bg-white p-1.5 md:p-2 text-primary">
                                                     <svg
-                                                        className="size-5 shadow-sm rtl:rotate-180"
+                                                        className="w-4 h-4 md:w-5 md:h-5 rtl:rotate-180"
                                                         xmlns="http://www.w3.org/2000/svg"
                                                         fill="none"
                                                         viewBox="0 0 24 24"
@@ -615,14 +660,14 @@ export default function Cart() {
                         )}
                     </div>
                 </div>
-                <div className="md:w-2/5 mt-8 md:mt-6">
-                    <header className="text-start flex flex-col w-full">
+                <div className="md:w-2/5 mt-6 md:mt-8">
+                    <header className="text-start flex flex-col w-full mb-3">
                         <h1 className="text-xl font-bold text-gray-900 sm:text-3xl">
                             Información del Comprador
                         </h1>
-                        <p className="mt-2">Complete sus datos para continuar con la compra</p>
+                        <p className="mt-2 text-sm md:text-base text-gray-600">Complete sus datos para continuar con la compra</p>
                     </header>
-                    <div className="mx-auto max-w-lg p-3 md:p-4 border shadow-md my-2 md:my-3 bg-white rounded-lg">
+                    <div className="mx-auto max-w-lg p-4 md:p-5 border shadow-md my-2 md:my-3 bg-white rounded-lg">
                         <div className="space-y-3">
                             <div className="grid grid-cols-6 gap-2 md:gap-3">
                                 <div className="col-span-6">
@@ -734,31 +779,39 @@ export default function Cart() {
 
                                         <div className="col-span-6 mt-2">
                                             {!isCartValid && (
-                                                <p className="text-red-500 font-bold mb-2">
+                                                <p className="text-xs md:text-sm text-red-500 font-bold mb-2">
                                                     Hay productos en el carrito con stock insuficiente. Por favor, ajusta las cantidades.
                                                 </p>
+                                            )}
+                                            {!meetsMinimumPurchase && cartProducts.length > 0 && (
+                                                <div className="bg-yellow-50 border-l-4 border-yellow-400 p-3 mb-3 rounded">
+                                                    <p className="text-xs md:text-sm text-yellow-800">
+                                                        <span className="font-semibold">Compra mínima:</span> ${formatPrice(MINIMUM_PURCHASE)}. 
+                                                        <span className="block sm:inline sm:ml-1 mt-1 sm:mt-0">Te faltan ${formatPrice(MINIMUM_PURCHASE - total)} para alcanzar el mínimo.</span>
+                                                    </p>
+                                                </div>
                                             )}
                                             <div className="flex gap-2 flex-col sm:flex-row">
                                                 <button
                                                     onClick={() => setPaymentMethod('mercadopago')}
-                                                    disabled={!isCartValid || cartProducts.length === 0 || !formComplete}
-                                                    className={`flex-1 rounded p-2 text-md transition border-2 h-[50px] md:h-[60px] flex items-center justify-center
+                                                    disabled={!isCartValid || cartProducts.length === 0 || !formComplete || !meetsMinimumPurchase}
+                                                    className={`flex-1 rounded p-2 text-xs md:text-sm transition border-2 h-[60px] md:h-[70px] flex items-center justify-center
                                                         ${paymentMethod === 'mercadopago' ? 'border-purple-600 bg-secondary' : 'border-gray-300 bg-gray-100'}
-                                                        ${(!isCartValid || cartProducts.length === 0 || !formComplete) ? 'bg-gray-300 text-gray-500 cursor-not-allowed' : ''}
+                                                        ${(!isCartValid || cartProducts.length === 0 || !formComplete || !meetsMinimumPurchase) ? 'bg-gray-300 text-gray-500 cursor-not-allowed' : ''}
                                                     `}
                                                 >
                                                     <img
                                                         src="https://res.cloudinary.com/djuk4a84p/image/upload/v1755571794/MP_RGB_HANDSHAKE_color_horizontal_l0i6d8.svg"
                                                         alt="Mercado Pago"
-                                                        className="h-[30px] md:h-[40px] w-auto mx-auto"
+                                                        className="h-[35px] md:h-[45px] w-auto mx-auto"
                                                     />
                                                 </button>
                                                 <button
                                                     onClick={() => setPaymentMethod('transfer')}
-                                                    disabled={!isCartValid || cartProducts.length === 0 || !formComplete}
-                                                    className={`flex-1 rounded p-2 text-md transition border-2 font-bold
+                                                    disabled={!isCartValid || cartProducts.length === 0 || !formComplete || !meetsMinimumPurchase}
+                                                    className={`flex-1 rounded p-2 text-xs md:text-sm transition border-2 font-bold
                                                         ${paymentMethod === 'transfer' ? 'border-purple-600 bg-secondary' : 'border-gray-300 bg-gray-100'}
-                                                        ${(!isCartValid || cartProducts.length === 0 || !formComplete) ? 'bg-gray-300 text-gray-500 cursor-not-allowed' : ''}
+                                                        ${(!isCartValid || cartProducts.length === 0 || !formComplete || !meetsMinimumPurchase) ? 'bg-gray-300 text-gray-500 cursor-not-allowed' : ''}
                                                     `}
                                                 >
                                                     Transferencia Bancaria
@@ -766,11 +819,12 @@ export default function Cart() {
                                             </div>
                                             <button
                                                 onClick={paymentMethod === 'mercadopago' ? mpCheckout : transferCheckout}
-                                                disabled={!isCartValid || cartProducts.length === 0 || !formComplete}
-                                                className={`mt-4 block rounded px-5 py-3 w-full transition font-bold
-                                                ${(!isCartValid || cartProducts.length === 0 || !formComplete) ? 'bg-gray-300 text-gray-500 cursor-not-allowed' : 'bg-primary text-white hover:bg-purple-300'}`}
+                                                disabled={!isCartValid || cartProducts.length === 0 || !formComplete || !meetsMinimumPurchase}
+                                                className={`mt-4 block rounded px-4 py-3 md:px-5 md:py-3 w-full transition font-bold text-sm md:text-base
+                                                ${(!isCartValid || cartProducts.length === 0 || !formComplete || !meetsMinimumPurchase) ? 'bg-gray-300 text-gray-500 cursor-not-allowed' : 'bg-primary text-white hover:bg-purple-300'}`}
                                             >
                                                 {!formComplete ? 'Complete todos los campos para continuar' :
+                                                    !meetsMinimumPurchase ? `Compra mínima: $${formatPrice(MINIMUM_PURCHASE)}` :
                                                     paymentMethod === 'mercadopago' ?
                                                         'Proceder al Pago con Mercado Pago' :
                                                         'Confirmar Pedido (Pagar con Transferencia)'}
@@ -790,10 +844,10 @@ export default function Cart() {
         return (
             <section className="flex justify-between max-md:flex-col md:space-x-4 px-2 md:px-4 pb-4 max-w-[1600px] mx-auto">
                 <div className="md:w-3/5">
-                    <div className="mt-8 md:mt-6">
-                        <header className="text-left flex justify-between w-full">
+                    <div className="mt-6 md:mt-8">
+                        <header className="text-left flex justify-between w-full mb-4">
                             <h1 className="text-xl font-bold text-gray-900 sm:text-3xl">
-                                Tú Carrito
+                                Tu Carrito
                             </h1>
                         </header>
                         {!products?.length ? (
@@ -801,28 +855,28 @@ export default function Cart() {
                         ) : (
                             <>
                                 {renderCartProducts()}
-                                <div className="mt-8 flex justify-end border-t border-gray-100 pt-8">
-                                    <div className="max-w-md space-y-4">
-                                        <dl className="space-y-1 text-md text-text">
-                                            <div className="flex justify-end text-red-500 border-b mb-3">
-                                                <button onClick={deleteCart}>Borrar Carrito</button>
+                                <div className="mt-8 flex justify-end border-t border-gray-100 pt-6">
+                                    <div className="w-full max-w-md space-y-4">
+                                        <dl className="space-y-2 text-sm md:text-md text-text">
+                                            <div className="flex justify-end text-red-500 border-b pb-2 mb-3">
+                                                <button onClick={deleteCart} className="text-sm hover:underline">Borrar Carrito</button>
                                             </div>
-                                            <div className="flex justify-between">
+                                            <div className="flex justify-between text-base md:text-lg font-semibold">
                                                 <dt>Total</dt>
-                                                <dd> ${formatPrice(total)}</dd>
+                                                <dd>$ {formatPrice(total)}</dd>
                                             </div>
                                         </dl>
                                         <div className="flex justify-end">
                                             <Link
-                                                className="group flex items-center justify-between gap-4 rounded-lg border border-primary bg-primary px-5 py-3 transition-colors hover:bg-transparent focus:ring focus:outline-none"
+                                                className="group flex items-center justify-between gap-3 rounded-lg border border-primary bg-primary px-4 py-2.5 md:px-5 md:py-3 transition-colors hover:bg-transparent focus:ring focus:outline-none w-full sm:w-auto"
                                                 href="/products"
                                             >
-                                                <span className="font-medium text-white transition-colors group-hover:text-primary">
+                                                <span className="font-medium text-sm md:text-base text-white transition-colors group-hover:text-primary">
                                                     Continuar Comprando
                                                 </span>
-                                                <span className="shrink-0 rounded-full border border-current bg-white p-2 text-primary">
+                                                <span className="shrink-0 rounded-full border border-current bg-white p-1.5 md:p-2 text-primary">
                                                     <svg
-                                                        className="size-5 shadow-sm rtl:rotate-180"
+                                                        className="w-4 h-4 md:w-5 md:h-5 rtl:rotate-180"
                                                         xmlns="http://www.w3.org/2000/svg"
                                                         fill="none"
                                                         viewBox="0 0 24 24"
@@ -847,14 +901,14 @@ export default function Cart() {
                 {!products?.length ? (
                     ''
                 ) : (
-                    <div className="md:w-2/5 mt-8 md:mt-6">
-                        <header className="text-start flex flex-col w-full">
+                    <div className="md:w-2/5 mt-6 md:mt-8">
+                        <header className="text-start flex flex-col w-full mb-3">
                             <h1 className="text-xl font-bold text-gray-900 sm:text-3xl">
                                 Detalles de Envío
                             </h1>
-                            <p className="mt-2">Utilizamos los Datos de su Cuenta para el Envío.</p>
+                            <p className="mt-2 text-sm md:text-base text-gray-600">Utilizamos los Datos de su Cuenta para el Envío.</p>
                         </header>
-                        <div className="mx-auto max-w-lg p-3 md:p-4 border shadow-md my-2 md:my-3 bg-white rounded-lg">
+                        <div className="mx-auto max-w-lg p-4 md:p-5 border shadow-md my-2 md:my-3 bg-white rounded-lg">
                             <div className="space-y-3">
                                 <div className="grid grid-cols-6 gap-2 md:gap-3">
                                     <div className="col-span-6">
@@ -956,31 +1010,39 @@ export default function Cart() {
 
                                     <div className="col-span-6 mt-2">
                                         {!isCartValid && (
-                                            <p className="text-red-500 font-bold mb-2">
+                                            <p className="text-xs md:text-sm text-red-500 font-bold mb-2">
                                                 Hay productos en el carrito con stock insuficiente. Por favor, ajusta las cantidades.
                                             </p>
+                                        )}
+                                        {!meetsMinimumPurchase && cartProducts.length > 0 && (
+                                            <div className="bg-yellow-50 border-l-4 border-yellow-400 p-3 mb-3 rounded">
+                                                <p className="text-xs md:text-sm text-yellow-800">
+                                                    <span className="font-semibold">Compra mínima:</span> ${formatPrice(MINIMUM_PURCHASE)}. 
+                                                    <span className="block sm:inline sm:ml-1 mt-1 sm:mt-0">Te faltan ${formatPrice(MINIMUM_PURCHASE - total)} para alcanzar el mínimo.</span>
+                                                </p>
+                                            </div>
                                         )}
                                         <div className="flex gap-2 flex-col sm:flex-row">
                                             <button
                                                 onClick={() => setPaymentMethod('mercadopago')}
-                                                disabled={!isCartValid || cartProducts.length === 0 || !formComplete}
-                                                className={`flex-1 rounded p-2 text-md transition border-2 h-[50px] md:h-[60px] flex items-center justify-center
+                                                disabled={!isCartValid || cartProducts.length === 0 || !formComplete || !meetsMinimumPurchase}
+                                                className={`flex-1 rounded p-2 text-xs md:text-sm transition border-2 h-[60px] md:h-[70px] flex items-center justify-center
                                                     ${paymentMethod === 'mercadopago' ? 'border-purple-600 bg-secondary' : 'border-gray-300 bg-gray-100'}
-                                                    ${(!isCartValid || cartProducts.length === 0 || !formComplete) ? 'bg-gray-300 text-gray-500 cursor-not-allowed' : ''}
+                                                    ${(!isCartValid || cartProducts.length === 0 || !formComplete || !meetsMinimumPurchase) ? 'bg-gray-300 text-gray-500 cursor-not-allowed' : ''}
                                                 `}
                                             >
                                                 <img
                                                     src="https://res.cloudinary.com/djuk4a84p/image/upload/v1755571794/MP_RGB_HANDSHAKE_color_horizontal_l0i6d8.svg"
                                                     alt="Mercado Pago"
-                                                    className="h-[30px] md:h-[40px] w-auto mx-auto"
+                                                    className="h-[35px] md:h-[45px] w-auto mx-auto"
                                                 />
                                             </button>
                                             <button
                                                 onClick={() => setPaymentMethod('transfer')}
-                                                disabled={!isCartValid || cartProducts.length === 0 || !formComplete}
-                                                className={`flex-1 rounded p-2 text-md transition border-2 font-bold
+                                                disabled={!isCartValid || cartProducts.length === 0 || !formComplete || !meetsMinimumPurchase}
+                                                className={`flex-1 rounded p-2 text-xs md:text-sm transition border-2 font-bold
                                                     ${paymentMethod === 'transfer' ? 'border-purple-600 bg-secondary' : 'border-gray-300 bg-gray-100'}
-                                                    ${(!isCartValid || cartProducts.length === 0 || !formComplete) ? 'bg-gray-300 text-gray-500 cursor-not-allowed' : ''}
+                                                    ${(!isCartValid || cartProducts.length === 0 || !formComplete || !meetsMinimumPurchase) ? 'bg-gray-300 text-gray-500 cursor-not-allowed' : ''}
                                                 `}
                                             >
                                                 Transferencia Bancaria
@@ -988,11 +1050,12 @@ export default function Cart() {
                                         </div>
                                         <button
                                             onClick={paymentMethod === 'mercadopago' ? mpCheckout : transferCheckout}
-                                            disabled={!isCartValid || cartProducts.length === 0 || !formComplete}
-                                            className={`mt-4 block rounded px-5 py-3 w-full transition font-bold
-                                            ${(!isCartValid || cartProducts.length === 0 || !formComplete) ? 'bg-gray-300 text-gray-500 cursor-not-allowed' : 'bg-primary text-white hover:bg-purple-300'}`}
+                                            disabled={!isCartValid || cartProducts.length === 0 || !formComplete || !meetsMinimumPurchase}
+                                            className={`mt-4 block rounded px-4 py-3 md:px-5 md:py-3 w-full transition font-bold text-sm md:text-base
+                                            ${(!isCartValid || cartProducts.length === 0 || !formComplete || !meetsMinimumPurchase) ? 'bg-gray-300 text-gray-500 cursor-not-allowed' : 'bg-primary text-white hover:bg-purple-300'}`}
                                         >
                                             {!formComplete ? 'Complete todos los campos para continuar' :
+                                                !meetsMinimumPurchase ? `Compra mínima: $${formatPrice(MINIMUM_PURCHASE)}` :
                                                 paymentMethod === 'mercadopago' ?
                                                     'Proceder al Pago con Mercado Pago' :
                                                     'Confirmar Pedido (Pagar con Transferencia)'}
