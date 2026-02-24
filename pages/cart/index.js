@@ -162,10 +162,19 @@ export default function Cart() {
         return calculatedTotal;
     }, [uniqueProducts, products, getProductCount, cartProducts]);
 
+    // Calculate discount and final total for bank transfer
+    const discount = useMemo(() => {
+        return paymentMethod === 'transfer' ? total * 0.10 : 0;
+    }, [total, paymentMethod]);
+
+    const finalTotal = useMemo(() => {
+        return total - discount;
+    }, [total, discount]);
+
     // Check if total meets minimum purchase requirement
     const meetsMinimumPurchase = useMemo(() => {
-        return total >= MINIMUM_PURCHASE;
-    }, [total]);
+        return finalTotal >= MINIMUM_PURCHASE;
+    }, [finalTotal]);
 
     // Efecto para cargar productos - solo se ejecuta cuando cambian los uniqueIds
     useEffect(() => {
@@ -624,9 +633,27 @@ export default function Cart() {
                                                 <button onClick={deleteCart} className="text-sm hover:underline">Borrar Carrito</button>
                                             </div>
                                             <div className="flex justify-between text-base md:text-lg font-semibold">
-                                                <dt>Total</dt>
+                                                <dt>Subtotal</dt>
                                                 <dd>$ {formatPrice(total)}</dd>
                                             </div>
+                                            {paymentMethod === 'transfer' && (
+                                                <>
+                                                    <div className="flex justify-between text-sm md:text-base text-green-600">
+                                                        <dt>Descuento (10% por transferencia)</dt>
+                                                        <dd>-$ {formatPrice(discount)}</dd>
+                                                    </div>
+                                                    <div className="flex justify-between text-lg md:text-xl font-bold border-t pt-2">
+                                                        <dt>Total a Pagar</dt>
+                                                        <dd>$ {formatPrice(finalTotal)}</dd>
+                                                    </div>
+                                                </>
+                                            )}
+                                            {paymentMethod !== 'transfer' && (
+                                                <div className="flex justify-between text-base md:text-lg font-semibold">
+                                                    <dt>Total</dt>
+                                                    <dd>$ {formatPrice(total)}</dd>
+                                                </div>
+                                            )}
                                         </dl>
                                         <div className="flex justify-end">
                                             <Link
@@ -788,7 +815,7 @@ export default function Cart() {
                                                     <div className="bg-yellow-50 border-l-4 border-yellow-400 p-3 mb-3 rounded">
                                                         <p className="text-xs md:text-sm text-yellow-800">
                                                             <span className="font-semibold">Compra mínima:</span> ${formatPrice(MINIMUM_PURCHASE)}. 
-                                                            <span className="block sm:inline sm:ml-1 mt-1 sm:mt-0">Te faltan ${formatPrice(MINIMUM_PURCHASE - total)} para alcanzar el mínimo.</span>
+                                                            <span className="block sm:inline sm:ml-1 mt-1 sm:mt-0">Te faltan ${formatPrice(MINIMUM_PURCHASE - finalTotal)} para alcanzar el mínimo.</span>
                                                         </p>
                                                     </div>
                                                 )}
@@ -822,13 +849,9 @@ export default function Cart() {
                                                     onClick={paymentMethod === 'mercadopago' ? mpCheckout : transferCheckout}
                                                     disabled={!isCartValid || cartProducts.length === 0 || !formComplete || !meetsMinimumPurchase}
                                                     className={`mt-4 block rounded px-4 py-3 md:px-5 md:py-3 w-full transition font-bold text-sm md:text-base
-                                                    ${(!isCartValid || cartProducts.length === 0 || !formComplete || !meetsMinimumPurchase) ? 'bg-gray-300 text-gray-500 cursor-not-allowed' : 'bg-primary text-white hover:bg-purple-300'}`}
+                                                    ${(!isCartValid || cartProducts.length === 0 || !formComplete || !meetsMinimumPurchase) ? 'bg-gray-300 text-gray-500 cursor-not-allowed' : 'bg-black text-white hover:bg-gray-800'}`}
                                                 >
-                                                    {!formComplete ? 'Complete todos los campos para continuar' :
-                                                        !meetsMinimumPurchase ? `Compra mínima: $${formatPrice(MINIMUM_PURCHASE)}` :
-                                                        paymentMethod === 'mercadopago' ?
-                                                            'Proceder al Pago con Mercado Pago' :
-                                                            'Confirmar Pedido (Pagar con Transferencia)'}
+                                                    Realizar pedido
                                                 </button>
                                             </div>
                                         </>
@@ -864,9 +887,27 @@ export default function Cart() {
                                                 <button onClick={deleteCart} className="text-sm hover:underline">Borrar Carrito</button>
                                             </div>
                                             <div className="flex justify-between text-base md:text-lg font-semibold">
-                                                <dt>Total</dt>
+                                                <dt>Subtotal</dt>
                                                 <dd>$ {formatPrice(total)}</dd>
                                             </div>
+                                            {paymentMethod === 'transfer' && (
+                                                <>
+                                                    <div className="flex justify-between text-sm md:text-base text-green-600">
+                                                        <dt>Descuento (10% por transferencia)</dt>
+                                                        <dd>-$ {formatPrice(discount)}</dd>
+                                                    </div>
+                                                    <div className="flex justify-between text-lg md:text-xl font-bold border-t pt-2">
+                                                        <dt>Total a Pagar</dt>
+                                                        <dd>$ {formatPrice(finalTotal)}</dd>
+                                                    </div>
+                                                </>
+                                            )}
+                                            {paymentMethod !== 'transfer' && (
+                                                <div className="flex justify-between text-base md:text-lg font-semibold">
+                                                    <dt>Total</dt>
+                                                    <dd>$ {formatPrice(total)}</dd>
+                                                </div>
+                                            )}
                                         </dl>
                                         <div className="flex justify-end">
                                             <Link
@@ -1021,7 +1062,7 @@ export default function Cart() {
                                                 <div className="bg-yellow-50 border-l-4 border-yellow-400 p-3 mb-3 rounded">
                                                     <p className="text-xs md:text-sm text-yellow-800">
                                                         <span className="font-semibold">Compra mínima:</span> ${formatPrice(MINIMUM_PURCHASE)}. 
-                                                        <span className="block sm:inline sm:ml-1 mt-1 sm:mt-0">Te faltan ${formatPrice(MINIMUM_PURCHASE - total)} para alcanzar el mínimo.</span>
+                                                        <span className="block sm:inline sm:ml-1 mt-1 sm:mt-0">Te faltan ${formatPrice(MINIMUM_PURCHASE - finalTotal)} para alcanzar el mínimo.</span>
                                                     </p>
                                                 </div>
                                             )}
@@ -1055,13 +1096,9 @@ export default function Cart() {
                                                 onClick={paymentMethod === 'mercadopago' ? mpCheckout : transferCheckout}
                                                 disabled={!isCartValid || cartProducts.length === 0 || !formComplete || !meetsMinimumPurchase}
                                                 className={`mt-4 block rounded px-4 py-3 md:px-5 md:py-3 w-full transition font-bold text-sm md:text-base
-                                                ${(!isCartValid || cartProducts.length === 0 || !formComplete || !meetsMinimumPurchase) ? 'bg-gray-300 text-gray-500 cursor-not-allowed' : 'bg-primary text-white hover:bg-purple-300'}`}
+                                                ${(!isCartValid || cartProducts.length === 0 || !formComplete || !meetsMinimumPurchase) ? 'bg-gray-300 text-gray-500 cursor-not-allowed' : 'bg-black text-white hover:bg-gray-800'}`}
                                             >
-                                                {!formComplete ? 'Complete todos los campos para continuar' :
-                                                    !meetsMinimumPurchase ? `Compra mínima: $${formatPrice(MINIMUM_PURCHASE)}` :
-                                                    paymentMethod === 'mercadopago' ?
-                                                        'Proceder al Pago con Mercado Pago' :
-                                                        'Confirmar Pedido (Pagar con Transferencia)'}
+                                                Realizar pedido
                                             </button>
                                         </div>
                                     </div>
