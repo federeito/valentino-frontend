@@ -105,7 +105,7 @@ export default function Hero({ product, secondProduct, featuredProducts = [] }) 
                     {currentSlide_item?.isPromo ? (
                         /* Full-width promotional image */
                         <div className="relative">
-                            <div className="relative w-full h-[300px] sm:h-[450px] lg:h-[550px] rounded-2xl overflow-hidden shadow-2xl bg-white">
+                            <div className="relative w-full h-[500px] sm:h-[450px] lg:h-[550px] rounded-2xl overflow-hidden shadow-2xl bg-white">
                                 {slides.map((slide, index) => (
                                     slide.isPromo && (
                                         <div
@@ -116,10 +116,10 @@ export default function Hero({ product, secondProduct, featuredProducts = [] }) 
                                                     : 'opacity-0 scale-105'
                                             }`}
                                         >
-                                            {/* Side by side images */}
-                                            <div className="flex flex-row h-full gap-0 w-full">
+                                            {/* Stack vertically on mobile, side by side on larger screens */}
+                                            <div className="flex flex-col sm:flex-row h-full gap-0 w-full">
                                                 {slide.images.map((img, imgIndex) => (
-                                                    <div key={imgIndex} className="flex-1 h-full min-w-0">
+                                                    <div key={imgIndex} className="flex-1 h-full min-w-0 min-h-0">
                                                         <img
                                                             src={img}
                                                             alt={`Promotional Image ${imgIndex + 1}`}
