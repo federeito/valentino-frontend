@@ -171,10 +171,10 @@ export default function Cart() {
         return total - discount;
     }, [total, discount]);
 
-    // Check if total meets minimum purchase requirement
+    // Check if subtotal (before discount) meets minimum purchase requirement
     const meetsMinimumPurchase = useMemo(() => {
-        return finalTotal >= MINIMUM_PURCHASE;
-    }, [finalTotal]);
+        return total >= MINIMUM_PURCHASE;
+    }, [total]);
 
     // Efecto para cargar productos - solo se ejecuta cuando cambian los uniqueIds
     useEffect(() => {
@@ -815,7 +815,7 @@ export default function Cart() {
                                                     <div className="bg-yellow-50 border-l-4 border-yellow-400 p-3 mb-3 rounded">
                                                         <p className="text-xs md:text-sm text-yellow-800">
                                                             <span className="font-semibold">Compra mínima:</span> ${formatPrice(MINIMUM_PURCHASE)}. 
-                                                            <span className="block sm:inline sm:ml-1 mt-1 sm:mt-0">Te faltan ${formatPrice(MINIMUM_PURCHASE - finalTotal)} para alcanzar el mínimo.</span>
+                                                            <span className="block sm:inline sm:ml-1 mt-1 sm:mt-0">Te faltan ${formatPrice(MINIMUM_PURCHASE - total)} para alcanzar el mínimo.</span>
                                                         </p>
                                                     </div>
                                                 )}
@@ -1062,7 +1062,7 @@ export default function Cart() {
                                                 <div className="bg-yellow-50 border-l-4 border-yellow-400 p-3 mb-3 rounded">
                                                     <p className="text-xs md:text-sm text-yellow-800">
                                                         <span className="font-semibold">Compra mínima:</span> ${formatPrice(MINIMUM_PURCHASE)}. 
-                                                        <span className="block sm:inline sm:ml-1 mt-1 sm:mt-0">Te faltan ${formatPrice(MINIMUM_PURCHASE - finalTotal)} para alcanzar el mínimo.</span>
+                                                        <span className="block sm:inline sm:ml-1 mt-1 sm:mt-0">Te faltan ${formatPrice(MINIMUM_PURCHASE - total)} para alcanzar el mínimo.</span>
                                                     </p>
                                                 </div>
                                             )}
