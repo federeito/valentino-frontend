@@ -77,7 +77,7 @@ export async function getServerSideProps() {
 
     const featuredId1 = '68ab998313094de877cae019';
     const featuredId2 = '68ab993013094de877cadff7';
-    const featuredId3 = '68aba14f06a44779c3754538'; // Add third featured product
+    const featuredId3 = '68aba14f06a44779c3754538'; 
     const collectionId = '68aba14f06a44779c3754538';
 
     const featuredProduct1 = await Product.findById(featuredId1);

@@ -22,7 +22,7 @@ export default function Hero({ product, secondProduct, featuredProducts = [] }) 
         {
             _id: 'cloudinary-2',
             images: [
-                'https://res.cloudinary.com/djuk4a84p/image/upload/v1771645925/foto1_kuje4u.jpg',
+                'https://res.cloudinary.com/djuk4a84p/image/upload/v1771892025/Captura_de_pantalla_2026-02-23_211231_v6smc7.jpg',
                 'https://res.cloudinary.com/djuk4a84p/image/upload/v1771645925/foto2_ef7hxd.jpg'
             ],
             isPromo: true
@@ -105,7 +105,7 @@ export default function Hero({ product, secondProduct, featuredProducts = [] }) 
                     {currentSlide_item?.isPromo ? (
                         /* Full-width promotional image */
                         <div className="relative">
-                            <div className="relative w-full h-[350px] sm:h-[450px] lg:h-[550px] rounded-2xl overflow-hidden shadow-2xl bg-white">
+                            <div className="relative w-full h-[300px] sm:h-[450px] lg:h-[550px] rounded-2xl overflow-hidden shadow-2xl bg-white">
                                 {slides.map((slide, index) => (
                                     slide.isPromo && (
                                         <div
@@ -117,13 +117,13 @@ export default function Hero({ product, secondProduct, featuredProducts = [] }) 
                                             }`}
                                         >
                                             {/* Side by side images */}
-                                            <div className="flex h-full gap-0">
+                                            <div className="flex flex-row h-full gap-0 w-full">
                                                 {slide.images.map((img, imgIndex) => (
-                                                    <div key={imgIndex} className="flex-1 h-full">
+                                                    <div key={imgIndex} className="flex-1 h-full min-w-0">
                                                         <img
                                                             src={img}
                                                             alt={`Promotional Image ${imgIndex + 1}`}
-                                                            className="w-full h-full object-cover"
+                                                            className="w-full h-full object-cover object-center"
                                                         />
                                                     </div>
                                                 ))}
@@ -134,11 +134,11 @@ export default function Hero({ product, secondProduct, featuredProducts = [] }) 
                                 <div className="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-transparent" />
                                 
                                 {/* CTA Button Overlay */}
-                                <div className="absolute bottom-8 sm:bottom-12 left-0 right-0 flex justify-center">
-                                    <div className="text-center px-4">
+                                <div className="absolute bottom-4 sm:bottom-8 md:bottom-12 left-0 right-0 flex justify-center px-4">
+                                    <div className="text-center w-full">
                                         <Link 
                                             href="/products"
-                                            className="inline-flex items-center justify-center gap-2 px-6 sm:px-8 py-3 sm:py-4 rounded-xl font-semibold text-gray-900 bg-white/95 backdrop-blur-md shadow-xl hover:shadow-2xl hover:bg-white transition-all duration-300 hover:scale-105 active:scale-95 text-sm sm:text-base border border-gray-200/50"
+                                            className="inline-flex items-center justify-center gap-2 px-5 sm:px-8 py-2.5 sm:py-4 rounded-xl font-semibold text-gray-900 bg-white/95 backdrop-blur-md shadow-xl hover:shadow-2xl hover:bg-white transition-all duration-300 hover:scale-105 active:scale-95 text-xs sm:text-base border border-gray-200/50"
                                         >
                                             Explorar la Colección
                                             <svg className="w-4 h-4 sm:w-5 sm:h-5 transition-transform group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
