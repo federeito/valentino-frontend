@@ -105,7 +105,7 @@ export default function Hero({ product, secondProduct, featuredProducts = [] }) 
                     {currentSlide_item?.isPromo ? (
                         /* Full-width promotional image */
                         <div className="relative">
-                            <div className="relative w-full h-[500px] sm:h-[450px] lg:h-[550px] rounded-2xl overflow-hidden shadow-2xl bg-white">
+                            <div className="relative w-full h-[250px] sm:h-[450px] lg:h-[550px] rounded-2xl overflow-hidden shadow-2xl bg-white">
                                 {slides.map((slide, index) => (
                                     slide.isPromo && (
                                         <div
@@ -116,14 +116,14 @@ export default function Hero({ product, secondProduct, featuredProducts = [] }) 
                                                     : 'opacity-0 scale-105'
                                             }`}
                                         >
-                                            {/* Stack vertically on mobile, side by side on larger screens */}
-                                            <div className="flex flex-col sm:flex-row h-full gap-0 w-full">
+                                            {/* Side by side images - optimized for mobile */}
+                                            <div className="flex flex-row h-full gap-0 w-full">
                                                 {slide.images.map((img, imgIndex) => (
-                                                    <div key={imgIndex} className="flex-1 h-full min-w-0 min-h-0">
+                                                    <div key={imgIndex} className="flex-1 h-full min-w-0">
                                                         <img
                                                             src={img}
                                                             alt={`Promotional Image ${imgIndex + 1}`}
-                                                            className="w-full h-full object-cover object-center"
+                                                            className="w-full h-full object-cover object-top"
                                                         />
                                                     </div>
                                                 ))}
@@ -131,10 +131,10 @@ export default function Hero({ product, secondProduct, featuredProducts = [] }) 
                                         </div>
                                     )
                                 ))}
-                                <div className="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-transparent" />
+                                <div className="absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-transparent" />
                                 
                                 {/* CTA Button Overlay */}
-                                <div className="absolute bottom-4 sm:bottom-8 md:bottom-12 left-0 right-0 flex justify-center px-4">
+                                <div className="absolute bottom-2 sm:bottom-8 md:bottom-12 left-0 right-0 flex justify-center px-4">
                                     <div className="text-center w-full">
                                         <Link 
                                             href="/products"
