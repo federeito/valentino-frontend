@@ -613,7 +613,7 @@ export default function Cart() {
         const guestInfoComplete = guestEmail && guestName;
 
         return (
-            <section className="flex justify-between max-md:flex-col md:space-x-4 px-2 md:px-4 pb-4 max-w-[1600px] mx-auto">
+            <section className="flex justify-between max-md:flex-col md:space-x-4 px-2 md:px-4 pb-4 pt-20 max-w-[1600px] mx-auto">
                 <div className="md:w-3/5">
                     <div className="mt-6 md:mt-8">
                         <header className="text-left flex justify-between w-full mb-4">
@@ -867,7 +867,7 @@ export default function Cart() {
 
     if (session) {
         return (
-            <section className="flex justify-between max-md:flex-col md:space-x-4 px-2 md:px-4 pb-4 max-w-[1600px] mx-auto">
+            <section className="flex justify-between max-md:flex-col md:space-x-4 px-2 md:px-4 pb-4 pt-20 max-w-[1600px] mx-auto">
                 <div className="md:w-3/5">
                     <div className="mt-6 md:mt-8">
                         <header className="text-left flex justify-between w-full mb-4">

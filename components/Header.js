@@ -14,6 +14,9 @@ export default function Header() {
 
     const { data: session } = useSession();
 
+    // Check if we're on the cart page
+    const isCartPage = pathname === '/cart';
+
     useEffect(() => {
         const handleScroll = () => {
             setIsScrolled(window.scrollY > 20);
@@ -37,9 +40,10 @@ export default function Header() {
 
     return (
         <>
-            <div className="h-[92px]" /> {/* 28px banner + 64px header */}
+            {/* Only show spacer if NOT on cart page */}
+            {!isCartPage && <div className="h-[92px]" />}
             
-            <header className={`fixed top-7 left-0 right-0 z-50 transition-all duration-500 ${
+            <header className={`fixed ${isCartPage ? 'top-0' : 'top-7'} left-0 right-0 z-50 transition-all duration-500 ${
                 isScrolled 
                     ? 'bg-white shadow-lg shadow-black/5' 
                     : 'bg-white'
