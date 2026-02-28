@@ -102,7 +102,7 @@ export default async function handler(req, res) {
                 unit_price: productInfo.Precio,
                 currency_id: "ARS",
                 productId: cartItem.productId,
-                color: cartItem.color,
+                color: cartItem.color || null,
                 originalTitle: productInfo.Título,
                 código: productCode,
             });
@@ -122,8 +122,8 @@ export default async function handler(req, res) {
         unit_price: item.unit_price,
         total_price: item.unit_price * item.quantity,
         productId: item.productId,
-        color: item.color,
-        código: item.código, // Include product code in order
+        color: item.color || null,
+        código: item.código,
     }));
 
     // Lógica para manejar el método de pago seleccionado
