@@ -12,12 +12,7 @@ const OrderSchema = new Schema({
     state: String,
     paid: { type: Boolean, default: false },
     paymentMethod: { type: String, enum: ['mercadopago', 'transfer'] },
-    statusHistory: [{
-        status: { type: String, required: true },
-        timestamp: { type: Date, default: Date.now },
-        note: String,
-        updatedBy: String
-    }]
+    statusHistory: { type: String, default: 'Pendiente' }
 }, {
     timestamps: true,
 });
