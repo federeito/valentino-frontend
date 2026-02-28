@@ -11,7 +11,13 @@ const OrderSchema = new Schema({
     address: String,
     state: String,
     paid: { type: Boolean, default: false },
-    paymentMethod: { type: String, enum: ['mercadopago', 'transfer'] }, // Removed required for now
+    paymentMethod: { type: String, enum: ['mercadopago', 'transfer'] },
+    statusHistory: [{
+        status: { type: String, required: true },
+        timestamp: { type: Date, default: Date.now },
+        note: String,
+        updatedBy: String
+    }]
 }, {
     timestamps: true,
 });

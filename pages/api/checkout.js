@@ -138,7 +138,12 @@ export default async function handler(req, res) {
             state,
             zip,
             paid: false,
-            paymentMethod: 'mercadopago'
+            paymentMethod: 'mercadopago',
+            statusHistory: [{
+                status: 'Pendiente',
+                timestamp: new Date(),
+                note: 'Pedido creado - Esperando pago de MercadoPago'
+            }]
         };
         
         const orderDoc = await Order.create(orderData);
@@ -185,7 +190,12 @@ export default async function handler(req, res) {
             state: state,
             zip: zip,
             paid: false,
-            paymentMethod: paymentMethod // Explicitly pass the variable
+            paymentMethod: paymentMethod,
+            statusHistory: [{
+                status: 'Pendiente',
+                timestamp: new Date(),
+                note: 'Pedido creado - Esperando transferencia bancaria'
+            }]
         });
 
         // Calcular el total
