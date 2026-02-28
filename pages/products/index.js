@@ -100,17 +100,44 @@ export default function Products({ allProducts = [], categories = [] }) {
         setCurrentPage(1);
     }, [searchTerm, sortBy, selectedCategory]);
 
-    const handleAddToCart = (productId, productTitle) => {
-        addProduct(productId);
-        toast.success(`¡${productTitle} añadido al carrito!`, {
-            style: {
-                background: 'linear-gradient(135deg, #a78bfa 0%, #c084fc 100%)',
-                color: 'white',
-                borderRadius: '12px',
-                fontWeight: 'bold'
-            },
-            duration: 3000,
-        });
+    const handleAddToCart = (productId, productTitle, productColors = null) => {
+        // If product has colors, add the first available color
+        if (productColors && productColors.length > 0) {
+            const firstAvailableColor = productColors.find(color => color.available !== false);
+            if (firstAvailableColor) {
+                addProduct(productId, { color: firstAvailableColor });
+                toast.success(`¡${productTitle} agregado al carrito en color ${firstAvailableColor.name}!`, {
+                    style: {
+                        background: 'linear-gradient(135deg, #a78bfa 0%, #c084fc 100%)',
+                        color: 'white',
+                        borderRadius: '12px',
+                        fontWeight: 'bold'
+                    },
+                    duration: 3000,
+                });
+            } else {
+                toast.error('No hay colores disponibles para este producto', {
+                    style: {
+                        background: 'linear-gradient(135deg, #f093fb 0%, #f5576c 100%)',
+                        color: 'white',
+                        borderRadius: '12px',
+                        fontWeight: 'bold'
+                    }
+                });
+            }
+        } else {
+            // Product without colors
+            addProduct(productId);
+            toast.success(`¡${productTitle} añadido al carrito!`, {
+                style: {
+                    background: 'linear-gradient(135deg, #a78bfa 0%, #c084fc 100%)',
+                    color: 'white',
+                    borderRadius: '12px',
+                    fontWeight: 'bold'
+                },
+                duration: 3000,
+            });
+        }
     };
 
     const filteredProducts = getFilteredProducts();
@@ -413,7 +440,15 @@ export default function Products({ allProducts = [], categories = [] }) {
                                                     ) : !showActions[product._id] ? (
                                                         // In stock - show shopping bag icon circular and compact
                                                         <button
-                                                            onClick={() => setShowActions(prev => ({ ...prev, [product._id]: true }))}
+                                                            onClick={() => {
+                                                                // If product has only one color or no colors, add directly to cart
+                                                                if (!product.colors || product.colors.length <= 1) {
+                                                                    handleAddToCart(product._id, product.Título, product.colors);
+                                                                } else {
+                                                                    // If multiple colors, show action buttons
+                                                                    setShowActions(prev => ({ ...prev, [product._id]: true }));
+                                                                }
+                                                            }}
                                                             className="w-12 h-12 sm:w-14 sm:h-14 mx-auto bg-gray-600 text-white rounded-full font-semibold hover:bg-black transition-all duration-300 hover:scale-110 flex items-center justify-center"
                                                         >
                                                             <svg className="w-5 h-5 sm:w-6 sm:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -421,47 +456,16 @@ export default function Products({ allProducts = [], categories = [] }) {
                                                             </svg>
                                                         </button>
                                                     ) : (
-                                                        // Expanded actions
+                                                        // Expanded actions - only for products with multiple colors
                                                         <div className="space-y-2">
-                                                            {product.colors && product.colors.length > 1 ? (
-                                                                <Link href={`/products/${product._id}`}>
-                                                                    <button className="w-full bg-pink-50 border-2 border-pink-300 text-pink-600 py-2 sm:py-2.5 rounded-lg font-semibold text-xs sm:text-sm hover:bg-pink-100 hover:border-pink-400 hover:text-pink-700 hover:shadow-lg hover:shadow-pink-300/30 transition-all duration-300 flex items-center justify-center gap-2">
-                                                                        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 21a4 4 0 01-4-4V5a2 2 0 012-2h4a2 2 0 012 2v12a4 4 0 01-4 4zm0 0h12a2 2 0 002-2v-4a2 2 0 00-2-2h-2.343M11 7.343l1.657-1.657a2 2 0 012.828 0l2.829 2.829a2 2 0 010 2.828l-8.486 8.485M7 17h.01" />
-                                                                        </svg>
-                                                                        Seleccionar color
-                                                                    </button>
-                                                                </Link>
-                                                            ) : (
-                                                                <button
-                                                                    onClick={() => {
-                                                                        handleAddToCart(product._id, product.Título);
-                                                                        setShowActions(prev => ({ ...prev, [product._id]: false }));
-                                                                    }}
-                                                                    className="w-full group/btn relative overflow-hidden rounded-xl bg-gradient-to-r from-rose-500 to-pink-600 py-2 sm:py-2.5 text-center text-xs sm:text-sm font-bold text-white shadow-lg shadow-rose-500/25 transition-all duration-300 hover:shadow-xl hover:shadow-rose-500/40 hover:scale-105 active:scale-95"
-                                                                >
-                                                                    <span className="relative z-10 flex items-center justify-center gap-2">
-                                                                        <svg 
-                                                                            xmlns="http://www.w3.org/2000/svg" 
-                                                                            width="24" 
-                                                                            height="24" 
-                                                                            viewBox="0 0 24 24" 
-                                                                            fill="none" 
-                                                                            stroke="currentColor" 
-                                                                            strokeWidth="2" 
-                                                                            strokeLinecap="round" 
-                                                                            strokeLinejoin="round" 
-                                                                            className="w-4 h-4 transition-transform group-hover/btn:rotate-12"
-                                                                        >
-                                                                            <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
-                                                                            <path d="M6.331 8h11.339a2 2 0 0 1 1.977 2.304l-1.255 8.152a3 3 0 0 1 -2.966 2.544h-6.852a3 3 0 0 1 -2.965 -2.544l-1.255 -8.152a2 2 0 0 1 1.977 -2.304z" />
-                                                                            <path d="M9 11v-5a3 3 0 0 1 6 0v5" />
-                                                                        </svg>
-                                                                        Agregar al carrito
-                                                                    </span>
-                                                                    <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/25 to-transparent -translate-x-full group-hover/btn:translate-x-full transition-transform duration-700" />
+                                                            <Link href={`/products/${product._id}`}>
+                                                                <button className="w-full bg-pink-50 border-2 border-pink-300 text-pink-600 py-2 sm:py-2.5 rounded-lg font-semibold text-xs sm:text-sm hover:bg-pink-100 hover:border-pink-400 hover:text-pink-700 hover:shadow-lg hover:shadow-pink-300/30 transition-all duration-300 flex items-center justify-center gap-2">
+                                                                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 21a4 4 0 01-4-4V5a2 2 0 012-2h4a2 2 0 012 2v12a4 4 0 01-4 4zm0 0h12a2 2 0 002-2v-4a2 2 0 00-2-2h-2.343M11 7.343l1.657-1.657a2 2 0 012.828 0l2.829 2.829a2 2 0 010 2.828l-8.486 8.485M7 17h.01" />
+                                                                    </svg>
+                                                                    Seleccionar color
                                                                 </button>
-                                                            )}
+                                                            </Link>
                                                             <Link href={`/products/${product._id}`}>
                                                                 <button className="w-full bg-white border border-gray-300 text-gray-700 py-2 sm:py-2.5 rounded-lg font-medium text-xs sm:text-sm hover:bg-gray-50 transition-all duration-300 flex items-center justify-center gap-2">
                                                                     Ver más detalles
