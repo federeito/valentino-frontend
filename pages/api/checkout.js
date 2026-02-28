@@ -3,7 +3,7 @@ import { mongooseconnect } from "@/lib/mongoose";
 import { Order } from "@/models/Order";
 import { Product } from "@/models/Product";
 import { MercadoPagoConfig, Preference } from 'mercadopago';
-import nodemailer from 'nodemailer'; // Importamos Nodemailer
+import nodemailer from 'nodemailer';
 
 // Configuración de Mercado Pago
 const mercadopago = new MercadoPagoConfig({
@@ -13,13 +13,15 @@ const mercadopago = new MercadoPagoConfig({
     }
 });
 
-// Configuración de Nodemailer para el envío de correos
+// Configuración de Nodemailer con SMTP de MailerSend
 const transporter = nodemailer.createTransport({
-    service: 'gmail', // Puedes usar otro servicio como 'hotmail', 'outlook', etc.
+    host: process.env.MAILERSEND_SMTP_HOST || 'smtp.mailersend.net',
+    port: parseInt(process.env.MAILERSEND_SMTP_PORT || '587'),
+    secure: false, // true for 465, false for other ports
     auth: {
-        user: process.env.EMAIL_USER,
-        pass: process.env.EMAIL_PASS,
-    }
+        user: process.env.MAILERSEND_SMTP_USER,
+        pass: process.env.MAILERSEND_SMTP_PASS,
+    },
 });
 
 // Función para procesar los productos del carrito y manejar tanto el formato anterior como el nuevo
@@ -64,6 +66,7 @@ export default async function handler(req, res) {
     }
 
     const { email, name, address, city, state, zip, cartProducts, paymentMethod } = req.body;
+    
     await mongooseconnect();
 
     // Procesar los productos del carrito para manejar tanto el formato anterior como el nuevo
@@ -87,15 +90,21 @@ export default async function handler(req, res) {
                 itemTitle += ` - Color: ${cartItem.color.name}`;
             }
 
+            // Access código from the raw MongoDB document to handle accented characters
+            const productCode = productInfo.toObject?.()?.código || 
+                               productInfo._doc?.código || 
+                               productInfo['código'] || 
+                               'N/A';
+
             items.push({
                 title: itemTitle,
                 quantity: cartItem.quantity,
                 unit_price: productInfo.Precio,
                 currency_id: "ARS",
-                // Información adicional para el order
                 productId: cartItem.productId,
                 color: cartItem.color,
                 originalTitle: productInfo.Título,
+                código: productCode,
             });
         }
     }
@@ -114,12 +123,13 @@ export default async function handler(req, res) {
         total_price: item.unit_price * item.quantity,
         productId: item.productId,
         color: item.color,
+        código: item.código, // Include product code in order
     }));
 
     // Lógica para manejar el método de pago seleccionado
     if (paymentMethod === 'mercadopago') {
         // Lógica de Mercado Pago
-        const orderDoc = await Order.create({
+        const orderData = {
             line_items,
             email,
             name,
@@ -129,7 +139,9 @@ export default async function handler(req, res) {
             zip,
             paid: false,
             paymentMethod: 'mercadopago'
-        });
+        };
+        
+        const orderDoc = await Order.create(orderData);
 
         try {
             // Para Mercado Pago, solo necesitamos los datos básicos del item
@@ -163,73 +175,123 @@ export default async function handler(req, res) {
 
     } else if (paymentMethod === 'transfer') {
         // Lógica para Transferencia Bancaria
+        
         const orderDoc = await Order.create({
-            line_items,
-            email,
-            name,
-            address,
-            city,
-            state,
-            zip,
+            line_items: line_items,
+            email: email,
+            name: name,
+            address: address,
+            city: city,
+            state: state,
+            zip: zip,
             paid: false,
-            paymentMethod: 'transfer'
+            paymentMethod: paymentMethod // Explicitly pass the variable
         });
 
         // Calcular el total
         const total = items.reduce((sum, item) => sum + item.unit_price * item.quantity, 0);
+        const discount = total * 0.10; // 10% discount for bank transfer
+        const finalTotal = total - discount;
 
         // Crear la lista de productos para el email
         const productList = items.map(item => 
-            `<li>${item.title} - Cantidad: ${item.quantity} - Precio: $${item.unit_price.toLocaleString()} - Subtotal: $${(item.unit_price * item.quantity).toLocaleString()}</li>`
+            `<li style="margin-bottom: 10px;">
+                <strong>${item.title}</strong> (COD: ${item.código})<br>
+                Cantidad: ${item.quantity} - Precio: $${item.unit_price.toLocaleString()} - Subtotal: $${(item.unit_price * item.quantity).toLocaleString()}
+            </li>`
         ).join('');
 
-        // Contenido del correo con los datos de la transferencia
+        // HTML content for the email
+        const htmlContent = `
+            <!DOCTYPE html>
+            <html>
+            <head>
+                <meta charset="UTF-8">
+                <style>
+                    body { font-family: Arial, sans-serif; line-height: 1.6; color: #333; }
+                    .container { max-width: 600px; margin: 0 auto; padding: 20px; }
+                    .header { text-align: center; margin-bottom: 30px; }
+                    .logo { max-width: 200px; margin: 20px 0; }
+                    .section { margin-bottom: 30px; }
+                    .bank-info { background-color: #f5f5f5; padding: 20px; border-radius: 8px; }
+                    .bank-info li { margin-bottom: 10px; }
+                    .total { font-size: 18px; font-weight: bold; color: #2c5f2d; }
+                    .discount { color: #16a34a; font-weight: bold; }
+                    .footer { margin-top: 40px; padding-top: 20px; border-top: 1px solid #ddd; text-align: center; color: #666; }
+                </style>
+            </head>
+            <body>
+                <div class="container">
+                    <div class="header">
+                        <h1>¡Gracias por tu pedido, ${name}!</h1>
+                        <img src="https://res.cloudinary.com/djuk4a84p/image/upload/v1755574026/valentino_logo_g5zdfg.png" alt="Valentino Paris Logo" class="logo"/>
+                    </div>
+                    
+                    <div class="section">
+                        <p>Tu pedido ha sido creado y está en espera de pago por transferencia bancaria.</p>
+                        <p><strong>Número de pedido:</strong> #${orderDoc._id.toString().slice(-6)}</p>
+                    </div>
+                    
+                    <div class="section">
+                        <h2>Resumen del pedido:</h2>
+                        <ul>
+                            ${productList}
+                        </ul>
+                        
+                        <p><strong>Subtotal:</strong> $${total.toLocaleString()}</p>
+                        <p class="discount"><strong>Descuento (10% por transferencia):</strong> -$${discount.toLocaleString()}</p>
+                        <p class="total">Total a pagar: $${finalTotal.toLocaleString()}</p>
+                    </div>
+                    
+                    <div class="section bank-info">
+                        <h2>Datos para la transferencia:</h2>
+                        <ul>
+                            <li><strong>Titular:</strong> ${process.env.BANK_ACCOUNT_NAME}</li>
+                            <li><strong>Número de cuenta:</strong> ${process.env.BANK_ACCOUNT_NUMBER}</li>
+                            <li><strong>CBU:</strong> ${process.env.BANK_CBU}</li>
+                            <li><strong>Alias:</strong> ${process.env.BANK_ALIAS}</li>
+                        </ul>
+                        <p style="margin-top: 15px;"><strong>⚠️ Importante:</strong> Por favor, incluye el número de pedido <strong>#${orderDoc._id.toString().slice(-6)}</strong> en el concepto de la transferencia.</p>
+                    </div>
+                    
+                    <div class="section">
+                        <h2>Datos de envío:</h2>
+                        <p>
+                            ${name}<br>
+                            ${address}<br>
+                            ${city}, ${state} ${zip}
+                        </p>
+                    </div>
+                    
+                    <div class="section">
+                        <p>Una vez realizada la transferencia, por favor envía el comprobante de pago respondiendo a este correo para que podamos confirmar y procesar tu pedido.</p>
+                    </div>
+                    
+                    <div class="footer">
+                        <p>¡Muchas gracias por tu compra!</p>
+                        <p style="font-size: 12px; color: #999;">Valentino Paris - Venta Mayorista de Marroquinería</p>
+                    </div>
+                </div>
+            </body>
+            </html>
+        `;
+
+        // Configuración del correo
         const mailOptions = {
-            from: process.env.EMAIL_USER,
+            from: `"${process.env.MAILERSEND_FROM_NAME || 'Valentino Paris'}" <${process.env.MAILERSEND_FROM_EMAIL}>`,
             to: email,
             subject: `Confirmación de tu pedido #${orderDoc._id.toString().slice(-6)}`,
-            html: `
-                <h1>¡Gracias por tu pedido, ${name}!</h1>
-                <img src="https://res.cloudinary.com/djuk4a84p/image/upload/v1755574026/valentino_logo_g5zdfg.png" alt="Valentino Paris Logo" style="max-width: 200px; margin: 20px 0;"/>
-                
-                <p>Tu pedido ha sido creado y está en espera de pago por transferencia bancaria.</p>
-                
-                <h2>Resumen del pedido:</h2>
-                <ul>
-                    ${productList}
-                </ul>
-                
-                <p><strong>Total a pagar: $${total.toLocaleString()}</strong></p>
-                
-                <h2>Datos para la transferencia:</h2>
-                <ul>
-                    <li><strong>Titular:</strong> ${process.env.BANK_ACCOUNT_NAME}</li>
-                    <li><strong>Número de cuenta:</strong> ${process.env.BANK_ACCOUNT_NUMBER}</li>
-                    <li><strong>CBU:</strong> ${process.env.BANK_CBU}</li>
-                    <li><strong>Alias:</strong> ${process.env.BANK_ALIAS}</li>
-                </ul>
-                
-                <p><strong>Número de pedido:</strong> #${orderDoc._id.toString().slice(-6)}</p>
-                <p>Por favor, incluye el número de pedido en el concepto de la transferencia y adjunta el comprobante de pago en respuesta a este correo para que podamos confirmar tu pedido.</p>
-                
-                <h2>Datos de envío:</h2>
-                <p>
-                    ${name}<br>
-                    ${address}<br>
-                    ${city}, ${state} ${zip}
-                </p>
-                
-                <p>¡Muchas gracias por tu compra!</p>
-            `,
+            html: htmlContent,
         };
 
         try {
             await transporter.sendMail(mailOptions);
-            console.log('Correo de confirmación enviado a', email);
+            
             res.status(200).json({ 
                 orderId: orderDoc._id, 
                 message: 'Orden creada, datos de transferencia enviados por correo.',
-                total: total
+                total: finalTotal,
+                discount: discount
             });
         } catch (error) {
             console.error('Error al enviar el correo:', error);

@@ -1,18 +1,19 @@
 import { models } from "mongoose";
 
-const { Schema, model } = require ('mongoose');
+const { Schema, model } = require('mongoose');
 
 const OrderSchema = new Schema({
-    line_items: Object, // This will store the array of product details as received from the checkout
+    line_items: Array,
     name: String,
     email: String,
     city: String,
     zip: String,
     address: String,
     state: String,
-    paid: Boolean,
+    paid: { type: Boolean, default: false },
+    paymentMethod: { type: String, enum: ['mercadopago', 'transfer'] }, // Removed required for now
 }, {
-    timestamps: true, // Adds createdAt and updatedAt fields automatically
+    timestamps: true,
 });
 
 export const Order = models?.Order || model('Order', OrderSchema);
