@@ -9,7 +9,7 @@ import nodemailer from 'nodemailer';
 const mercadopago = new MercadoPagoConfig({
     accessToken: process.env.MP_ACCESS_TOKEN,
     options: {
-        sandbox: false,
+        sandbox: true,
     }
 });
 
