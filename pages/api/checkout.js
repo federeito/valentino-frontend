@@ -275,11 +275,15 @@ export default async function handler(req, res) {
                     
                     <div class="section">
                         <p>Una vez realizada la transferencia, por favor envía el comprobante de pago respondiendo a este correo para que podamos confirmar y procesar tu pedido.</p>
+                        <p style="background-color: #fff3cd; padding: 15px; border-left: 4px solid #ffc107; margin-top: 15px;">
+                            <strong>📧 Importante:</strong> Responde a este correo o envía el comprobante a <strong>${process.env.PAYMENT_CONFIRMATION_EMAIL || process.env.MAILERSEND_FROM_EMAIL}</strong><br>
+                            <strong>Asunto sugerido:</strong> Comprobante pedido #${orderDoc._id.toString().slice(-6)}
+                        </p>
                     </div>
                     
                     <div class="footer">
                         <p>¡Muchas gracias por tu compra!</p>
-                        <p style="font-size: 12px; color: #999;">Valentino Paris - Venta Mayorista de Marroquinería</p>
+                        <p style="font-size: 12px; color: #999;">Valentino Paris - Venta Mayorista de accesorios para el pelo</p>
                     </div>
                 </div>
             </body>
