@@ -172,7 +172,7 @@ export default async function handler(req, res) {
                 }
             });
 
-            res.status(200).json({ url: preference.sandbox_init_point || preference.init_point });
+            res.status(200).json({ url: preference.sandbox_init_point || preference.sandbox_init_point });
         } catch (error) {
             console.error('Error al crear la preferencia de Mercado Pago:', error);
             res.status(500).json({ error: 'Error al procesar el pago con Mercado Pago' });
