@@ -831,7 +831,7 @@ export default function Cart() {
                                                         <img
                                                             src="https://res.cloudinary.com/djuk4a84p/image/upload/v1755571794/MP_RGB_HANDSHAKE_color_horizontal_l0i6d8.svg"
                                                             alt="Mercado Pago"
-                                                            className="h-[35px] md:h-[45px] w-auto mx-auto"
+                                                            className="h-[45px] md:h-[55px] w-auto mx-auto"
                                                         />
                                                     </button>
                                                     <button
@@ -1078,7 +1078,7 @@ export default function Cart() {
                                                     <img
                                                         src="https://res.cloudinary.com/djuk4a84p/image/upload/v1755571794/MP_RGB_HANDSHAKE_color_horizontal_l0i6d8.svg"
                                                         alt="Mercado Pago"
-                                                        className="h-[35px] md:h-[45px] w-auto mx-auto"
+                                                        className="h-[45px] md:h-[55px] w-auto mx-auto"
                                                     />
                                                 </button>
                                                 <button
