@@ -8,9 +8,6 @@ import nodemailer from 'nodemailer';
 // Configuración de Mercado Pago
 const mercadopago = new MercadoPagoConfig({
     accessToken: process.env.MP_ACCESS_TOKEN,
-    options: {
-        sandbox: false,
-    }
 });
 
 // Configuración de Nodemailer con SMTP de MailerSend
@@ -157,24 +154,39 @@ export default async function handler(req, res) {
                 currency_id: "ARS",
             }));
 
+            // Determine if we're in sandbox mode
+            const isSandbox = process.env.MP_SANDBOX_MODE === 'true';
+            const baseUrl = isSandbox ? process.env.SUCCESS_URL : process.env.SUCCESS_URL;
+
             const preference = await new Preference(mercadopago).create({
                 body: {
                     items: mpItems,
+                    payer: {
+                        name: name,
+                        email: email,
+                    },
                     back_urls: {
-                        success: `${process.env.SUCCESS_URL}/cart?success=1`,
-                        failure: `${process.env.SUCCESS_URL}/cart?canceled=1`,
-                        pending: `${process.env.SUCCESS_URL}/cart?pending=1`,
+                        success: `${baseUrl}/cart?success=1`,
+                        failure: `${baseUrl}/cart?canceled=1`,
+                        pending: `${baseUrl}/cart?pending=1`,
                     },
                     auto_return: "approved",
+                    notification_url: process.env.MP_WEBHOOK_URL,
+                    statement_descriptor: "VALENTINO PARIS",
+                    external_reference: orderDoc._id.toString(),
                     metadata: {
-                        orderId: orderDoc._id.toString(),
+                        order_id: orderDoc._id.toString(),
                     }
                 }
             });
 
-            res.status(200).json({ url: preference.init_point});
+            // Use sandbox URL for testing, production URL for live
+            const checkoutUrl = isSandbox ? preference.sandbox_init_point : preference.init_point;
+            
+            res.status(200).json({ url: checkoutUrl });
         } catch (error) {
             console.error('Error al crear la preferencia de Mercado Pago:', error);
+            console.error('Error details:', JSON.stringify(error, null, 2));
             res.status(500).json({ error: 'Error al procesar el pago con Mercado Pago' });
         }
 
