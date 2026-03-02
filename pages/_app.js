@@ -13,6 +13,7 @@ export default function App({ Component, pageProps: { session, ...pageProps } })
   return <>
     <Head>
       <link rel="icon" href="https://res.cloudinary.com/djuk4a84p/image/upload/v1772474170/favicon_n1ymv4.png" />
+      <meta name="description" content="Accesorios para el cabello con amplio stock. Catálogo mayorista online para comercios y revendedores. Envíos a todo el país." />
     </Head>
     <SessionProvider session={session}>
       <PriceVisibilityProvider>
