@@ -1,0 +1,9 @@
+# *
+User-agent: *
+Allow: /
+
+# Host
+Host: https://valentinoaccesorios.com.ar
+
+# Sitemaps
+Sitemap: https://valentinoaccesorios.com.ar/sitemap.xml
