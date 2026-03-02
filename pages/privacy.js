@@ -201,8 +201,8 @@ export default function Privacy() {
                             <div className="bg-red-50 border-l-4 border-red-500 p-4 rounded-r-lg">
                                 <p className="text-gray-700">
                                     <span className="font-semibold">Contactanos a:</span>{' '}
-                                    <a href="mailto:valentinobayres@hotmail.com" className="text-red-600 hover:text-red-700 font-medium underline">
-                                        valentinobayres@hotmail.com
+                                    <a href="mailto:contacto@valentinoaccesorios.com.ar" className="text-red-600 hover:text-red-700 font-medium underline">
+                                    contacto@valentinoaccesorios.com.ar
                                     </a>
                                 </p>
                             </div>
@@ -231,8 +231,8 @@ export default function Privacy() {
                             <p className="text-gray-700 mb-3">Si tenés consultas sobre privacidad:</p>
                             <div className="flex items-center gap-2 text-lg">
                                 <span>📧</span>
-                                <a href="mailto:valentinobayres@hotmail.com" className="text-red-600 hover:text-red-700 font-semibold underline">
-                                    valentinobayres@hotmail.com
+                                <a href="mailto:contacto@valentinoaccesorios.com.ar" className="text-red-600 hover:text-red-700 font-semibold underline">
+                                contacto@valentinoaccesorios.com.ar
                                 </a>
                             </div>
                         </section>

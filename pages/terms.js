@@ -211,8 +211,8 @@ export default function Terms() {
                             <div className="bg-red-50 border-l-4 border-red-500 p-4 rounded-r-lg">
                                 <div className="flex items-center gap-2 text-lg">
                                     <span>📧</span>
-                                    <a href="mailto:valentinobayres@hotmail.com" className="text-red-600 hover:text-red-700 font-semibold underline">
-                                        valentinobayres@hotmail.com
+                                    <a href="mailto:contacto@valentinoaccesorios.com.ar" className="text-red-600 hover:text-red-700 font-semibold underline">
+                                    contacto@valentinoaccesorios.com.ar
                                     </a>
                                 </div>
                             </div>

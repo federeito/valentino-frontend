@@ -153,7 +153,7 @@ export default function Account() {
 
                         {/* Additional Info */}
                         <div className="mt-6 sm:mt-8 text-center text-gray-600 text-xs sm:text-sm px-4">
-                            <p className="break-words">¿Necesitás ayuda? Contactanos a valentinobayres@hotmail.com</p>
+                            <p className="break-words">¿Necesitás ayuda? Contactanos a contacto@valentinoaccesorios.com.ar</p>
                         </div>
                     </div>
                 </div>
