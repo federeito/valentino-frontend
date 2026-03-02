@@ -4,12 +4,16 @@ import { PriceVisibilityProvider } from "@/lib/PriceVisibilityContext";
 import "@/styles/globals.css";
 import { Poppins } from "next/font/google";
 import { Toaster } from "react-hot-toast";
-import { SessionProvider } from "next-auth/react"
+import { SessionProvider } from "next-auth/react";
+import Head from "next/head";
 
 const poppinsFont = Poppins({ subsets: ["latin"], weight: '400' });
 
 export default function App({ Component, pageProps: { session, ...pageProps } }) {
   return <>
+    <Head>
+      <link rel="icon" href="https://res.cloudinary.com/djuk4a84p/image/upload/v1772474170/favicon_n1ymv4.png" />
+    </Head>
     <SessionProvider session={session}>
       <PriceVisibilityProvider>
         <CartContextProvider>

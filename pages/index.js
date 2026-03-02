@@ -5,6 +5,7 @@ import PromoBanner from "@/components/PromoBanner";
 import { mongooseconnect } from "@/lib/mongoose";
 import { Product } from "@/models/Product";
 import { useEffect, useState } from "react";
+import Head from "next/head";
 
 export default function Home({ featuredProducts, newProducts, collectionProduct }) {
     const [isVisible, setIsVisible] = useState(false);
@@ -15,6 +16,9 @@ export default function Home({ featuredProducts, newProducts, collectionProduct 
 
     return (
         <>
+            <Head>
+                <title>Valentino Accesorios | Catálogo mayorista online</title>
+            </Head>
             <PromoBanner />
             {/* Subtle background */}
             <div className="fixed inset-0 -z-10 bg-gradient-to-br from-gray-50 via-white to-red-50/20" />
