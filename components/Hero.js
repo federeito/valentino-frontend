@@ -1,279 +1,421 @@
-import { CartContext } from "@/lib/CartContext";
 import Link from "next/link";
-import { useContext, useState, useEffect } from "react";
-import toast from "react-hot-toast";
+import { useState, useEffect, useCallback } from "react";
 
-export default function Hero({ product, secondProduct, featuredProducts = [] }) {
-    const { addProduct } = useContext(CartContext);
-    const [currentSlide, setCurrentSlide] = useState(0);
-    const [isAnimating, setIsAnimating] = useState(false);
-    const [progress, setProgress] = useState(0);
+// ─── CONFIGURACIÓN DE SLIDES ─────────────────────────────────────────────────
+const SLIDES = [
+  {
+    id: "slide-1",
+    // Subí 2.png a Cloudinary y pegá la URL acá:
+    image: "https://res.cloudinary.com/djuk4a84p/image/upload/v1772492898/2_wrvgzz.png",
+    badge: "✦ Colección 2025",
+    eyebrow: "Accesorios Mayoristas",
+    title: ["Colecciones", "exclusivas de", "accesorios"],
+    titleAccent: "para el cabello",
+    subtitle: "Colecciones exclusivas de accesorios para el cabello",
+    microbadges: ["✔ Envíos a todo el país", "✔ Compra 100% online"],
+    buttons: [
+      { label: "Explorar Colección", href: "/products", variant: "primary" },
+      { label: "Contactar", href: "/contact", variant: "ghost" },
+    ],
+  },
+  {
+    id: "slide-2",
+    image: "https://res.cloudinary.com/djuk4a84p/image/upload/v1772552330/3_vim6e0.png",
+    badge: "✦ Nuevos Ingresos",
+    eyebrow: "Temporada 2025",
+    title: ["Elegancia", "en cada"],
+    titleAccent: "detalle",
+    subtitle: "Accesorios seleccionados para potenciar tu negocio con estilo.",
+    microbadges: ["✔ Envíos a todo el país", "✔ Compra 100% online"],
+    buttons: [
+      { label: "Explorar Colección", href: "/products", variant: "primary" },
+    ],
+  },
+  {
+    id: "slide-3",
+    image: "https://res.cloudinary.com/djuk4a84p/image/upload/v1771850496/2_i7caob.jpg",
+    badge: "✦ Precios Mayoristas",
+    eyebrow: "Nueva Temporada",
+    title: ["Brillos que"],
+    titleAccent: "enamoran",
+    subtitle: "Comprá en cantidad y obtené los mejores precios del mercado.",
+    microbadges: ["✔ Envíos a todo el país", "✔ Compra 100% online"],
+    buttons: [
+      { label: "Explorar Colección", href: "/products", variant: "primary" },
+      { label: "Ver Precios", href: "/products", variant: "ghost" },
+    ],
+  },
+];
+// ─────────────────────────────────────────────────────────────────────────────
 
-    // Cloudinary promotional images
-    const cloudinarySlides = [
-        {
-            _id: 'cloudinary-1',
-            images: [
-                'https://res.cloudinary.com/djuk4a84p/image/upload/v1771850485/1_c2bcoc.jpg',
-                'https://res.cloudinary.com/djuk4a84p/image/upload/v1771850496/2_i7caob.jpg'
-            ],
-            isPromo: true
-        },
-        {
-            _id: 'cloudinary-2',
-            images: [
-                'https://res.cloudinary.com/djuk4a84p/image/upload/v1771892025/Captura_de_pantalla_2026-02-23_211231_v6smc7.jpg',
-                'https://res.cloudinary.com/djuk4a84p/image/upload/v1771645925/foto2_ef7hxd.jpg'
-            ],
-            isPromo: true
-        }
-    ];
+const DURATION = 6000;
 
-    // Combine products and cloudinary images
-    const productSlides = featuredProducts.length > 0 ? featuredProducts : [product, secondProduct].filter(Boolean);
-    const slides = [...productSlides, ...cloudinarySlides];
-    const currentSlide_item = slides[currentSlide];
-    const currentProduct = currentSlide_item?.isPromo ? productSlides[0] : currentSlide_item;
+function useCarousel(total) {
+  const [cur, setCur] = useState(0);
+  const [prog, setProg] = useState(0);
+  const [paused, setPaused] = useState(false);
 
-    useEffect(() => {
-        let progressValue = 0;
-        
-        const progressInterval = setInterval(() => {
-            progressValue += (100 / 50); // 5000ms / 100 steps
-            if (progressValue >= 100) {
-                progressValue = 100;
-            }
-            setProgress(progressValue);
-        }, 100);
+  const goTo = useCallback(
+    (idx) => {
+      setCur((idx + total) % total);
+      setProg(0);
+    },
+    [total]
+  );
 
-        const slideInterval = setInterval(() => {
-            if (!isAnimating) {
-                setIsAnimating(true);
-                setProgress(0);
-                progressValue = 0;
-                setCurrentSlide((prev) => (prev + 1) % slides.length);
-                setTimeout(() => setIsAnimating(false), 700);
-            }
-        }, 5000);
+  const next = useCallback(() => goTo(cur + 1), [cur, goTo]);
+  const prev = useCallback(() => goTo(cur - 1), [cur, goTo]);
 
-        return () => {
-            clearInterval(progressInterval);
-            clearInterval(slideInterval);
-        };
-    }, [currentSlide, slides.length, isAnimating]);
+  useEffect(() => {
+    if (paused) return;
+    const step = 100 / (DURATION / 80);
+    const pt = setInterval(() => setProg((p) => Math.min(p + step, 100)), 80);
+    const st = setTimeout(next, DURATION);
+    return () => { clearInterval(pt); clearTimeout(st); };
+  }, [cur, paused, next]);
 
-    function goToSlide(index) {
-        if (!isAnimating && index !== currentSlide) {
-            setIsAnimating(true);
-            setProgress(0);
-            setCurrentSlide(index);
-            setTimeout(() => setIsAnimating(false), 700);
-        }
-    }
+  return { cur, prog, paused, setPaused, goTo, next, prev };
+}
 
-    function addItemToCart() {
-        addProduct(currentProduct._id);
-        toast.success('¡Producto añadido al carrito!', {
-            style: {
-                background: 'linear-gradient(135deg, #dc2626 0%, #ef4444 100%)',
-                color: 'white',
-                borderRadius: '12px',
-                padding: '16px',
-                fontWeight: '600'
-            },
-            iconTheme: {
-                primary: '#fff',
-                secondary: '#dc2626',
-            },
-        });
-    }
+export default function Hero() {
+  const total = SLIDES.length;
+  const { cur, prog, paused, setPaused, goTo, next, prev } = useCarousel(total);
 
-    if (!currentProduct) return null;
+  return (
+    <section
+      className="relative w-full overflow-hidden"
+      style={{ height: "clamp(320px, 52vw, 620px)" }}
+      onMouseEnter={() => setPaused(true)}
+      onMouseLeave={() => setPaused(false)}
+    >
+      {/* ── SLIDES ── */}
+      {SLIDES.map((slide, i) => (
+        <div
+          key={slide.id}
+          className="absolute inset-0 grid transition-opacity duration-[850ms]"
+          style={{
+            gridTemplateColumns: "46% 54%",
+            opacity: i === cur ? 1 : 0,
+            pointerEvents: i === cur ? "auto" : "none",
+          }}
+        >
+          {/* LEFT — dark panel */}
+          <div
+            className="relative flex flex-col justify-center overflow-hidden"
+            style={{
+              background: "linear-gradient(160deg, #1c1412 0%, #231816 100%)",
+              padding: "clamp(28px, 5vw, 64px)",
+            }}
+          >
+            {/* Warm glow */}
+            <div
+              className="absolute pointer-events-none"
+              style={{
+                top: "-80px", left: "-80px",
+                width: "280px", height: "280px",
+                background: "radial-gradient(circle, rgba(220,38,38,0.10) 0%, transparent 70%)",
+                borderRadius: "50%",
+              }}
+            />
+            {/* Right border accent */}
+            <div
+              className="absolute right-0"
+              style={{
+                top: "15%", bottom: "15%", width: "1px",
+                background: "linear-gradient(to bottom, transparent, rgba(220,38,38,0.45), transparent)",
+              }}
+            />
 
-    return (
-        <div className="relative bg-gradient-to-br from-gray-50 via-white to-red-50/30 overflow-hidden">
-            {/* Subtle background pattern */}
-            <div className="absolute inset-0 opacity-[0.03]" style={{
-                backgroundImage: `radial-gradient(circle at 1px 1px, #dc2626 1px, transparent 0)`,
-                backgroundSize: '40px 40px'
-            }} />
+            {/* Badge */}
+            <span
+              className="inline-flex items-center w-fit mb-3 px-3 py-1 rounded-full text-[10px] font-medium tracking-widest uppercase"
+              style={{
+                color: "#dc2626",
+                background: "rgba(220,38,38,0.12)",
+                border: "1px solid rgba(220,38,38,0.28)",
+                opacity: i === cur ? 1 : 0,
+                transition: "opacity 500ms 60ms",
+              }}
+            >
+              {slide.badge}
+            </span>
 
-            {/* Carousel Container */}
-            <div className="relative">
-                <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-8 sm:py-12 lg:py-20">
-                    {/* Check if current slide is promotional */}
-                    {currentSlide_item?.isPromo ? (
-                        /* Full-width promotional image */
-                        <div className="relative">
-                            <div className="relative w-full h-[250px] sm:h-[450px] lg:h-[550px] rounded-2xl overflow-hidden shadow-2xl bg-white">
-                                {slides.map((slide, index) => (
-                                    slide.isPromo && (
-                                        <div
-                                            key={slide._id}
-                                            className={`absolute inset-0 transition-all duration-700 ${
-                                                index === currentSlide
-                                                    ? 'opacity-100 scale-100'
-                                                    : 'opacity-0 scale-105'
-                                            }`}
-                                        >
-                                            {/* Side by side images - optimized for mobile */}
-                                            <div className="flex flex-row h-full gap-0 w-full">
-                                                {slide.images.map((img, imgIndex) => (
-                                                    <div key={imgIndex} className="flex-1 h-full min-w-0">
-                                                        <img
-                                                            src={img}
-                                                            alt={`Promotional Image ${imgIndex + 1}`}
-                                                            className="w-full h-full object-cover object-top"
-                                                        />
-                                                    </div>
-                                                ))}
-                                            </div>
-                                        </div>
-                                    )
-                                ))}
-                                <div className="absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-transparent" />
-                                
-                                {/* CTA Button Overlay */}
-                                <div className="absolute bottom-2 sm:bottom-8 md:bottom-12 left-0 right-0 flex justify-center px-4">
-                                    <div className="text-center w-full">
-                                        <Link 
-                                            href="/products"
-                                            className="inline-flex items-center justify-center gap-2 px-5 sm:px-8 py-2.5 sm:py-4 rounded-xl font-semibold text-gray-900 bg-white/95 backdrop-blur-md shadow-xl hover:shadow-2xl hover:bg-white transition-all duration-300 hover:scale-105 active:scale-95 text-xs sm:text-base border border-gray-200/50"
-                                        >
-                                            Explorar la Colección
-                                            <svg className="w-4 h-4 sm:w-5 sm:h-5 transition-transform group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
-                                            </svg>
-                                        </Link>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    ) : (
-                        /* Product layout with content and image */
-                        <div className="grid lg:grid-cols-2 gap-8 lg:gap-12 xl:gap-16 items-center">
-                            {/* Content - Animated */}
-                            <div className="space-y-6 sm:space-y-8 relative z-10">
-                                {slides.map((slide, index) => {
-                                    if (slide.isPromo) return null;
-                                    
-                                    return (
-                                        <div
-                                            key={slide._id}
-                                            className={`transition-all duration-700 ${
-                                                index === currentSlide
-                                                    ? 'opacity-100 translate-x-0'
-                                                    : 'opacity-0 translate-x-10 absolute inset-0 pointer-events-none'
-                                            }`}
-                                        >
-                                            {/* Title */}
-                                            <div className="space-y-3 sm:space-y-4">
-                                                <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-gray-900 leading-tight tracking-tight">
-                                                    {slide.Título}
-                                                </h1>
-                                                <div className="w-16 sm:w-20 h-1 bg-gradient-to-r from-red-500 to-pink-500 rounded-full" />
-                                            </div>
+            {/* Eyebrow */}
+            <p
+              className="flex items-center gap-2 mb-3 text-[11px] font-normal tracking-[0.22em] uppercase"
+              style={{
+                color: "rgba(245,240,235,0.5)",
+                opacity: i === cur ? 1 : 0,
+                transform: i === cur ? "translateY(0)" : "translateY(10px)",
+                transition: "opacity 580ms 120ms, transform 580ms 120ms",
+              }}
+            >
+              <span
+                className="flex-shrink-0 rounded"
+                style={{ width: "22px", height: "1.5px", background: "linear-gradient(135deg,#dc2626,#ec4899)" }}
+              />
+              {slide.eyebrow}
+            </p>
 
-                                            {/* Description */}
-                                            <p className="text-base sm:text-lg text-gray-600 leading-relaxed max-w-xl mt-6">
-                                                {slide.Descripción}
-                                            </p>
+            {/* Headline */}
+            <h2
+              className="font-light leading-[1.12] mb-3"
+              style={{
+                fontFamily: "'Cormorant Garamond', Georgia, serif",
+                fontSize: "clamp(28px, 3.8vw, 56px)",
+                color: "#f5f0eb",
+                opacity: i === cur ? 1 : 0,
+                transform: i === cur ? "translateY(0)" : "translateY(18px)",
+                transition: "opacity 680ms 200ms, transform 680ms 200ms",
+              }}
+            >
+              {slide.title.map((line, j) => (
+                <span key={j} className="block">{line}</span>
+              ))}
+              <em
+                className="not-italic block"
+                style={{
+                  fontStyle: "italic",
+                  background: "linear-gradient(135deg,#dc2626,#ec4899)",
+                  WebkitBackgroundClip: "text",
+                  WebkitTextFillColor: "transparent",
+                  backgroundClip: "text",
+                }}
+              >
+                {slide.titleAccent}
+              </em>
+            </h2>
 
-                                            {/* CTA Buttons */}
-                                            <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 pt-6">
-                                                <button 
-                                                    onClick={addItemToCart}
-                                                    className="group relative overflow-hidden bg-gradient-to-r from-red-600 to-red-700 text-white px-6 sm:px-8 py-3 sm:py-4 rounded-xl font-semibold shadow-lg shadow-red-500/30 hover:shadow-xl hover:shadow-red-500/40 transition-all duration-300 hover:scale-105 active:scale-95 text-sm sm:text-base"
-                                                >
-                                                    <span className="relative z-10 flex items-center justify-center gap-2">
-                                                        <svg className="w-4 h-4 sm:w-5 sm:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
-                                                        </svg>
-                                                        Añadir al Carrito
-                                                    </span>
-                                                    <div className="absolute inset-0 bg-gradient-to-r from-red-700 to-red-800 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-                                                </button>
+            {/* Rule */}
+            <div
+              className="rounded mb-4"
+              style={{
+                height: "2px",
+                background: "linear-gradient(135deg,#dc2626,#ec4899)",
+                opacity: i === cur ? 1 : 0,
+                width: i === cur ? "52px" : "30px",
+                transition: "opacity 500ms 310ms, width 500ms 310ms",
+              }}
+            />
 
-                                                <Link 
-                                                    href="/products"
-                                                    className="group flex items-center justify-center gap-2 px-6 sm:px-8 py-3 sm:py-4 rounded-xl font-semibold text-gray-700 bg-white border-2 border-gray-200 hover:border-red-500 hover:text-red-600 transition-all duration-300 hover:scale-105 active:scale-95 text-sm sm:text-base"
-                                                >
-                                                    Ver Todo
-                                                    <svg className="w-4 h-4 sm:w-5 sm:h-5 transition-transform group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
-                                                    </svg>
-                                                </Link>
-                                            </div>
+            {/* Subtitle */}
+            <p
+              className="mb-5 font-light leading-[1.75]"
+              style={{
+                fontSize: "clamp(12px, 1.1vw, 14px)",
+                color: "rgba(245,240,235,0.55)",
+                maxWidth: "290px",
+                opacity: i === cur ? 1 : 0,
+                transform: i === cur ? "translateY(0)" : "translateY(8px)",
+                transition: "opacity 560ms 360ms, transform 560ms 360ms",
+              }}
+            >
+              {slide.subtitle}
+            </p>
 
-                                            {/* Features */}
-                                            <div className="flex flex-wrap gap-4 sm:gap-6 pt-6 border-t border-gray-200 mt-8">
-                                                {[
-                                                    { icon: '🚚', text: 'Envío Gratis' },
-                                                    { icon: '🔒', text: 'Pago Seguro' },
-                                                ].map((feature, i) => (
-                                                    <div key={i} className="flex items-center gap-2 text-xs sm:text-sm text-gray-600">
-                                                        <span className="text-base sm:text-lg">{feature.icon}</span>
-                                                        <span className="font-medium">{feature.text}</span>
-                                                    </div>
-                                                ))}
-                                            </div>
-                                        </div>
-                                    );
-                                })}
-                            </div>
-
-                            {/* Image - Animated */}
-                            <div className="relative">
-                                <div className="relative aspect-square rounded-2xl overflow-hidden shadow-2xl">
-                                    {slides.map((slide, index) => (
-                                        !slide.isPromo && (
-                                            <img
-                                                key={slide._id}
-                                                src={slide.Imagenes?.[0]}
-                                                alt={slide.Título}
-                                                className={`absolute inset-0 w-full h-full object-cover transition-all duration-700 ${
-                                                    index === currentSlide
-                                                        ? 'opacity-100 scale-100'
-                                                        : 'opacity-0 scale-105'
-                                                }`}
-                                            />
-                                        )
-                                    ))}
-                                    <div className="absolute inset-0 bg-gradient-to-t from-black/10 to-transparent" />
-                                </div>
-                            </div>
-                        </div>
-                    )}
-
-                    {/* Progress Indicators - Samsung Style */}
-                    {slides.length > 1 && (
-                        <div className="flex justify-center gap-2 sm:gap-3 mt-8 sm:mt-12">
-                            {slides.map((_, index) => (
-                                <button
-                                    key={index}
-                                    onClick={() => goToSlide(index)}
-                                    className="relative h-1 rounded-full overflow-hidden transition-all duration-300 group"
-                                    style={{ width: index === currentSlide ? '48px' : '24px' }}
-                                    aria-label={`Go to slide ${index + 1}`}
-                                >
-                                    <div className="absolute inset-0 bg-gray-300" />
-                                    {index === currentSlide ? (
-                                        <div 
-                                            className="absolute inset-0 bg-gradient-to-r from-red-500 to-pink-500"
-                                            style={{ 
-                                                width: `${progress}%`,
-                                                transition: 'width 0.1s linear'
-                                            }}
-                                        />
-                                    ) : (
-                                        <div className="absolute inset-0 bg-gradient-to-r from-red-500 to-pink-500 opacity-0 group-hover:opacity-50 transition-opacity duration-300" />
-                                    )}
-                                </button>
-                            ))}
-                        </div>
-                    )}
-                </div>
+            {/* Micro badges */}
+            <div
+              className="flex flex-wrap gap-2 mb-6"
+              style={{
+                opacity: i === cur ? 1 : 0,
+                transform: i === cur ? "translateY(0)" : "translateY(8px)",
+                transition: "opacity 560ms 420ms, transform 560ms 420ms",
+              }}
+            >
+              {slide.microbadges.map((mb, k) => (
+                <span
+                  key={k}
+                  className="text-[10px] font-medium tracking-wide px-3 py-1 rounded-full"
+                  style={{
+                    color: "rgba(245,240,235,0.75)",
+                    background: "rgba(255,255,255,0.07)",
+                    border: "1px solid rgba(255,255,255,0.12)",
+                  }}
+                >
+                  {mb}
+                </span>
+              ))}
             </div>
+
+            {/* Buttons */}
+            <div
+              className="flex flex-wrap gap-2"
+              style={{
+                opacity: i === cur ? 1 : 0,
+                transform: i === cur ? "translateY(0)" : "translateY(8px)",
+                transition: "opacity 560ms 480ms, transform 560ms 480ms",
+              }}
+            >
+              {slide.buttons.map((btn, k) =>
+                btn.variant === "primary" ? (
+                  <Link
+                    key={k}
+                    href={btn.href}
+                    className="group inline-flex items-center gap-2 rounded-lg font-medium tracking-wider uppercase transition-all duration-250 hover:-translate-y-0.5 hover:scale-[1.02]"
+                    style={{
+                      padding: "10px 22px",
+                      fontSize: "clamp(10px, 0.95vw, 12px)",
+                      letterSpacing: "0.13em",
+                      background: "linear-gradient(135deg,#dc2626,#ec4899)",
+                      color: "#fff",
+                      boxShadow: "0 4px 20px rgba(220,38,38,0.32)",
+                    }}
+                  >
+                    {btn.label}
+                    <svg className="w-3 h-3 transition-transform group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
+                    </svg>
+                  </Link>
+                ) : (
+                  <Link
+                    key={k}
+                    href={btn.href}
+                    className="inline-flex items-center gap-2 rounded-lg font-medium tracking-wider uppercase transition-all duration-250 hover:-translate-y-0.5"
+                    style={{
+                      padding: "10px 22px",
+                      fontSize: "clamp(10px, 0.95vw, 12px)",
+                      letterSpacing: "0.13em",
+                      background: "rgba(255,255,255,0.07)",
+                      color: "rgba(245,240,235,0.85)",
+                      border: "1.5px solid rgba(245,240,235,0.18)",
+                      backdropFilter: "blur(4px)",
+                    }}
+                  >
+                    {btn.label}
+                  </Link>
+                )
+              )}
+            </div>
+          </div>
+
+          {/* RIGHT — photo */}
+          <div className="relative overflow-hidden">
+            <img
+              src={slide.image}
+              alt={slide.subtitle}
+              className="w-full h-full object-cover object-center transition-transform duration-[8000ms]"
+              style={{ transform: i === cur ? "scale(1.06)" : "scale(1)" }}
+            />
+            {/* Left vignette blending into dark panel */}
+            <div
+              className="absolute inset-0 pointer-events-none"
+              style={{
+                background: "linear-gradient(to right, rgba(28,20,18,0.25) 0%, transparent 35%)",
+              }}
+            />
+          </div>
         </div>
-    );
+      ))}
+
+      {/* ── ARROW BUTTONS ── */}
+      {[
+        { id: "prev", action: prev, d: "M15 19l-7-7 7-7", side: { left: "14px" } },
+        { id: "next", action: next, d: "M9 5l7 7-7 7",   side: { right: "14px" } },
+      ].map((arrow) => (
+        <button
+          key={arrow.id}
+          onClick={arrow.action}
+          aria-label={arrow.id}
+          className="absolute top-1/2 -translate-y-1/2 z-20 flex items-center justify-center w-9 h-9 rounded-full transition-all duration-220 hover:scale-110"
+          style={{
+            ...arrow.side,
+            background: "rgba(255,255,255,0.10)",
+            border: "1.5px solid rgba(255,255,255,0.18)",
+            color: "#fff",
+            backdropFilter: "blur(8px)",
+            boxShadow: "0 2px 14px rgba(0,0,0,0.15)",
+          }}
+          onMouseEnter={(e) => {
+            e.currentTarget.style.background = "rgba(220,38,38,0.25)";
+            e.currentTarget.style.borderColor = "rgba(220,38,38,0.6)";
+          }}
+          onMouseLeave={(e) => {
+            e.currentTarget.style.background = "rgba(255,255,255,0.10)";
+            e.currentTarget.style.borderColor = "rgba(255,255,255,0.18)";
+          }}
+        >
+          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d={arrow.d} />
+          </svg>
+        </button>
+      ))}
+
+      {/* ── SLIDE COUNTER ── */}
+      <div
+        className="absolute top-4 right-4 z-20 text-[10px] tracking-[0.15em] rounded-full px-3 py-1"
+        style={{
+          color: "rgba(255,255,255,0.5)",
+          background: "rgba(0,0,0,0.25)",
+          backdropFilter: "blur(8px)",
+          border: "1px solid rgba(255,255,255,0.10)",
+        }}
+      >
+        <span style={{ color: "rgba(255,255,255,0.9)", fontWeight: 500 }}>
+          {String(cur + 1).padStart(2, "0")}
+        </span>{" "}
+        / {String(total).padStart(2, "0")}
+      </div>
+
+      {/* ── DOT INDICATORS ── */}
+      <div className="absolute bottom-4 left-1/2 -translate-x-1/2 z-20 flex items-center gap-2">
+        {SLIDES.map((_, i) => (
+          <button
+            key={i}
+            onClick={() => goTo(i)}
+            aria-label={`Slide ${i + 1}`}
+            className="relative overflow-hidden rounded-full transition-all duration-300"
+            style={{
+              height: "3.5px",
+              width: i === cur ? "42px" : "14px",
+              background: i === cur ? "rgba(220,38,38,0.2)" : "rgba(255,255,255,0.25)",
+              border: "none",
+              padding: 0,
+            }}
+          >
+            {i === cur && (
+              <span
+                className="absolute inset-y-0 left-0 rounded-full"
+                style={{
+                  width: `${prog}%`,
+                  background: "linear-gradient(135deg,#dc2626,#ec4899)",
+                  transition: "width 80ms linear",
+                }}
+              />
+            )}
+          </button>
+        ))}
+      </div>
+
+      {/* ── PROGRESS BAR ── */}
+      <div className="absolute bottom-0 left-0 right-0 h-[2px] z-20" style={{ background: "rgba(220,38,38,0.10)" }}>
+        <div
+          className="h-full rounded"
+          style={{
+            width: `${prog}%`,
+            background: "linear-gradient(135deg,#dc2626,#ec4899)",
+            transition: "width 80ms linear",
+          }}
+        />
+      </div>
+
+      {/* ── PAUSE INDICATOR ── */}
+      {paused && (
+        <div
+          className="absolute top-4 left-1/2 -translate-x-1/2 z-20 flex items-center gap-1 px-3 py-1 rounded-full"
+          style={{
+            background: "rgba(0,0,0,0.25)",
+            backdropFilter: "blur(8px)",
+            border: "1px solid rgba(255,255,255,0.10)",
+          }}
+        >
+          <span className="block w-[2px] h-3 rounded bg-white/50" />
+          <span className="block w-[2px] h-3 rounded bg-white/50" />
+        </div>
+      )}
+
+      <style jsx global>{`
+        @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,400&display=swap');
+      `}</style>
+    </section>
+  );
 }
