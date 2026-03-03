@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 import { useState, useEffect, useCallback } from "react";
 
 // ─── CONFIGURACIÓN DE SLIDES ─────────────────────────────────────────────────
@@ -6,7 +7,7 @@ const SLIDES = [
   {
     id: "slide-1",
     // Subí 2.png a Cloudinary y pegá la URL acá:
-    image: "https://res.cloudinary.com/djuk4a84p/image/upload/f_auto,q_auto:eco,w_1400/v1772492898/2_wrvgzz.png",
+    image: "https://res.cloudinary.com/djuk4a84p/image/upload/f_auto,q_auto:good,w_1600/v1772492898/2_wrvgzz.png",
     badge: "✦ Colección 2025",
     eyebrow: "Accesorios Mayoristas",
     title: ["Colecciones", "exclusivas de", "accesorios"],
@@ -20,7 +21,7 @@ const SLIDES = [
   },
   {
     id: "slide-2",
-    image: "https://res.cloudinary.com/djuk4a84p/image/upload/f_auto,q_auto:eco,w_1400/v1772552330/3_vim6e0.png",
+    image: "https://res.cloudinary.com/djuk4a84p/image/upload/f_auto,q_auto:good,w_1600/v1772552330/3_vim6e0.png",
     badge: "✦ Nuevos Ingresos",
     eyebrow: "Temporada 2025",
     title: ["Elegancia", "en cada"],
@@ -84,7 +85,7 @@ export default function Hero() {
   return (
     <section
       className="relative w-full overflow-hidden"
-      style={{ height: "clamp(320px, 52vw, 620px)" }}
+      style={{ height: "clamp(500px, 80vh, 650px)" }}
       onMouseEnter={() => setPaused(true)}
       onMouseLeave={() => setPaused(false)}
     >
@@ -92,34 +93,34 @@ export default function Hero() {
       {SLIDES.map((slide, i) => (
         <div
           key={slide.id}
-          className="absolute inset-0 grid transition-opacity duration-[850ms]"
+          className="absolute inset-0 grid grid-cols-1 lg:grid-cols-[46%_54%] transition-opacity duration-[850ms]"
           style={{
-            gridTemplateColumns: "46% 54%",
             opacity: i === cur ? 1 : 0,
             pointerEvents: i === cur ? "auto" : "none",
           }}
         >
           {/* LEFT — dark panel */}
           <div
-            className="relative flex flex-col justify-center overflow-hidden"
+            className="relative flex flex-col justify-center overflow-hidden order-2 lg:order-1"
             style={{
               background: "linear-gradient(160deg, #1c1412 0%, #231816 100%)",
-              padding: "clamp(28px, 5vw, 64px)",
+              padding: "clamp(24px, 4vw, 64px) clamp(20px, 5vw, 48px)",
             }}
           >
             {/* Warm glow */}
             <div
               className="absolute pointer-events-none"
               style={{
-                top: "-80px", left: "-80px",
-                width: "280px", height: "280px",
+                top: "-60px", left: "-60px",
+                width: "clamp(180px, 30vw, 280px)",
+                height: "clamp(180px, 30vw, 280px)",
                 background: "radial-gradient(circle, rgba(220,38,38,0.10) 0%, transparent 70%)",
                 borderRadius: "50%",
               }}
             />
-            {/* Right border accent */}
+            {/* Right border accent - hidden on mobile */}
             <div
-              className="absolute right-0"
+              className="absolute right-0 hidden lg:block"
               style={{
                 top: "15%", bottom: "15%", width: "1px",
                 background: "linear-gradient(to bottom, transparent, rgba(220,38,38,0.45), transparent)",
@@ -128,7 +129,7 @@ export default function Hero() {
 
             {/* Badge */}
             <span
-              className="inline-flex items-center w-fit mb-3 px-3 py-1 rounded-full text-[10px] font-medium tracking-widest uppercase"
+              className="inline-flex items-center w-fit mb-2 lg:mb-3 px-2.5 lg:px-3 py-1 rounded-full text-[9px] lg:text-[10px] font-medium tracking-widest uppercase"
               style={{
                 color: "#dc2626",
                 background: "rgba(220,38,38,0.12)",
@@ -142,7 +143,7 @@ export default function Hero() {
 
             {/* Eyebrow */}
             <p
-              className="flex items-center gap-2 mb-3 text-[11px] font-normal tracking-[0.22em] uppercase"
+              className="flex items-center gap-2 mb-2 lg:mb-3 text-[10px] lg:text-[11px] font-normal tracking-[0.18em] lg:tracking-[0.22em] uppercase"
               style={{
                 color: "rgba(245,240,235,0.5)",
                 opacity: i === cur ? 1 : 0,
@@ -151,18 +152,18 @@ export default function Hero() {
               }}
             >
               <span
-                className="flex-shrink-0 rounded"
-                style={{ width: "22px", height: "1.5px", background: "linear-gradient(135deg,#dc2626,#ec4899)" }}
+                className="flex-shrink-0 rounded w-[18px] lg:w-[22px]"
+                style={{ height: "1.5px", background: "linear-gradient(135deg,#dc2626,#ec4899)" }}
               />
               {slide.eyebrow}
             </p>
 
             {/* Headline */}
             <h2
-              className="font-light leading-[1.12] mb-3"
+              className="font-light leading-[1.12] mb-2 lg:mb-3"
               style={{
                 fontFamily: "'Cormorant Garamond', Georgia, serif",
-                fontSize: "clamp(28px, 3.8vw, 56px)",
+                fontSize: "clamp(32px, 6vw, 56px)",
                 color: "#f5f0eb",
                 opacity: i === cur ? 1 : 0,
                 transform: i === cur ? "translateY(0)" : "translateY(18px)",
@@ -188,23 +189,23 @@ export default function Hero() {
 
             {/* Rule */}
             <div
-              className="rounded mb-4"
+              className="rounded mb-3 lg:mb-4"
               style={{
                 height: "2px",
                 background: "linear-gradient(135deg,#dc2626,#ec4899)",
                 opacity: i === cur ? 1 : 0,
-                width: i === cur ? "52px" : "30px",
+                width: i === cur ? "clamp(42px, 10vw, 52px)" : "30px",
                 transition: "opacity 500ms 310ms, width 500ms 310ms",
               }}
             />
 
             {/* Subtitle */}
             <p
-              className="mb-5 font-light leading-[1.75]"
+              className="mb-4 lg:mb-5 font-light leading-[1.6] lg:leading-[1.75]"
               style={{
-                fontSize: "clamp(12px, 1.1vw, 14px)",
+                fontSize: "clamp(13px, 1.2vw, 14px)",
                 color: "rgba(245,240,235,0.55)",
-                maxWidth: "290px",
+                maxWidth: "100%",
                 opacity: i === cur ? 1 : 0,
                 transform: i === cur ? "translateY(0)" : "translateY(8px)",
                 transition: "opacity 560ms 360ms, transform 560ms 360ms",
@@ -215,7 +216,7 @@ export default function Hero() {
 
             {/* Micro badges */}
             <div
-              className="flex flex-wrap gap-2 mb-6"
+              className="flex flex-wrap gap-1.5 lg:gap-2 mb-5 lg:mb-6"
               style={{
                 opacity: i === cur ? 1 : 0,
                 transform: i === cur ? "translateY(0)" : "translateY(8px)",
@@ -225,7 +226,7 @@ export default function Hero() {
               {slide.microbadges.map((mb, k) => (
                 <span
                   key={k}
-                  className="text-[10px] font-medium tracking-wide px-3 py-1 rounded-full"
+                  className="text-[9px] lg:text-[10px] font-medium tracking-wide px-2.5 lg:px-3 py-1 rounded-full"
                   style={{
                     color: "rgba(245,240,235,0.75)",
                     background: "rgba(255,255,255,0.07)",
@@ -251,10 +252,10 @@ export default function Hero() {
                   <Link
                     key={k}
                     href={btn.href}
-                    className="group inline-flex items-center gap-2 rounded-lg font-medium tracking-wider uppercase transition-all duration-250 hover:-translate-y-0.5 hover:scale-[1.02]"
+                    className="group inline-flex items-center gap-2 rounded-lg font-medium tracking-wider uppercase transition-all duration-250 hover:-translate-y-0.5 hover:scale-[1.02] active:scale-95"
                     style={{
-                      padding: "10px 22px",
-                      fontSize: "clamp(10px, 0.95vw, 12px)",
+                      padding: "clamp(8px, 1.5vw, 10px) clamp(16px, 3vw, 22px)",
+                      fontSize: "clamp(9px, 1vw, 12px)",
                       letterSpacing: "0.13em",
                       background: "linear-gradient(135deg,#dc2626,#ec4899)",
                       color: "#fff",
@@ -262,7 +263,7 @@ export default function Hero() {
                     }}
                   >
                     {btn.label}
-                    <svg className="w-3 h-3 transition-transform group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <svg className="w-2.5 h-2.5 lg:w-3 lg:h-3 transition-transform group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
                     </svg>
                   </Link>
@@ -270,10 +271,10 @@ export default function Hero() {
                   <Link
                     key={k}
                     href={btn.href}
-                    className="inline-flex items-center gap-2 rounded-lg font-medium tracking-wider uppercase transition-all duration-250 hover:-translate-y-0.5"
+                    className="inline-flex items-center gap-2 rounded-lg font-medium tracking-wider uppercase transition-all duration-250 hover:-translate-y-0.5 active:scale-95"
                     style={{
-                      padding: "10px 22px",
-                      fontSize: "clamp(10px, 0.95vw, 12px)",
+                      padding: "clamp(8px, 1.5vw, 10px) clamp(16px, 3vw, 22px)",
+                      fontSize: "clamp(9px, 1vw, 12px)",
                       letterSpacing: "0.13em",
                       background: "rgba(255,255,255,0.07)",
                       color: "rgba(245,240,235,0.85)",
@@ -289,11 +290,16 @@ export default function Hero() {
           </div>
 
           {/* RIGHT — photo */}
-          <div className="relative overflow-hidden">
-            <img
+          <div className="relative overflow-hidden order-1 lg:order-2 h-[280px] lg:h-auto">
+            <Image
               src={slide.image}
               alt={slide.subtitle}
-              className="w-full h-full object-cover object-center transition-transform duration-[8000ms]"
+              fill
+              priority={i === 0}
+              loading={i === 0 ? "eager" : "lazy"}
+              quality={85}
+              sizes="(max-width: 1024px) 100vw, 54vw"
+              className="object-cover object-center transition-transform duration-[8000ms]"
               style={{ transform: i === cur ? "scale(1.06)" : "scale(1)" }}
             />
             {/* Left vignette blending into dark panel */}
@@ -309,16 +315,15 @@ export default function Hero() {
 
       {/* ── ARROW BUTTONS ── */}
       {[
-        { id: "prev", action: prev, d: "M15 19l-7-7 7-7", side: { left: "14px" } },
-        { id: "next", action: next, d: "M9 5l7 7-7 7",   side: { right: "14px" } },
+        { id: "prev", action: prev, d: "M15 19l-7-7 7-7", side: { left: "8px lg:left-[14px]" } },
+        { id: "next", action: next, d: "M9 5l7 7-7 7",   side: { right: "8px lg:right-[14px]" } },
       ].map((arrow) => (
         <button
           key={arrow.id}
           onClick={arrow.action}
           aria-label={arrow.id}
-          className="absolute top-1/2 -translate-y-1/2 z-20 flex items-center justify-center w-9 h-9 rounded-full transition-all duration-220 hover:scale-110"
+          className={`absolute top-1/2 -translate-y-1/2 z-20 flex items-center justify-center rounded-full transition-all duration-220 hover:scale-110 active:scale-95 w-8 h-8 lg:w-9 lg:h-9 ${arrow.side}`}
           style={{
-            ...arrow.side,
             background: "rgba(255,255,255,0.10)",
             border: "1.5px solid rgba(255,255,255,0.18)",
             color: "#fff",
@@ -334,7 +339,7 @@ export default function Hero() {
             e.currentTarget.style.borderColor = "rgba(255,255,255,0.18)";
           }}
         >
-          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <svg className="w-3.5 h-3.5 lg:w-4 lg:h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d={arrow.d} />
           </svg>
         </button>
@@ -342,7 +347,7 @@ export default function Hero() {
 
       {/* ── SLIDE COUNTER ── */}
       <div
-        className="absolute top-4 right-4 z-20 text-[10px] tracking-[0.15em] rounded-full px-3 py-1"
+        className="absolute top-3 right-3 lg:top-4 lg:right-4 z-20 text-[9px] lg:text-[10px] tracking-[0.15em] rounded-full px-2.5 lg:px-3 py-1"
         style={{
           color: "rgba(255,255,255,0.5)",
           background: "rgba(0,0,0,0.25)",
@@ -357,7 +362,7 @@ export default function Hero() {
       </div>
 
       {/* ── DOT INDICATORS ── */}
-      <div className="absolute bottom-4 left-1/2 -translate-x-1/2 z-20 flex items-center gap-2">
+      <div className="absolute bottom-3 lg:bottom-4 left-1/2 -translate-x-1/2 z-20 flex items-center gap-1.5 lg:gap-2">
         {SLIDES.map((_, i) => (
           <button
             key={i}
@@ -365,8 +370,8 @@ export default function Hero() {
             aria-label={`Slide ${i + 1}`}
             className="relative overflow-hidden rounded-full transition-all duration-300"
             style={{
-              height: "3.5px",
-              width: i === cur ? "42px" : "14px",
+              height: "3px lg:h-[3.5px]",
+              width: i === cur ? "clamp(32px, 8vw, 42px)" : "clamp(12px, 3vw, 14px)",
               background: i === cur ? "rgba(220,38,38,0.2)" : "rgba(255,255,255,0.25)",
               border: "none",
               padding: 0,
@@ -387,7 +392,7 @@ export default function Hero() {
       </div>
 
       {/* ── PROGRESS BAR ── */}
-      <div className="absolute bottom-0 left-0 right-0 h-[2px] z-20" style={{ background: "rgba(220,38,38,0.10)" }}>
+      <div className="absolute bottom-0 left-0 right-0 h-[1.5px] lg:h-[2px] z-20" style={{ background: "rgba(220,38,38,0.10)" }}>
         <div
           className="h-full rounded"
           style={{
@@ -401,15 +406,15 @@ export default function Hero() {
       {/* ── PAUSE INDICATOR ── */}
       {paused && (
         <div
-          className="absolute top-4 left-1/2 -translate-x-1/2 z-20 flex items-center gap-1 px-3 py-1 rounded-full"
+          className="absolute top-3 lg:top-4 left-1/2 -translate-x-1/2 z-20 flex items-center gap-1 px-2.5 lg:px-3 py-1 rounded-full"
           style={{
             background: "rgba(0,0,0,0.25)",
             backdropFilter: "blur(8px)",
             border: "1px solid rgba(255,255,255,0.10)",
           }}
         >
-          <span className="block w-[2px] h-3 rounded bg-white/50" />
-          <span className="block w-[2px] h-3 rounded bg-white/50" />
+          <span className="block w-[2px] h-2.5 lg:h-3 rounded bg-white/50" />
+          <span className="block w-[2px] h-2.5 lg:h-3 rounded bg-white/50" />
         </div>
       )}
 

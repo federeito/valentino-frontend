@@ -18,6 +18,8 @@ export default function Home({ featuredProducts, newProducts, collectionProduct 
         <>
             <Head>
                 <title>Valentino Accesorios | Catálogo mayorista online</title>
+                <meta name="description" content="Accesorios para el cabello al por mayor. Colecciones exclusivas con envíos a todo el país." />
+                <link rel="preconnect" href="https://res.cloudinary.com" />
             </Head>
             <PromoBanner />
             {/* Subtle background */}
