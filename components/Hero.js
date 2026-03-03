@@ -6,7 +6,7 @@ const SLIDES = [
   {
     id: "slide-1",
     // Subí 2.png a Cloudinary y pegá la URL acá:
-    image: "https://res.cloudinary.com/djuk4a84p/image/upload/f_auto,q_auto:good,w_1600/v1772492898/2_wrvgzz.png",
+    image: "https://res.cloudinary.com/djuk4a84p/image/upload/f_auto,q_auto:eco,w_1400/v1772492898/2_wrvgzz.png",
     badge: "✦ Colección 2025",
     eyebrow: "Accesorios Mayoristas",
     title: ["Colecciones", "exclusivas de", "accesorios"],
@@ -20,7 +20,7 @@ const SLIDES = [
   },
   {
     id: "slide-2",
-    image: "https://res.cloudinary.com/djuk4a84p/image/upload/f_auto,q_auto:good,w_1600/v1772552330/3_vim6e0.png",
+    image: "https://res.cloudinary.com/djuk4a84p/image/upload/f_auto,q_auto:eco,w_1400/v1772552330/3_vim6e0.png",
     badge: "✦ Nuevos Ingresos",
     eyebrow: "Temporada 2025",
     title: ["Elegancia", "en cada"],
