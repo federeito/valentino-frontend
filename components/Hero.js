@@ -9,11 +9,11 @@ const SLIDES = [
     // Subí 2.png a Cloudinary y pegá la URL acá:
     image: "https://res.cloudinary.com/djuk4a84p/image/upload/f_auto,q_auto:good,w_1600/v1772492898/2_wrvgzz.png",
     badge: "✦ Colección 2025",
-    eyebrow: "Accesorios Mayoristas",
+    eyebrow: "",
     title: ["Colecciones", "exclusivas de", "accesorios"],
     titleAccent: "para el cabello",
     subtitle: "Colecciones exclusivas de accesorios para el cabello",
-    microbadges: ["✔ Envíos a todo el país", "✔ Compra 100% online"],
+    microbadges: [""],
     buttons: [
       { label: "Explorar Colección", href: "/products", variant: "primary" },
       { label: "Contactar", href: "/contact", variant: "ghost" },
