@@ -11,11 +11,27 @@ export default function Header() {
     const [isScrolled, setIsScrolled] = useState(false);
     const [cartBounce, setCartBounce] = useState(false);
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+    const [isCategoriesOpen, setIsCategoriesOpen] = useState(false);
 
     const { data: session } = useSession();
 
     // Check if we're on the cart page
     const isCartPage = pathname === '/cart';
+
+    // Product categories
+    const categories = [
+        "Broches",
+        "Cepillos",
+        "Gomitas",
+        "Gorras",
+        "Hebillas",
+        "Horquillas",
+        "Infantil",
+        "Linea Economica",
+        "Peines",
+        "Peinetas",
+        "Vinchas",
+    ];
 
     useEffect(() => {
         const handleScroll = () => {
@@ -69,7 +85,7 @@ export default function Header() {
                         <nav className="hidden md:block">
                             <ul className="flex items-center gap-1">
                                 {navLinks.map((link) => (
-                                    <li key={link.href}>
+                                    <li key={link.href} className={link.label === 'Productos' ? 'group relative' : ''}>
                                         <Link 
                                             href={link.href}
                                             className={`relative px-5 py-2 text-sm font-medium transition-all duration-300 rounded-lg ${
@@ -83,6 +99,32 @@ export default function Header() {
                                                 <span className="absolute bottom-0 left-1/2 -translate-x-1/2 w-1/2 h-0.5 bg-gradient-to-r from-red-500 to-pink-500 rounded-full" />
                                             )}
                                         </Link>
+
+                                        {/* Dropdown for Products */}
+                                        {link.label === 'Productos' && (
+                                            <div className="absolute top-full left-0 pt-2 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 z-50">
+                                                <div className="bg-gray-100 rounded-lg shadow-lg border border-gray-200 py-2 min-w-[200px]">
+                                                    <button
+                                                        onClick={() => {
+                                                            window.location.href = '/products';
+                                                        }}
+                                                        className="w-full text-left block px-4 py-2 text-sm text-gray-700 hover:bg-white hover:text-red-600 transition-all duration-200"
+                                                    >
+                                                        Todos los productos
+                                                    </button>
+                                                    <div className="my-1 border-t border-gray-300"></div>
+                                                    {categories.map((category) => (
+                                                        <Link
+                                                            key={category}
+                                                            href={`/products?category=${encodeURIComponent(category)}`}
+                                                            className="block px-4 py-2 text-sm text-gray-700 hover:bg-white hover:text-red-600 transition-all duration-200"
+                                                        >
+                                                            {category}
+                                                        </Link>
+                                                    ))}
+                                                </div>
+                                            </div>
+                                        )}
                                     </li>
                                 ))}
                                 
@@ -219,35 +261,90 @@ export default function Header() {
 
                 {/* Mobile Menu */}
                 <div className={`md:hidden overflow-hidden transition-all duration-300 ease-in-out ${
-                    isMobileMenuOpen ? 'max-h-96 border-t border-gray-100' : 'max-h-0'
+                    isMobileMenuOpen ? 'max-h-[500px] border-t border-gray-100' : 'max-h-0'
                 }`}>
-                    <div className="bg-white/95 backdrop-blur-xl px-4 py-4 space-y-1">
-                        {navLinks.map((link) => (
-                            <Link 
-                                key={link.href}
-                                href={link.href}
-                                onClick={() => setIsMobileMenuOpen(false)}
-                                className={`block px-4 py-3 rounded-lg text-sm font-medium transition-all duration-300 ${
-                                    pathname === link.href
+                    <div className="bg-gray-100 backdrop-blur-xl px-4 py-4 space-y-1 overflow-y-auto max-h-[calc(100vh-120px)]">
+                        {/* Inicio Link */}
+                        <Link 
+                            href="/"
+                            onClick={() => setIsMobileMenuOpen(false)}
+                            className={`block px-4 py-3 rounded-lg text-sm font-medium transition-all duration-300 ${
+                                pathname === '/'
+                                    ? 'bg-gradient-to-r from-red-50 to-pink-50 text-red-600 shadow-sm'
+                                    : 'text-gray-600 hover:bg-white hover:text-red-600'
+                            }`}
+                        >
+                            Inicio
+                        </Link>
+
+                        {/* Productos with Expandable Categories */}
+                        <div>
+                            <button
+                                onClick={() => setIsCategoriesOpen(!isCategoriesOpen)}
+                                className={`w-full flex items-center justify-between px-4 py-3 rounded-lg text-sm font-medium transition-all duration-300 ${
+                                    pathname === '/products'
                                         ? 'bg-gradient-to-r from-red-50 to-pink-50 text-red-600 shadow-sm'
-                                        : 'text-gray-600 hover:bg-gray-50 hover:text-red-600'
+                                        : 'text-gray-600 hover:bg-white hover:text-red-600'
                                 }`}
                             >
-                                {link.label}
-                            </Link>
-                        ))}
+                                <span>Productos</span>
+                                <svg
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    className={`w-4 h-4 transition-transform duration-300 ${isCategoriesOpen ? 'rotate-180' : ''}`}
+                                    fill="none"
+                                    viewBox="0 0 24 24"
+                                    stroke="currentColor"
+                                    strokeWidth="2"
+                                >
+                                    <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
+                                </svg>
+                            </button>
+
+                            {/* Categories Submenu */}
+                            <div className={`overflow-hidden transition-all duration-300 ${
+                                isCategoriesOpen ? 'max-h-[400px] mt-1' : 'max-h-0'
+                            }`}>
+                                <div className="pl-4 space-y-1">
+                                    <button
+                                        onClick={() => {
+                                            window.location.href = '/products';
+                                        }}
+                                        className="w-full text-left block px-4 py-2.5 rounded-lg text-sm text-gray-700 hover:bg-white hover:text-red-600 transition-all duration-200"
+                                    >
+                                        Todos los productos
+                                    </button>
+                                    <div className="my-1 border-t border-gray-300 mx-4"></div>
+                                    {categories.map((category) => (
+                                        <Link
+                                            key={category}
+                                            href={`/products?category=${encodeURIComponent(category)}`}
+                                            onClick={() => {
+                                                setIsMobileMenuOpen(false);
+                                                setIsCategoriesOpen(false);
+                                            }}
+                                            className="block px-4 py-2.5 rounded-lg text-sm text-gray-700 hover:bg-white hover:text-red-600 transition-all duration-200"
+                                        >
+                                            {category}
+                                        </Link>
+                                    ))}
+                                </div>
+                            </div>
+                        </div>
                         
                         {/* Línea Económica - Mobile */}
                         <Link
                             href="/products?category=Linea%20Economica"
-                            onClick={() => setIsMobileMenuOpen(false)}
-                            className="relative block px-4 py-3 rounded-lg bg-gradient-to-r from-green-500 to-emerald-600 text-white shadow-md active:from-green-600 active:to-emerald-700 transition-all duration-300"
+                            onClick={() => {
+                                setIsMobileMenuOpen(false);
+                                setIsCategoriesOpen(false);
+                            }}
+                            className="relative block px-4 py-3 rounded-lg bg-white border-2 border-emerald-500 hover:bg-emerald-50 transition-all duration-300"
                         >
                             <div className="flex items-center justify-between gap-3">
                                 <div className="flex items-center gap-2 min-w-0 flex-1">
                                     <svg 
                                         xmlns="http://www.w3.org/2000/svg" 
-                                        className="w-5 h-5 flex-shrink-0" 
+                                        className="w-5 h-5 flex-shrink-0 text-emerald-600" 
                                         fill="none" 
                                         viewBox="0 0 24 24" 
                                         stroke="currentColor" 
@@ -255,33 +352,26 @@ export default function Header() {
                                     >
                                         <path strokeLinecap="round" strokeLinejoin="round" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z" />
                                     </svg>
-                                    <span className="text-sm font-extrabold uppercase tracking-wide truncate">
-                                        Línea Económica
-                                    </span>
+                                    <div className="flex flex-col">
+                                        <span className="text-sm font-bold text-gray-800 truncate">
+                                            Línea Económica
+                                        </span>
+                                        <span className="text-xs text-emerald-600 font-medium">
+                                            Oferta 2×1 • Desde 72 unidades
+                                        </span>
+                                    </div>
                                 </div>
-                                <span className="text-xs bg-yellow-400 text-green-900 px-2 py-1 rounded-full font-extrabold shadow-sm whitespace-nowrap flex-shrink-0">
+                                <span className="text-[10px] bg-yellow-400 text-emerald-900 px-2 py-1 rounded-full font-bold shadow-sm whitespace-nowrap flex-shrink-0">
                                     AHORRO
                                 </span>
-                            </div>
-                            
-                            {/* Mobile promo info - Below the button content */}
-                            <div className="mt-2 pt-2 border-t border-white/20">
-                                <div className="flex items-center justify-center gap-2 text-white/90">
-                                    <div className="text-xs font-bold">
-                                        Oferta 2×1
-                                    </div>
-                                    <div className="w-1 h-1 rounded-full bg-white/60"></div>
-                                    <div className="text-xs">
-                                        Desde 72 unidades
-                                    </div>
-                                </div>
                             </div>
                         </Link>
                         
                         {!session && (
                             <Link
                                 href="/account"
-                                className="block px-4 py-3 rounded-lg text-sm font-medium text-gray-600 hover:bg-gray-50 hover:text-red-600 transition-all duration-300"
+                                onClick={() => setIsMobileMenuOpen(false)}
+                                className="block px-4 py-3 rounded-lg text-sm font-medium text-gray-600 hover:bg-white hover:text-red-600 transition-all duration-300"
                             >
                                 Mi Cuenta
                             </Link>
