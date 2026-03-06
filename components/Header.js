@@ -27,7 +27,6 @@ export default function Header() {
         "Hebillas",
         "Horquillas",
         "Infantil",
-        "Linea Economica",
         "Peines",
         "Peinetas",
         "Vinchas",
@@ -261,9 +260,9 @@ export default function Header() {
 
                 {/* Mobile Menu */}
                 <div className={`md:hidden overflow-hidden transition-all duration-300 ease-in-out ${
-                    isMobileMenuOpen ? 'max-h-[500px] border-t border-gray-100' : 'max-h-0'
+                    isMobileMenuOpen ? 'max-h-[80vh] border-t border-gray-100' : 'max-h-0'
                 }`}>
-                    <div className="bg-gray-100 backdrop-blur-xl px-4 py-4 space-y-1 overflow-y-auto max-h-[calc(100vh-120px)]">
+                    <div className="bg-gray-100 backdrop-blur-xl px-4 py-4 space-y-1 overflow-y-auto max-h-[80vh]">
                         {/* Inicio Link */}
                         <Link 
                             href="/"
@@ -302,7 +301,7 @@ export default function Header() {
 
                             {/* Categories Submenu */}
                             <div className={`overflow-hidden transition-all duration-300 ${
-                                isCategoriesOpen ? 'max-h-[400px] mt-1' : 'max-h-0'
+                                isCategoriesOpen ? 'max-h-[1000px] mt-1' : 'max-h-0'
                             }`}>
                                 <div className="pl-4 space-y-1">
                                     <button
