@@ -172,7 +172,7 @@ export default function Products({ allProducts = [], categories = [] }) {
                         </h1>
                         <div className="w-24 sm:w-32 h-1 bg-gradient-to-r from-pink-300 to-rose-300 mx-auto rounded-full mb-4 sm:mb-6" />
                         <p className="text-gray-600 text-base sm:text-lg max-w-2xl mx-auto px-4 font-light tracking-wide">
-                            Explora nuestra completa colección de productos cuidadosamente seleccionados
+                            Explora nuestra completo catálogo de productos cuidadosamente seleccionados
                         </p>
                         
                         {/* Estadísticas */}
