@@ -76,7 +76,6 @@ export default function Header() {
                                     alt="Valentino Paris"
                                     className="h-10 w-auto sm:h-12 transition-all duration-300 group-hover:brightness-110"
                                 />
-                                <div className="absolute -inset-1 bg-gradient-to-r from-red-500/20 to-pink-500/20 rounded-full blur-lg opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
                             </div>
                         </Link>
 
