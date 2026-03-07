@@ -18,7 +18,7 @@ export default function Home({ featuredProducts, newProducts, collectionProduct 
         <>
             <Head>
                 <title>Valentino Accesorios | Catálogo mayorista online</title>
-                <meta name="description" content="Accesorios para el cabello al por mayor. Colecciones exclusivas con envíos a todo el país." />
+                <meta name="description" content="Accesorios para el cabello al por mayor. Hebillas, peinetas y clips con diseños exclusivos para revendedores. Comprá online con envíos a todo el país." />
                 <link rel="preconnect" href="https://res.cloudinary.com" />
             </Head>
             <PromoBanner />
@@ -28,6 +28,9 @@ export default function Home({ featuredProducts, newProducts, collectionProduct 
             <div className={`min-h-screen transform transition-all duration-1000 ${
                 isVisible ? 'opacity-100' : 'opacity-0'
             }`}>
+                {/* Main heading for SEO */}
+                <h1 className="sr-only">Accesorios para el cabello al por mayor</h1>
+                
                 {/* Hero Section */}
                 <Hero featuredProducts={featuredProducts} />
 
