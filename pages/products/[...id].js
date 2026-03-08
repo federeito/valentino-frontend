@@ -6,6 +6,7 @@ import { mongooseconnect } from "@/lib/mongoose";
 import { Product } from "@/models/Product";
 import Link from "next/link";
 import { useContext, useState, useEffect } from "react";
+import { useRouter } from "next/router";
 import toast from "react-hot-toast";
 
 const formatPrice = (price) => {
@@ -20,6 +21,11 @@ export default function ProductPage({ product }) {
     const [quantity, setQuantity] = useState(1);
     const [selectedColor, setSelectedColor] = useState(null);
     
+    const router = useRouter();
+    // Use router.asPath which is available during SSR
+    const isAccesoriosPath = router.asPath.startsWith('/accesorios-para-el-pelo');
+    const productsPath = isAccesoriosPath ? '/accesorios-para-el-pelo' : '/products';
+
     const countInCart = cartProducts.filter(id => id === product._id).length;
     const productImages = product.Imagenes?.slice(0, 12) || [];
 
@@ -218,7 +224,9 @@ export default function ProductPage({ product }) {
                                         <svg className="w-3 h-3 text-gray-400 mx-1" fill="currentColor" viewBox="0 0 20 20">
                                             <path fillRule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clipRule="evenodd"></path>
                                         </svg>
-                                        <Link href="/products" className="ml-1 text-sm font-light text-gray-700 hover:text-primary tracking-wide">Productos</Link>
+                                        <Link href={productsPath} className="ml-1 text-sm font-light text-gray-700 hover:text-primary tracking-wide">
+                                            {isAccesoriosPath ? 'Accesorios para el Pelo' : 'Productos'}
+                                        </Link>
                                     </div>
                                 </li>
                                 <li aria-current="page">
@@ -521,12 +529,43 @@ export default function ProductPage({ product }) {
 }
 
 export async function getServerSideProps(context) {
-    await mongooseconnect();
-    const { id } = context.query;
-    const product = await Product.findById(id);
-    return {
-        props: {
-            product: JSON.parse(JSON.stringify(product))
+    try {
+        await mongooseconnect();
+        const { id } = context.query;
+        const product = await Product.findById(id).lean();
+        
+        if (!product) {
+            return {
+                notFound: true
+            }
+        }
+        
+        // Optimize product data
+        const optimizedProduct = {
+            _id: product._id.toString(),
+            Título: product.Título,
+            Descripción: product.Descripción,
+            Precio: product.Precio,
+            código: product.código,
+            stock: product.stock,
+            // Limit to 12 images
+            Imagenes: (product.Imagenes || []).slice(0, 12),
+            colors: (product.colors || []).map(color => ({
+                name: color.name,
+                code: color.code,
+                available: color.available !== false
+            }))
+        };
+        
+        return {
+            props: {
+                product: optimizedProduct
+            }
+        }
+    } catch (error) {
+        console.error("Error fetching product:", error);
+        return {
+            notFound: true
         }
     }
 }

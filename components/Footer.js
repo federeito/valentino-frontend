@@ -94,7 +94,7 @@ export default function Footer() {
                         <ul className="space-y-2 sm:space-y-3">
                             <li>
                                 <Link 
-                                    href="/products"
+                                    href="/accesorios-para-el-pelo"
                                     className="text-gray-600 hover:text-red-600 text-xs sm:text-sm transition-colors duration-300 inline-flex items-center group"
                                 >
                                     <span className="group-hover:translate-x-1 transition-transform duration-300">

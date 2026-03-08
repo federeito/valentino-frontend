@@ -50,7 +50,7 @@ export default function Header() {
 
     const navLinks = [
         { href: '/', label: 'Inicio' },
-        { href: '/products', label: 'Productos' },
+        { href: '/accesorios-para-el-pelo', label: 'Productos' },
     ];
 
     return (
@@ -104,7 +104,7 @@ export default function Header() {
                                                 <div className="bg-gray-100 rounded-lg shadow-lg border border-gray-200 py-2 min-w-[200px]">
                                                     <button
                                                         onClick={() => {
-                                                            window.location.href = '/products';
+                                                            window.location.href = '/accesorios-para-el-pelo';
                                                         }}
                                                         className="w-full text-left block px-4 py-2 text-sm text-gray-700 hover:bg-white hover:text-red-600 transition-all duration-200"
                                                     >
@@ -114,7 +114,7 @@ export default function Header() {
                                                     {categories.map((category) => (
                                                         <Link
                                                             key={category}
-                                                            href={`/products?category=${encodeURIComponent(category)}`}
+                                                            href={`/accesorios-para-el-pelo?category=${encodeURIComponent(category)}`}
                                                             className="block px-4 py-2 text-sm text-gray-700 hover:bg-white hover:text-red-600 transition-all duration-200"
                                                         >
                                                             {category}
@@ -129,7 +129,7 @@ export default function Header() {
                                 {/* Línea Económica - Special Link */}
                                 <li>
                                     <Link 
-                                        href="/products?category=Linea%20Economica"
+                                        href="/accesorios-para-el-pelo?category=Linea%20Economica"
                                         className="relative flex items-center gap-1.5 px-3 py-1.5 ml-2 bg-gradient-to-r from-green-500 to-emerald-600 text-white font-bold rounded-full hover:from-green-600 hover:to-emerald-700 transition-all duration-300 shadow-md hover:shadow-lg transform hover:scale-105 group"
                                     >
                                         {/* Tag Icon */}
@@ -305,7 +305,7 @@ export default function Header() {
                                 <div className="pl-4 space-y-1">
                                     <button
                                         onClick={() => {
-                                            window.location.href = '/products';
+                                            window.location.href = '/accesorios-para-el-pelo';
                                         }}
                                         className="w-full text-left block px-4 py-2.5 rounded-lg text-sm text-gray-700 hover:bg-white hover:text-red-600 transition-all duration-200"
                                     >
@@ -315,7 +315,7 @@ export default function Header() {
                                     {categories.map((category) => (
                                         <Link
                                             key={category}
-                                            href={`/products?category=${encodeURIComponent(category)}`}
+                                            href={`/accesorios-para-el-pelo?category=${encodeURIComponent(category)}`}
                                             onClick={() => {
                                                 setIsMobileMenuOpen(false);
                                                 setIsCategoriesOpen(false);
@@ -331,7 +331,7 @@ export default function Header() {
                         
                         {/* Línea Económica - Mobile */}
                         <Link
-                            href="/products?category=Linea%20Economica"
+                            href="/accesorios-para-el-pelo?category=Linea%20Economica"
                             onClick={() => {
                                 setIsMobileMenuOpen(false);
                                 setIsCategoriesOpen(false);

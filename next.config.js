@@ -10,6 +10,18 @@ const nextConfig = {
     ],
     qualities: [70, 75, 85, 95],
   },
+  async rewrites() {
+    return [
+      {
+        source: '/accesorios-para-el-pelo',
+        destination: '/products',
+      },
+      {
+        source: '/accesorios-para-el-pelo/:path*',
+        destination: '/products/:path*',
+      },
+    ];
+  },
 };
 
 module.exports = nextConfig;

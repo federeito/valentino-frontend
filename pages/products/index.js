@@ -26,6 +26,10 @@ export default function Products({ allProducts = [], categories = [] }) {
     const [showActions, setShowActions] = useState({}); // New state for showing actions
     const productsPerPage = 24; // Mobile: 2 columns × 12 rows = 24, Desktop: 4 columns × 6 rows = 24
 
+    // Determine the current base path (either /products or /accesorios-para-el-pelo)
+    const isAccesoriosPath = router.pathname === '/products' && router.asPath.startsWith('/accesorios-para-el-pelo');
+    const basePath = isAccesoriosPath ? '/accesorios-para-el-pelo' : '/products';
+
     // Set category from URL query parameter
     useEffect(() => {
         if (router.query.category) {
@@ -600,14 +604,41 @@ export async function getServerSideProps() {
         await mongooseconnect();
         
         const [allProducts, categories] = await Promise.all([
-            Product.find({}).populate('Categoria'),
-            Category.find({})
+            Product.find({}).populate('Categoria').lean(),
+            Category.find({}).lean()
         ]);
+        
+        // Optimize products data to reduce payload size
+        const optimizedProducts = allProducts.map(product => ({
+            _id: product._id.toString(),
+            Título: product.Título,
+            Descripción: product.Descripción,
+            Precio: product.Precio,
+            código: product.código,
+            stock: product.stock,
+            Categoria: product.Categoria ? {
+                _id: product.Categoria._id.toString(),
+                name: product.Categoria.name
+            } : null,
+            // Limit images to first 12 and only send URLs
+            Imagenes: (product.Imagenes || []).slice(0, 12),
+            // Only send color name, code, and availability
+            colors: (product.colors || []).map(color => ({
+                name: color.name,
+                code: color.code,
+                available: color.available !== false
+            }))
+        }));
+        
+        const optimizedCategories = categories.map(cat => ({
+            _id: cat._id.toString(),
+            name: cat.name
+        }));
         
         return {
             props: {
-                allProducts: JSON.parse(JSON.stringify(allProducts)),
-                categories: JSON.parse(JSON.stringify(categories))
+                allProducts: optimizedProducts,
+                categories: optimizedCategories
             }
         }
     } catch (error) {
