@@ -5,6 +5,7 @@ import { mongooseconnect } from "@/lib/mongoose";
 import { Product } from "@/models/Product";
 import { Category } from "@/models/Category";
 import Link from "next/link";
+import Head from "next/head";
 import { useContext, useState, useEffect, useCallback } from "react";
 import toast from "react-hot-toast";
 import { useRouter } from "next/router";
@@ -159,6 +160,9 @@ export default function Products({ allProducts = [], categories = [] }) {
 
     return (
         <>
+            <Head>
+                <link rel="canonical" href="https://www.valentinoaccesorios.com.ar/accesorios-para-el-pelo" />
+            </Head>
             <PromoBanner />
             {/* Background decorativo - Pastel colors */}
             <div className="fixed inset-0 overflow-hidden pointer-events-none -z-10">
