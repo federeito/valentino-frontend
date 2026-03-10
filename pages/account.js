@@ -199,7 +199,8 @@ export default function Account() {
                                         {!userStatus.isApproved && !statusLoading && (
                                             <div className="p-3 sm:p-3.5 md:p-4 bg-yellow-50 border border-yellow-200 rounded-lg">
                                                 <p className="text-xs sm:text-sm text-yellow-800">
-                                                    Tu cuenta está pendiente de aprobación. Algunas funcionalidades pueden estar limitadas.
+                                                Tu cuenta está pendiente de aprobación.
+                                                Para agilizar la activación y acceder a los precios mayoristas, te recomendamos completar los datos de tu cuenta.
                                                 </p>
                                             </div>
                                         )}
