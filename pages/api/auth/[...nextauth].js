@@ -27,6 +27,32 @@ export const authOptions = {
   },
   
   callbacks: {
+    async signIn({ user, account, profile, isNewUser }) {
+      // Send notification email for new Google or Facebook signups
+      if ((account.provider === 'google' || account.provider === 'facebook')) {
+        try {
+          // Always send notification (you can add isNewUser check if your setup supports it)
+          const response = await fetch(`${process.env.NEXTAUTH_URL}/api/notify-signup`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              name: user.name,
+              email: user.email,
+              provider: account.provider
+            })
+          });
+          
+          if (!response.ok) {
+            console.error('Failed to send signup notification');
+          }
+        } catch (error) {
+          console.error('Error sending signup notification:', error);
+          // Don't block the sign-in even if email fails
+        }
+      }
+      return true;
+    },
+    
     async jwt({ token, user, account }) {
       if (user) {
         token.id = user.id
@@ -48,7 +74,6 @@ export const authOptions = {
   },
   
   secret: process.env.NEXTAUTH_SECRET,
-  debug: process.env.NODE_ENV === 'development',
 };
 
 export default NextAuth(authOptions);
