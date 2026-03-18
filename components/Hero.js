@@ -14,7 +14,7 @@ const SLIDES = [
     subtitle: "",
     microbadges: [],
     buttons: [
-      { label: "Explorar Colección", href: "/products", variant: "primary" },
+      { label: "Explorar Colección", href: "/accesorios-para-el-pelo", variant: "primary" },
     ],
   },
   {
