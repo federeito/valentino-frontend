@@ -32,30 +32,30 @@ export default async function handler(req, res) {
         // Check if user is an admin
         const isAdmin = ADMIN_EMAILS.includes(session.user.email.toLowerCase());
         
-        let user = await User.findOne({ email: session.user.email });
-        
-        if (!user) {
-            // Create user if doesn't exist (first time login)
-            user = await User.create({
-                email: session.user.email,
-                name: session.user.name,
-                image: session.user.image,
-                isApproved: isAdmin, // Auto-approve admins
-                canViewPrices: isAdmin // Auto-grant price access to admins
-            });
-        } else if (isAdmin && (!user.isApproved || !user.canViewPrices)) {
-            // Update existing admin users to have proper permissions
-            user = await User.findByIdAndUpdate(
-                user._id,
-                {
+        // Use findOneAndUpdate with upsert to avoid duplicate key errors
+        let user = await User.findOneAndUpdate(
+            { email: session.user.email },
+            { 
+                $setOnInsert: {
+                    email: session.user.email,
+                    name: session.user.name,
+                    image: session.user.image,
+                    isApproved: isAdmin,
+                    canViewPrices: isAdmin
+                },
+                $set: isAdmin ? {
                     isApproved: true,
                     canViewPrices: true,
                     approvedAt: new Date(),
                     approvedBy: 'system_admin'
-                },
-                { new: true }
-            );
-        }
+                } : {}
+            },
+            { 
+                new: true, 
+                upsert: true,
+                setDefaultsOnInsert: true
+            }
+        );
 
         const canViewPrices = isAdmin || (user.canViewPrices && user.isApproved);
 

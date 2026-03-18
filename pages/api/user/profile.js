@@ -16,23 +16,30 @@ export default async function handler(req, res) {
 
         if (req.method === 'GET') {
             try {
-                let user = await User.findOne({ email });
-                
-                if (!user) {
-                    user = await User.create({
-                        email,
-                        name: session.user.name,
-                        image: session.user.image,
-                        provider: session.user.provider || 'email',
-                        isApproved: false,
-                        firstName: '',
-                        lastName: '',
-                        phone: '',
-                        cuitCuil: '',
-                        businessName: '',
-                        shippingAddress: '',
-                    });
-                }
+                // Use findOneAndUpdate with upsert to avoid duplicate key errors
+                const user = await User.findOneAndUpdate(
+                    { email },
+                    { 
+                        $setOnInsert: {
+                            email,
+                            name: session.user.name,
+                            image: session.user.image,
+                            provider: session.user.provider || 'email',
+                            isApproved: false,
+                            firstName: '',
+                            lastName: '',
+                            phone: '',
+                            cuitCuil: '',
+                            businessName: '',
+                            shippingAddress: '',
+                        }
+                    },
+                    { 
+                        new: true, 
+                        upsert: true,
+                        setDefaultsOnInsert: true
+                    }
+                );
 
                 return res.status(200).json({
                     firstName: user.firstName || '',
@@ -52,22 +59,25 @@ export default async function handler(req, res) {
             const { firstName, lastName, phone, cuitCuil, businessName, shippingAddress } = req.body;
 
             try {
-                const updateData = {
-                    email,
-                    name: session.user.name,
-                    image: session.user.image,
-                    provider: session.user.provider || 'email',
-                    firstName: firstName || '',
-                    lastName: lastName || '',
-                    phone: phone || '',
-                    cuitCuil: cuitCuil || '',
-                    businessName: businessName || '',
-                    shippingAddress: shippingAddress || '',
-                };
-
                 const user = await User.findOneAndUpdate(
                     { email },
-                    { $set: updateData },
+                    { 
+                        $set: {
+                            firstName: firstName || '',
+                            lastName: lastName || '',
+                            phone: phone || '',
+                            cuitCuil: cuitCuil || '',
+                            businessName: businessName || '',
+                            shippingAddress: shippingAddress || '',
+                        },
+                        $setOnInsert: {
+                            email,
+                            name: session.user.name,
+                            image: session.user.image,
+                            provider: session.user.provider || 'email',
+                            isApproved: false,
+                        }
+                    },
                     { 
                         new: true, 
                         upsert: true,
@@ -78,14 +88,12 @@ export default async function handler(req, res) {
 
                 return res.status(200).json({
                     message: 'Perfil actualizado exitosamente',
-                    user: {
-                        firstName: user.firstName || '',
-                        lastName: user.lastName || '',
-                        phone: user.phone || '',
-                        cuitCuil: user.cuitCuil || '',
-                        businessName: user.businessName || '',
-                        shippingAddress: user.shippingAddress || '',
-                    }
+                    firstName: user.firstName || '',
+                    lastName: user.lastName || '',
+                    phone: user.phone || '',
+                    cuitCuil: user.cuitCuil || '',
+                    businessName: user.businessName || '',
+                    shippingAddress: user.shippingAddress || '',
                 });
             } catch (error) {
                 console.error('Error updating user profile:', error);

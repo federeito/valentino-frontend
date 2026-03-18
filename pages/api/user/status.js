@@ -19,18 +19,24 @@ export default async function handler(req, res) {
         }
 
         try {
-            let user = await User.findOne({ email });
-            
-            // If user doesn't exist, create one
-            if (!user) {
-                user = await User.create({
-                    email,
-                    name: session.user.name,
-                    image: session.user.image,
-                    provider: session.user.provider || 'email',
-                    isApproved: false,
-                });
-            }
+            // Use findOneAndUpdate with upsert to avoid duplicate key errors
+            const user = await User.findOneAndUpdate(
+                { email },
+                { 
+                    $setOnInsert: {
+                        email,
+                        name: session.user.name,
+                        image: session.user.image,
+                        provider: session.user.provider || 'email',
+                        isApproved: false,
+                    }
+                },
+                { 
+                    new: true, 
+                    upsert: true,
+                    setDefaultsOnInsert: true
+                }
+            );
 
             return res.status(200).json({
                 isApproved: user.isApproved,
