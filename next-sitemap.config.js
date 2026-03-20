@@ -4,6 +4,9 @@ module.exports = {
   generateRobotsTxt: true,
   generateIndexSitemap: false,
   exclude: ['/api/*', '/admin/*', '/products', '/products/*'],
+  additionalPaths: async (config) => [
+    await config.transform(config, '/accesorios-para-el-pelo'),
+  ],
   robotsTxtOptions: {
     policies: [
       {
