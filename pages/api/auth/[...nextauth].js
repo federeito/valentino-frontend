@@ -1,6 +1,8 @@
 import NextAuth from 'next-auth'
 import GoogleProvider from 'next-auth/providers/google'
 import FacebookProvider from 'next-auth/providers/facebook'
+import { mongooseconnect } from '@/lib/mongoose'
+import { User } from '@/models/User'
 
 export const authOptions = {
   providers: [
@@ -28,22 +30,29 @@ export const authOptions = {
   
   callbacks: {
     async signIn({ user, account, profile, isNewUser }) {
-      // Send notification email for new Google or Facebook signups
+      // Send notification email only for NEW Google or Facebook signups
       if ((account.provider === 'google' || account.provider === 'facebook')) {
         try {
-          // Always send notification (you can add isNewUser check if your setup supports it)
-          const response = await fetch(`${process.env.NEXTAUTH_URL}/api/notify-signup`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-              name: user.name,
-              email: user.email,
-              provider: account.provider
-            })
-          });
+          await mongooseconnect();
           
-          if (!response.ok) {
-            console.error('Failed to send signup notification');
+          // Check if user already exists in database
+          const existingUser = await User.findOne({ email: user.email });
+          
+          // Only send notification if user is new
+          if (!existingUser) {
+            const response = await fetch(`${process.env.NEXTAUTH_URL}/api/notify-signup`, {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({
+                name: user.name,
+                email: user.email,
+                provider: account.provider
+              })
+            });
+            
+            if (!response.ok) {
+              console.error('Failed to send signup notification');
+            }
           }
         } catch (error) {
           console.error('Error sending signup notification:', error);
