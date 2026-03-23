@@ -658,7 +658,7 @@ export default function Cart() {
                                         <div className="flex justify-end">
                                             <Link
                                                 className="group flex items-center justify-between gap-3 rounded-lg border border-primary bg-primary px-4 py-2.5 md:px-5 md:py-3 transition-colors hover:bg-transparent focus:ring focus:outline-none w-full sm:w-auto"
-                                                href="/products"
+                                                href="/accesorios-para-el-pelo"
                                             >
                                                 <span className="font-medium text-sm md:text-base text-white transition-colors group-hover:text-primary">
                                                     Continuar Comprando
@@ -912,7 +912,7 @@ export default function Cart() {
                                         <div className="flex justify-end">
                                             <Link
                                                 className="group flex items-center justify-between gap-3 rounded-lg border border-primary bg-primary px-4 py-2.5 md:px-5 md:py-3 transition-colors hover:bg-transparent focus:ring focus:outline-none w-full sm:w-auto"
-                                                href="/products"
+                                                href="/accesorios-para-el-pelo"
                                             >
                                                 <span className="font-medium text-sm md:text-base text-white transition-colors group-hover:text-primary">
                                                     Continuar Comprando

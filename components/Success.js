@@ -40,7 +40,7 @@ export default function Success() {
 
         {/* Botón */}
         <Link
-          href="/products"
+          href="/accesorios-para-el-pelo"
           className="inline-block bg-primary text-white font-semibold px-6 py-3 rounded-md hover:bg-primary/90 transition"
         >
           Seguir comprando
