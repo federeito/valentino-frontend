@@ -317,7 +317,7 @@ export default function ProductPage({ product }) {
                             <div className={`transform transition-all duration-1000 delay-300 ${
                                 isVisible ? 'translate-x-0 opacity-100' : 'translate-x-10 opacity-0'
                             }`}>
-                                <h1 className="text-2xl md:text-3xl lg:text-4xl font-light tracking-wide bg-gradient-to-r from-slate-700 via-gray-800 to-slate-700 bg-clip-text text-transparent mb-6 font-['Inter',_'system-ui',_sans-serif] leading-tight">
+                                <h1 className="text-2xl md:text-3xl lg:text-4xl font-light tracking-wide text-gray-800 mb-6 font-['Inter',_'system-ui',_sans-serif] leading-tight">
                                     {product.Título}
                                 </h1>
 
