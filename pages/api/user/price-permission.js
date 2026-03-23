@@ -39,16 +39,16 @@ export default async function handler(req, res) {
                 $setOnInsert: {
                     email: session.user.email,
                     name: session.user.name,
-                    image: session.user.image,
-                    isApproved: isAdmin,
-                    canViewPrices: isAdmin
+                    image: session.user.image
                 },
-                $set: isAdmin ? {
-                    isApproved: true,
-                    canViewPrices: true,
-                    approvedAt: new Date(),
-                    approvedBy: 'system_admin'
-                } : {}
+                $set: {
+                    ...(isAdmin ? {
+                        isApproved: true,
+                        canViewPrices: true,
+                        approvedAt: new Date(),
+                        approvedBy: 'system_admin'
+                    } : {})
+                }
             },
             { 
                 new: true, 
@@ -57,6 +57,7 @@ export default async function handler(req, res) {
             }
         );
 
+        // For admins, always return true regardless of database state
         const canViewPrices = isAdmin || (user.canViewPrices && user.isApproved);
 
         return res.status(200).json({ 
