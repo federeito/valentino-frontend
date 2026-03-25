@@ -338,7 +338,7 @@ export default function Products({ allProducts = [], categories = [] }) {
                                                     )}
 
                                                     {/* Quick view - Eye icon preserved */}
-                                                    <Link href={`/products/${product._id}`}>
+                                                    <Link href={`/accesorios-para-el-pelo/${product._id}`}>
                                                         <button className="absolute top-2 sm:top-3 right-2 sm:right-3 p-1.5 sm:p-2 bg-white/90 backdrop-blur-sm rounded-full opacity-0 group-hover:opacity-100 transition-all duration-300 hover:bg-white hover:scale-110 shadow-lg shadow-blue-200/30 z-10">
                                                             <svg className="w-3 h-3 sm:w-4 sm:h-4 text-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
@@ -371,7 +371,7 @@ export default function Products({ allProducts = [], categories = [] }) {
 
                                                 {/* Información del producto */}
                                                 <div className="p-2 sm:p-3 md:p-4 border-t border-pink-100">
-                                                    <Link href={`/products/${product._id}`}>
+                                                <Link href={`/accesorios-para-el-pelo/${product._id}`}>
                                                         <h3 className="text-sm sm:text-base md:text-lg font-normal tracking-wide text-gray-800 group-hover:text-red-600 transition-colors duration-300 line-clamp-2 sm:truncate mb-2 font-['Inter',_'system-ui',_sans-serif]">
                                                             {product.Título}
                                                         </h3>
@@ -466,7 +466,7 @@ export default function Products({ allProducts = [], categories = [] }) {
                                                     ) : (
                                                         // Expanded actions - only for products with multiple colors
                                                         <div className="space-y-2">
-                                                            <Link href={`/products/${product._id}`}>
+                                                            <Link href={`/accesorios-para-el-pelo/${product._id}`}>
                                                                 <button className="w-full bg-pink-50 border-2 border-pink-300 text-pink-600 py-2 sm:py-2.5 rounded-lg font-semibold text-xs sm:text-sm hover:bg-pink-100 hover:border-pink-400 hover:text-pink-700 hover:shadow-lg hover:shadow-pink-300/30 transition-all duration-300 flex items-center justify-center gap-2">
                                                                     <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 21a4 4 0 01-4-4V5a2 2 0 012-2h4a2 2 0 012 2v12a4 4 0 01-4 4zm0 0h12a2 2 0 002-2v-4a2 2 0 00-2-2h-2.343M11 7.343l1.657-1.657a2 2 0 012.828 0l2.829 2.829a2 2 0 010 2.828l-8.486 8.485M7 17h.01" />
@@ -474,7 +474,7 @@ export default function Products({ allProducts = [], categories = [] }) {
                                                                     Seleccionar color
                                                                 </button>
                                                             </Link>
-                                                            <Link href={`/products/${product._id}`}>
+                                                            <Link href={`/accesorios-para-el-pelo/${product._id}`}>
                                                                 <button className="w-full bg-white border border-gray-300 text-gray-700 py-2 sm:py-2.5 rounded-lg font-medium text-xs sm:text-sm hover:bg-gray-50 transition-all duration-300 flex items-center justify-center gap-2">
                                                                     Ver más detalles
                                                                 </button>

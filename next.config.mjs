@@ -15,6 +15,20 @@ const nextConfig = {
     imageSizes: [16, 32, 48, 64, 96, 128, 256, 384],
     qualities: [75, 85, 95],
   },
+  async redirects() {
+    return [
+      {
+        source: '/products',
+        destination: '/accesorios-para-el-pelo',
+        permanent: true,
+      },
+      {
+        source: '/products/:path*',
+        destination: '/accesorios-para-el-pelo/:path*',
+        permanent: true,
+      },
+    ];
+  },
   async rewrites() {
     return [
       {
