@@ -161,6 +161,8 @@ export default function Products({ allProducts = [], categories = [] }) {
     return (
         <>
             <Head>
+                <title>Valentino Accesorios | Accesorios para el pelo por mayor</title>
+                <meta name="description" content="Catálogo mayorista de accesorios para el cabello. Hebillas, clips, peinetas y más con diseños exclusivos. Envíos a toda Argentina. ¡Ingresá y conocé nuestros precios!" />
                 <link rel="canonical" href="https://www.valentinoaccesorios.com.ar/accesorios-para-el-pelo" />
             </Head>
             <PromoBanner />
