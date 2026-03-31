@@ -260,6 +260,19 @@ export default function Cart() {
         toast.success('Carrito Vacío');
     }
 
+    function removeAllOfProduct(id, color = null) {
+        const updatedCart = cartProducts.filter(item => {
+            if (typeof item === 'object' && item.productId) {
+                if (item.productId !== id) return true;
+                if (color) return item.color?.name !== color.name;
+                return false;
+            }
+            return item !== id || color !== null;
+        });
+        setCartProducts(updatedCart);
+        toast.success('Producto eliminado del carrito');
+    }
+
     const getFormattedAddress = () => {
         let fullAddress = `${address.street} ${address.number}`;
         if (address.floor) {
@@ -404,6 +417,14 @@ export default function Cart() {
                                     className={`h-9 w-9 flex items-center justify-center text-gray-600 transition hover:opacity-75 border border-gray-300 rounded ${isAtStockLimit ? 'bg-gray-300 cursor-not-allowed' : ''}`}>
                                     +
                                 </button>
+                                <button
+                                    onClick={() => removeAllOfProduct(product._id, color)}
+                                    type="button"
+                                    className="h-9 w-9 flex items-center justify-center text-red-500 transition hover:opacity-75 border border-red-300 rounded ml-1">
+                                    <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                                        <path strokeLinecap="round" strokeLinejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                                    </svg>
+                                </button>
                             </div>
 
                             {/* Status messages */}
@@ -441,6 +462,14 @@ export default function Cart() {
                                 disabled={isAtStockLimit}
                                 className={`h-10 w-10 flex items-center justify-center text-gray-600 transition hover:opacity-75 border border-gray-300 rounded ${isAtStockLimit ? 'bg-gray-300 cursor-not-allowed' : ''}`}>
                                 +
+                            </button>
+                            <button
+                                onClick={() => removeAllOfProduct(product._id, color)}
+                                type="button"
+                                className="h-10 w-10 flex items-center justify-center text-red-500 transition hover:opacity-75 border border-red-300 rounded ml-1">
+                                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                                    <path strokeLinecap="round" strokeLinejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                                </svg>
                             </button>
                         </div>
                     </li>
