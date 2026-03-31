@@ -458,10 +458,10 @@ export default function Cart() {
                             <h3 className="text-sm md:text-md text-text font-medium">{product.Título}</h3>
 
                             {/* Product Code */}
-                            <div className="flex items-center gap-2 mt-1">
+                            <div className="flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-2 mt-1">
                                 <span className="text-xs text-gray-600">COD: <span className="font-medium">{product.código || 'N/A'}</span></span>
                                 {isPromoProduct && (
-                                    <span className="bg-green-100 text-green-700 text-xs font-bold px-2 py-0.5 rounded-full">2x1 — {freeUnits} gratis</span>
+                                    <span className="bg-green-100 text-green-700 text-xs font-bold px-2 py-0.5 rounded-full w-fit">2x1 — {freeUnits} gratis</span>
                                 )}
                             </div>
 
@@ -716,12 +716,12 @@ export default function Cart() {
                                                 <dd>$ {formatPrice(total)}</dd>
                                             </div>
                                             {lineaEconomicaPromoActive && (
-                                                <div className="flex justify-between text-sm md:text-base text-green-600">
-                                                    <dt className="flex items-center gap-1">
-                                                        <span className="bg-green-100 text-green-700 text-xs font-bold px-2 py-0.5 rounded-full">2x1</span>
-                                                        Promoción Línea Económica ({lineaEconomicaUnits} uds)
+                                                <div className="flex items-center justify-between gap-2 text-sm md:text-base text-green-600">
+                                                    <dt className="flex items-center gap-1 min-w-0 shrink">
+                                                        <span className="bg-green-100 text-green-700 text-xs font-bold px-2 py-0.5 rounded-full shrink-0">2x1</span>
+                                                        <span className="truncate">Línea Económica ({lineaEconomicaUnits} uds)</span>
                                                     </dt>
-                                                    <dd>-$ {formatPrice(lineaEconomicaDiscount)}</dd>
+                                                    <dd className="shrink-0 whitespace-nowrap">-$ {formatPrice(lineaEconomicaDiscount)}</dd>
                                                 </div>
                                             )}
                                             {paymentMethod === 'transfer' && (
@@ -916,12 +916,12 @@ export default function Cart() {
                                                 <dd>$ {formatPrice(total)}</dd>
                                             </div>
                                             {lineaEconomicaPromoActive && (
-                                                <div className="flex justify-between text-sm md:text-base text-green-600">
-                                                    <dt className="flex items-center gap-1">
-                                                        <span className="bg-green-100 text-green-700 text-xs font-bold px-2 py-0.5 rounded-full">2x1</span>
-                                                        Promoción Línea Económica ({lineaEconomicaUnits} uds)
+                                                <div className="flex items-center justify-between gap-2 text-sm md:text-base text-green-600">
+                                                    <dt className="flex items-center gap-1 min-w-0 shrink">
+                                                        <span className="bg-green-100 text-green-700 text-xs font-bold px-2 py-0.5 rounded-full shrink-0">2x1</span>
+                                                        <span className="truncate">Línea Económica ({lineaEconomicaUnits} uds)</span>
                                                     </dt>
-                                                    <dd>-$ {formatPrice(lineaEconomicaDiscount)}</dd>
+                                                    <dd className="shrink-0 whitespace-nowrap">-$ {formatPrice(lineaEconomicaDiscount)}</dd>
                                                 </div>
                                             )}
                                             {paymentMethod === 'transfer' && (
