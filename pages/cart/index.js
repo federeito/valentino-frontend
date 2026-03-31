@@ -13,6 +13,7 @@ const formatPrice = (price) => {
 
 // Minimum purchase amount constant
 const MINIMUM_PURCHASE = 300000;
+const LINEA_ECONOMICA_PROMO_MIN = 72;
 
 // Función actualizada para manejar tanto el formato anterior (strings) como el nuevo (objetos con colores)
 const countOfId = (id, cartProducts, color = null) => {
@@ -162,19 +163,67 @@ export default function Cart() {
         return calculatedTotal;
     }, [uniqueProducts, products, getProductCount, cartProducts]);
 
-    // Calculate discount and final total for bank transfer
+    // Calculate Línea Economica promotion - per product basis
+    const lineaEconomicaUnits = useMemo(() => {
+        let units = 0;
+        for (const cartItem of uniqueProducts) {
+            const productId = cartItem.productId || cartItem;
+            const product = products.find(p => p._id === productId);
+            if (product?.isLineaEconomica) {
+                const quantity = getProductCount ?
+                    getProductCount(productId, cartItem.color ? { color: cartItem.color } : {}) :
+                    countOfId(productId, cartProducts, cartItem.color);
+                if (quantity >= LINEA_ECONOMICA_PROMO_MIN) {
+                    units += quantity;
+                }
+            }
+        }
+        return units;
+    }, [uniqueProducts, products, getProductCount, cartProducts]);
+
+    const lineaEconomicaPromoActive = useMemo(() => {
+        return lineaEconomicaUnits > 0;
+    }, [lineaEconomicaUnits]);
+
+    // Discount from 2-for-1 promo: only for products with >= 72 units individually
+    const lineaEconomicaDiscount = useMemo(() => {
+        if (!lineaEconomicaPromoActive) return 0;
+        let discount = 0;
+        for (const cartItem of uniqueProducts) {
+            const productId = cartItem.productId || cartItem;
+            const product = products.find(p => p._id === productId);
+            if (product?.isLineaEconomica) {
+                const quantity = getProductCount ?
+                    getProductCount(productId, cartItem.color ? { color: cartItem.color } : {}) :
+                    countOfId(productId, cartProducts, cartItem.color);
+                if (quantity >= LINEA_ECONOMICA_PROMO_MIN) {
+                    const price = parseFloat(product.Precio || 0);
+                    const freeUnits = Math.floor(quantity / 2);
+                    discount += price * freeUnits;
+                }
+            }
+        }
+        return discount;
+    }, [lineaEconomicaPromoActive, uniqueProducts, products, getProductCount, cartProducts]);
+
+    // Subtotal after promo discount (before transfer discount)
+    const subtotalAfterPromo = useMemo(() => {
+        return total - lineaEconomicaDiscount;
+    }, [total, lineaEconomicaDiscount]);
+
+    // Update discount and finalTotal to use subtotalAfterPromo as base
     const discount = useMemo(() => {
-        return paymentMethod === 'transfer' ? total * 0.10 : 0;
-    }, [total, paymentMethod]);
+        return paymentMethod === 'transfer' ? subtotalAfterPromo * 0.10 : 0;
+    }, [subtotalAfterPromo, paymentMethod]);
 
     const finalTotal = useMemo(() => {
-        return total - discount;
-    }, [total, discount]);
+        return subtotalAfterPromo - discount;
+    }, [subtotalAfterPromo, discount]);
 
-    // Check if subtotal (before discount) meets minimum purchase requirement
+    // Check minimum purchase against subtotalAfterPromo
     const meetsMinimumPurchase = useMemo(() => {
-        return total >= MINIMUM_PURCHASE;
-    }, [total]);
+        return subtotalAfterPromo >= MINIMUM_PURCHASE;
+    }, [subtotalAfterPromo]);
 
     // Efecto para cargar productos - solo se ejecuta cuando cambian los uniqueIds
     useEffect(() => {
@@ -357,8 +406,48 @@ export default function Cart() {
             getProductCount(productId, color ? { color } : {}) :
             countOfId(productId, cartProducts, color);
 
+        const [inputValue, setInputValue] = useState(String(quantity));
+
+        useEffect(() => {
+            setInputValue(String(quantity));
+        }, [quantity]);
+
+        const applyQuantity = (newQty) => {
+            const parsed = parseInt(newQty, 10);
+            if (isNaN(parsed) || parsed < 1) {
+                setInputValue(String(quantity));
+                return;
+            }
+            const clamped = Math.min(parsed, product.stock);
+            const diff = clamped - quantity;
+            if (diff > 0) {
+                for (let i = 0; i < diff; i++) addProduct(productId, color ? { color } : {});
+            } else if (diff < 0) {
+                for (let i = 0; i < Math.abs(diff); i++) removeProduct(productId, color ? { color } : {});
+            }
+            if (parsed > product.stock) {
+                toast.error('No hay más stock disponible de este producto.');
+                setInputValue(String(product.stock));
+            }
+        };
+
         const isOverstocked = quantity > product.stock;
         const isAtStockLimit = quantity === product.stock;
+        const isPromoProduct = product.isLineaEconomica && quantity >= LINEA_ECONOMICA_PROMO_MIN;
+        const freeUnits = isPromoProduct ? Math.floor(quantity / 2) : 0;
+
+        const quantityInput = (sizeClass) => (
+            <input
+                type="number"
+                value={inputValue}
+                min={1}
+                max={product.stock}
+                onChange={e => setInputValue(e.target.value)}
+                onBlur={e => applyQuantity(e.target.value)}
+                onKeyDown={e => { if (e.key === 'Enter') { e.target.blur(); } }}
+                className={`${sizeClass} rounded border text-primary font-bold border-gray-300 text-center [-moz-appearance:_textfield] [&::-webkit-inner-spin-button]:m-0 [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:m-0 [&::-webkit-outer-spin-button]:appearance-none`}
+            />
+        );
 
         return (
             <div className="mt-8" key={`${product._id}-${color?.name || 'default'}`}>
@@ -366,15 +455,14 @@ export default function Cart() {
                     <li className="flex items-start gap-3 md:gap-4 justify-between flex-wrap">
                         <img src={product.Imagenes[0]} alt="cart image" className="h-16 w-16 object-cover rounded-lg flex-shrink-0" />
                         <div className="min-w-[150px] flex-grow">
-                            <h3 className="text-sm md:text-md text-text font-medium">
-                                {product.Título}
-                            </h3>
+                            <h3 className="text-sm md:text-md text-text font-medium">{product.Título}</h3>
 
                             {/* Product Code */}
                             <div className="flex items-center gap-2 mt-1">
-                                <span className="text-xs text-gray-600">
-                                    COD: <span className="font-medium">{product.código || 'N/A'}</span>
-                                </span>
+                                <span className="text-xs text-gray-600">COD: <span className="font-medium">{product.código || 'N/A'}</span></span>
+                                {isPromoProduct && (
+                                    <span className="bg-green-100 text-green-700 text-xs font-bold px-2 py-0.5 rounded-full">2x1 — {freeUnits} gratis</span>
+                                )}
                             </div>
 
                             {/* Mostrar color si existe */}
@@ -384,42 +472,30 @@ export default function Cart() {
                                         className="w-4 h-4 rounded-full border border-gray-300"
                                         style={{ backgroundColor: color.code }}
                                     />
-                                    <span className="text-xs text-gray-600">
-                                        Color: {color.name}
-                                    </span>
+                                    <span className="text-xs text-gray-600">Color: {color.name}</span>
                                 </div>
                             )}
 
                             <dl className="mt-1 space-y-px text-sm md:text-md text-text">
-                                <p className="font-semibold">$ {formatPrice(quantity * product.Precio)}</p>
+                                {isPromoProduct ? (
+                                    <div className="flex items-center gap-2">
+                                        <p className="line-through text-gray-400">$ {formatPrice(quantity * product.Precio)}</p>
+                                        <p className="font-semibold text-green-600">$ {formatPrice(Math.ceil(quantity / 2) * product.Precio)}</p>
+                                    </div>
+                                ) : (
+                                    <p className="font-semibold">$ {formatPrice(quantity * product.Precio)}</p>
+                                )}
                             </dl>
 
-                            {/* Quantity controls for mobile - below product info */}
+                            {/* Quantity controls for mobile */}
                             <div className="flex items-center gap-2 mt-3 sm:hidden">
-                                <button
-                                    onClick={() => decreaseProduct(product._id, color)}
-                                    type="button"
-                                    className="h-9 w-9 flex items-center justify-center text-gray-600 transition hover:opacity-75 border border-gray-300 rounded">
-                                    -
-                                </button>
-
-                                <input
-                                    type="number"
-                                    id="Quantity"
-                                    value={quantity}
-                                    readOnly
-                                    className="h-9 w-14 rounded border text-primary text-base font-bold border-gray-300 text-center [-moz-appearance:_textfield] [&::-webkit-inner-spin-button]:m-0 [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:m-0 [&::-webkit-outer-spin-button]:appearance-none"
-                                />
-                                <button
-                                    onClick={() => increaseProduct(product._id, product.stock, color)}
-                                    type="button"
+                                <button onClick={() => decreaseProduct(product._id, color)} type="button"
+                                    className="h-9 w-9 flex items-center justify-center text-gray-600 transition hover:opacity-75 border border-gray-300 rounded">-</button>
+                                {quantityInput("h-9 w-14 text-base")}
+                                <button onClick={() => increaseProduct(product._id, product.stock, color)} type="button"
                                     disabled={isAtStockLimit}
-                                    className={`h-9 w-9 flex items-center justify-center text-gray-600 transition hover:opacity-75 border border-gray-300 rounded ${isAtStockLimit ? 'bg-gray-300 cursor-not-allowed' : ''}`}>
-                                    +
-                                </button>
-                                <button
-                                    onClick={() => removeAllOfProduct(product._id, color)}
-                                    type="button"
+                                    className={`h-9 w-9 flex items-center justify-center text-gray-600 transition hover:opacity-75 border border-gray-300 rounded ${isAtStockLimit ? 'bg-gray-300 cursor-not-allowed' : ''}`}>+</button>
+                                <button onClick={() => removeAllOfProduct(product._id, color)} type="button"
                                     className="h-9 w-9 flex items-center justify-center text-red-500 transition hover:opacity-75 border border-red-300 rounded ml-1">
                                     <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                                         <path strokeLinecap="round" strokeLinejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
@@ -427,45 +503,19 @@ export default function Cart() {
                                 </button>
                             </div>
 
-                            {/* Status messages */}
-                            {isOverstocked && (
-                                <p className="text-xs text-red-500 font-bold mt-2">
-                                    ¡Excede el stock disponible!
-                                </p>
-                            )}
-                            {!isOverstocked && isAtStockLimit && (
-                                <p className="text-xs text-orange-500 font-bold mt-2">
-                                    Límite de stock alcanzado.
-                                </p>
-                            )}
+                            {isOverstocked && <p className="text-xs text-red-500 font-bold mt-2">¡Excede el stock disponible!</p>}
+                            {!isOverstocked && isAtStockLimit && <p className="text-xs text-orange-500 font-bold mt-2">Límite de stock alcanzado.</p>}
                         </div>
 
-                        {/* Quantity controls for desktop - on the right */}
+                        {/* Quantity controls for desktop */}
                         <div className="hidden sm:flex items-center gap-2">
-                            <button
-                                onClick={() => decreaseProduct(product._id, color)}
-                                type="button"
-                                className="h-10 w-10 flex items-center justify-center text-gray-600 transition hover:opacity-75 border border-gray-300 rounded">
-                                -
-                            </button>
-
-                            <input
-                                type="number"
-                                id="Quantity"
-                                value={quantity}
-                                readOnly
-                                className="h-10 w-16 rounded border text-primary text-lg font-bold border-gray-300 text-center [-moz-appearance:_textfield] [&::-webkit-inner-spin-button]:m-0 [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:m-0 [&::-webkit-outer-spin-button]:appearance-none"
-                            />
-                            <button
-                                onClick={() => increaseProduct(product._id, product.stock, color)}
-                                type="button"
+                            <button onClick={() => decreaseProduct(product._id, color)} type="button"
+                                className="h-10 w-10 flex items-center justify-center text-gray-600 transition hover:opacity-75 border border-gray-300 rounded">-</button>
+                                {quantityInput("h-10 w-16 text-lg")}
+                            <button onClick={() => increaseProduct(product._id, product.stock, color)} type="button"
                                 disabled={isAtStockLimit}
-                                className={`h-10 w-10 flex items-center justify-center text-gray-600 transition hover:opacity-75 border border-gray-300 rounded ${isAtStockLimit ? 'bg-gray-300 cursor-not-allowed' : ''}`}>
-                                +
-                            </button>
-                            <button
-                                onClick={() => removeAllOfProduct(product._id, color)}
-                                type="button"
+                                className={`h-10 w-10 flex items-center justify-center text-gray-600 transition hover:opacity-75 border border-gray-300 rounded ${isAtStockLimit ? 'bg-gray-300 cursor-not-allowed' : ''}`}>+</button>
+                            <button onClick={() => removeAllOfProduct(product._id, color)} type="button"
                                 className="h-10 w-10 flex items-center justify-center text-red-500 transition hover:opacity-75 border border-red-300 rounded ml-1">
                                 <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                                     <path strokeLinecap="round" strokeLinejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
@@ -665,6 +715,15 @@ export default function Cart() {
                                                 <dt>Subtotal</dt>
                                                 <dd>$ {formatPrice(total)}</dd>
                                             </div>
+                                            {lineaEconomicaPromoActive && (
+                                                <div className="flex justify-between text-sm md:text-base text-green-600">
+                                                    <dt className="flex items-center gap-1">
+                                                        <span className="bg-green-100 text-green-700 text-xs font-bold px-2 py-0.5 rounded-full">2x1</span>
+                                                        Promoción Línea Económica ({lineaEconomicaUnits} uds)
+                                                    </dt>
+                                                    <dd>-$ {formatPrice(lineaEconomicaDiscount)}</dd>
+                                                </div>
+                                            )}
                                             {paymentMethod === 'transfer' && (
                                                 <>
                                                     <div className="flex justify-between text-sm md:text-base text-green-600">
@@ -680,7 +739,7 @@ export default function Cart() {
                                             {paymentMethod !== 'transfer' && (
                                                 <div className="flex justify-between text-base md:text-lg font-semibold">
                                                     <dt>Total</dt>
-                                                    <dd>$ {formatPrice(total)}</dd>
+                                                    <dd>$ {formatPrice(subtotalAfterPromo)}</dd>
                                                 </div>
                                             )}
                                         </dl>
@@ -749,69 +808,6 @@ export default function Cart() {
                                     </div>
                                     {guestInfoComplete && (
                                         <>
-                                            <div className="col-span-6">
-                                                <label className="mb-1 block text-sm md:text-md font-medium text-gray-700">Dirección</label>
-                                                <div className="grid grid-cols-6 gap-2">
-                                                    <div className="col-span-4">
-                                                        <input
-                                                            type="text"
-                                                            className={`block p-3 border w-full rounded-md ${
-                                                                addressErrors.street ? 'border-red-500' : 'border-gray-300'
-                                                            }`}
-                                                            placeholder="Nombre de la calle"
-                                                            value={address.street}
-                                                            onChange={ev => {
-                                                                const value = ev.target.value;
-                                                                const error = validateAddress('street', value);
-                                                                setAddressErrors(prev => ({...prev, street: error}));
-                                                                setAddress(prev => ({...prev, street: value}));
-                                                            }}
-                                                            required
-                                                        />
-                                                        {addressErrors.street && (
-                                                            <p className="text-red-500 text-xs mt-1">{addressErrors.street}</p>
-                                                        )}
-                                                    </div>
-                                                    <div className="col-span-2">
-                                                        <input
-                                                            type="text"
-                                                            className={`block p-3 border w-full rounded-md ${
-                                                                addressErrors.number ? 'border-red-500' : 'border-gray-300'
-                                                            }`}
-                                                            placeholder="Número"
-                                                            value={address.number}
-                                                            onChange={ev => {
-                                                                const value = ev.target.value;
-                                                                const error = validateAddress('number', value);
-                                                                setAddressErrors(prev => ({...prev, number: error}));
-                                                                setAddress(prev => ({...prev, number: value}));
-                                                            }}
-                                                            required
-                                                        />
-                                                        {addressErrors.number && (
-                                                            <p className="text-red-500 text-xs mt-1">{addressErrors.number}</p>
-                                                        )}
-                                                    </div>
-                                                    <div className="col-span-3">
-                                                        <input
-                                                            type="text"
-                                                            className="block p-3 border w-full rounded-md border-gray-300"
-                                                            placeholder="Piso (opcional)"
-                                                            value={address.floor}
-                                                            onChange={ev => setAddress(prev => ({...prev, floor: ev.target.value}))}
-                                                        />
-                                                    </div>
-                                                    <div className="col-span-3">
-                                                        <input
-                                                            type="text"
-                                                            className="block p-3 border w-full rounded-md border-gray-300"
-                                                            placeholder="Departamento (opcional)"
-                                                            value={address.apartment}
-                                                            onChange={ev => setAddress(prev => ({...prev, apartment: ev.target.value}))}
-                                                        />
-                                                    </div>
-                                                </div>
-                                            </div>
                                             <div className="col-span-6 sm:col-span-3">
                                                 <label htmlFor="example10" className="mb-1 block text-md font-medium text-gray-700">Ciudad</label>
                                                 <input type="text" id="example10" className="block p-3 border w-full rounded-md border-gray-300 shadow-sm focus:border-primary-400 focus:ring focus:ring-primary-200 focus:ring-opacity-50 disabled:cursor-not-allowed disabled:bg-gray-50 disabled:text-gray-500" placeholder=""
@@ -844,7 +840,7 @@ export default function Cart() {
                                                     <div className="bg-yellow-50 border-l-4 border-yellow-400 p-3 mb-3 rounded">
                                                         <p className="text-xs md:text-sm text-yellow-800">
                                                             <span className="font-semibold">Compra mínima:</span> ${formatPrice(MINIMUM_PURCHASE)}. 
-                                                            <span className="block sm:inline sm:ml-1 mt-1 sm:mt-0">Te faltan ${formatPrice(MINIMUM_PURCHASE - total)} para alcanzar el mínimo.</span>
+                                                            <span className="block sm:inline sm:ml-1 mt-1 sm:mt-0">Te faltan ${formatPrice(MINIMUM_PURCHASE - subtotalAfterPromo)} para alcanzar el mínimo.</span>
                                                         </p>
                                                     </div>
                                                 )}
@@ -919,6 +915,15 @@ export default function Cart() {
                                                 <dt>Subtotal</dt>
                                                 <dd>$ {formatPrice(total)}</dd>
                                             </div>
+                                            {lineaEconomicaPromoActive && (
+                                                <div className="flex justify-between text-sm md:text-base text-green-600">
+                                                    <dt className="flex items-center gap-1">
+                                                        <span className="bg-green-100 text-green-700 text-xs font-bold px-2 py-0.5 rounded-full">2x1</span>
+                                                        Promoción Línea Económica ({lineaEconomicaUnits} uds)
+                                                    </dt>
+                                                    <dd>-$ {formatPrice(lineaEconomicaDiscount)}</dd>
+                                                </div>
+                                            )}
                                             {paymentMethod === 'transfer' && (
                                                 <>
                                                     <div className="flex justify-between text-sm md:text-base text-green-600">
@@ -934,7 +939,7 @@ export default function Cart() {
                                             {paymentMethod !== 'transfer' && (
                                                 <div className="flex justify-between text-base md:text-lg font-semibold">
                                                     <dt>Total</dt>
-                                                    <dd>$ {formatPrice(total)}</dd>
+                                                    <dd>$ {formatPrice(subtotalAfterPromo)}</dd>
                                                 </div>
                                             )}
                                         </dl>
@@ -1091,7 +1096,7 @@ export default function Cart() {
                                                 <div className="bg-yellow-50 border-l-4 border-yellow-400 p-3 mb-3 rounded">
                                                     <p className="text-xs md:text-sm text-yellow-800">
                                                         <span className="font-semibold">Compra mínima:</span> ${formatPrice(MINIMUM_PURCHASE)}. 
-                                                        <span className="block sm:inline sm:ml-1 mt-1 sm:mt-0">Te faltan ${formatPrice(MINIMUM_PURCHASE - total)} para alcanzar el mínimo.</span>
+                                                        <span className="block sm:inline sm:ml-1 mt-1 sm:mt-0">Te faltan ${formatPrice(MINIMUM_PURCHASE - subtotalAfterPromo)} para alcanzar el mínimo.</span>
                                                     </p>
                                                 </div>
                                             )}

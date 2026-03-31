@@ -1,5 +1,6 @@
 import { mongooseconnect } from "@/lib/mongoose";
 import { Product } from "@/models/Product";
+import { Category } from "@/models/Category";
 
 export default async function handle(req, res) {
     await mongooseconnect();
@@ -8,12 +9,10 @@ export default async function handle(req, res) {
         const { ids } = req.body;
 
         try {
-            // Validar que ids es un array
             if (!Array.isArray(ids)) {
                 return res.status(400).json({ error: 'IDs must be an array' });
             }
 
-            // Filtrar solo IDs válidos y únicos
             const validIds = [...new Set(ids.filter(id => id && typeof id === 'string'))];
             
             if (validIds.length === 0) {
@@ -21,7 +20,27 @@ export default async function handle(req, res) {
             }
 
             const products = await Product.find({_id: {$in: validIds}});
-            res.json(products);
+
+            const lineaEconomicaCategory = await Category.findOne({ 
+                name: { $regex: /l[ií]nea\s*econ[oó]mica/i } 
+            });
+
+            const lineaEconomicaId = lineaEconomicaCategory?._id?.toString();
+
+            const productsWithCategory = products.map(p => {
+                const obj = p.toObject();
+                const productCategoryId = (
+                    obj.Categoria?.toString() ||
+                    obj.category?.toString() ||
+                    obj.Categoría?.toString() ||
+                    obj.categoria?.toString() ||
+                    ''
+                );
+                obj.isLineaEconomica = !!(lineaEconomicaId && productCategoryId === lineaEconomicaId);
+                return obj;
+            });
+
+            res.json(productsWithCategory);
         } catch (error) {
             console.error('Error fetching cart products:', error);
             res.status(500).json({error: 'Internal Server Error'});
