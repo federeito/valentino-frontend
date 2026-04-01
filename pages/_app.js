@@ -6,6 +6,7 @@ import { Poppins } from "next/font/google";
 import { Toaster } from "react-hot-toast";
 import { SessionProvider } from "next-auth/react";
 import Head from "next/head";
+import { SpeedInsights } from "@vercel/speed-insights/next";
 
 const poppinsFont = Poppins({ subsets: ["latin"], weight: '400' });
 
@@ -29,5 +30,6 @@ export default function App({ Component, pageProps: { session, ...pageProps } })
         </CartContextProvider>
       </PriceVisibilityProvider>
     </SessionProvider>
+    <SpeedInsights />
   </>
 }
