@@ -157,7 +157,7 @@ export default function Hero() {
             <h2
               className="font-light leading-[1.15] mb-2 lg:mb-3"
               style={{
-                fontFamily: "'Cormorant Garamond', Georgia, serif",
+                fontFamily: "var(--font-cormorant), Georgia, serif",
                 fontSize: "clamp(36px, 8vw, 56px)",
                 color: "#1c1412",
                 opacity: i === cur ? 1 : 0,
