@@ -362,10 +362,6 @@ export default function Hero() {
           <span className="block w-[2px] rounded bg-white/50" style={{ height: "clamp(10px, 2.5vw, 12px)" }} />
         </div>
       )}
-
-      <style jsx global>{`
-        @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,400&display=swap');
-      `}</style>
     </section>
   );
 }
