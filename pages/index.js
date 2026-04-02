@@ -89,15 +89,16 @@ export async function getServerSideProps() {
     const featuredId3 = '68aba14f06a44779c3754538'; 
     const collectionId = '68aba14f06a44779c3754538';
 
-    const featuredProduct1 = await Product.findById(featuredId1);
-    const featuredProduct2 = await Product.findById(featuredId2);
-    const featuredProduct3 = await Product.findById(featuredId3);
-    const collectionProduct = await Product.findById(collectionId);
-    const newProducts = await Product.find({}, null, { sort: { '_id': -1 }, limit: 5 });
+  const [fp1, fp2, fp3, collectionProduct, newProducts] = await Promise.all([
+    Product.findById(featuredId1),
+    Product.findById(featuredId2),
+    Product.findById(featuredId3),
+    Product.findById(collectionId),
+    Product.find({}, null, { sort: { _id: -1 }, limit: 5 }),  ]);
 
     return {
         props: {
-            featuredProducts: JSON.parse(JSON.stringify([featuredProduct1, featuredProduct2, featuredProduct3].filter(Boolean))),
+            featuredProducts: JSON.parse(JSON.stringify([fp1, fp2, fp3].filter(Boolean))),
             newProducts: JSON.parse(JSON.stringify(newProducts)),
             collectionProduct: JSON.parse(JSON.stringify(collectionProduct)),
         }
