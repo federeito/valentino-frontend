@@ -81,7 +81,7 @@ export default function Home({ featuredProducts, newProducts, collectionProduct 
     );
 }
 
-export async function getServerSideProps() {
+export async function getStaticProps() {
     await mongooseconnect();
 
     const featuredId1 = '68ab998313094de877cae019';
@@ -101,6 +101,7 @@ export async function getServerSideProps() {
             featuredProducts: JSON.parse(JSON.stringify([fp1, fp2, fp3].filter(Boolean))),
             newProducts: JSON.parse(JSON.stringify(newProducts)),
             collectionProduct: JSON.parse(JSON.stringify(collectionProduct)),
-        }
+        },
+        revalidate: 60, // Revalidate every 60 seconds
     };
 }
