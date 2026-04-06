@@ -104,7 +104,7 @@ export default function Footer() {
                             </li>
                             <li>
                                 <Link 
-                                    href="/shipping"
+                                    href="/envios"
                                     className="text-gray-600 hover:text-red-600 text-xs sm:text-sm transition-colors duration-300 inline-flex items-center group"
                                 >
                                     <span className="group-hover:translate-x-1 transition-transform duration-300">
