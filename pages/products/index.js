@@ -161,8 +161,8 @@ export default function Products({ allProducts = [], categories = [] }) {
     return (
         <>
             <Head>
-                <title>Valentino Accesorios | Accesorios para el pelo por mayor</title>
-                <meta name="description" content="Catálogo mayorista de accesorios para el pelo. Hebillas, clips, peinetas y más con diseños exclusivos. Envíos a toda Argentina. ¡Ingresá y conocé nuestros precios!" />
+                <title>Valentino Accesorios | Accesorios para el Pelo por Mayor</title>
+                <meta name="description" content="Catálogo mayorista de accesorios para el pelo: hebillas, clips, vinchas, peinetas y más. Precios por mayor, envíos a toda Argentina. ¡Más de 300 modelos exclusivos!" />
                 <link rel="canonical" href="https://www.valentinoaccesorios.com.ar/accesorios-para-el-pelo" />
             </Head>
             <PromoBanner />
@@ -175,24 +175,115 @@ export default function Products({ allProducts = [], categories = [] }) {
 
             <div className="relative min-h-screen w-full bg-gradient-to-br from-pink-50/30 to-blue-50/30 font-['Inter',_'Segoe_UI',_'system-ui',_'-apple-system',_sans-serif]">
                 <div className="max-w-7xl mx-auto p-4 sm:p-6">
-                    {/* Header con título y estadísticas */}
-                    <div className="text-center mb-8 sm:mb-12">
-                        <h1 className="text-3xl sm:text-4xl md:text-5xl font-light tracking-wide bg-gradient-to-r from-slate-700 via-gray-800 to-slate-700 bg-clip-text text-transparent mb-4 font-['Inter',_'system-ui',_sans-serif]">
-                            Todos Nuestros Productos
-                        </h1>
-                        <div className="w-24 sm:w-32 h-1 bg-gradient-to-r from-pink-300 to-rose-300 mx-auto rounded-full mb-4 sm:mb-6" />
-                        <p className="text-gray-600 text-base sm:text-lg max-w-2xl mx-auto px-4 font-light tracking-wide">
-                            Explora nuestra completo catálogo de productos cuidadosamente seleccionados
-                        </p>
-                        
-                        {/* Estadísticas */}
-                        <div className="flex justify-center gap-4 sm:gap-8 mt-6 sm:mt-8">
-                            <div className="text-center">
-                                <div className="text-xl sm:text-2xl font-bold text-red-600">{allProducts?.length || 0}</div>
-                                <div className="text-xs sm:text-sm text-gray-500">Productos Total</div>
+                    {/* ── Premium Hero Banner ── */}
+                    <div className="relative overflow-hidden rounded-2xl sm:rounded-3xl mb-8 sm:mb-12 border border-[#e8e0d8] shadow-xl shadow-[#dc2626]/5"
+                        style={{ background: "linear-gradient(160deg, #f5f0eb 0%, #ede8e3 100%)" }}>
+
+                        {/* Decorative background blobs — warm tones */}
+                        <div className="absolute -top-10 -left-10 w-56 h-56 rounded-full blur-3xl pointer-events-none"
+                            style={{ background: "radial-gradient(circle, rgba(220,38,38,0.08) 0%, transparent 70%)" }} />
+                        <div className="absolute -bottom-10 -right-10 w-64 h-64 rounded-full blur-3xl pointer-events-none"
+                            style={{ background: "radial-gradient(circle, rgba(236,72,153,0.06) 0%, transparent 70%)" }} />
+
+                        {/* Subtle dot pattern */}
+                        <div
+                            className="absolute inset-0 opacity-[0.035] pointer-events-none"
+                            style={{
+                                backgroundImage: `radial-gradient(circle, #1c1412 1px, transparent 1px)`,
+                                backgroundSize: '24px 24px'
+                            }}
+                        />
+
+                        <div className="relative z-10 px-6 py-10 sm:px-10 sm:py-14 md:py-16 text-center">
+
+                            {/* Eyebrow label */}
+                            <div className="inline-flex items-center gap-2 rounded-full px-3 py-1 mb-5 shadow-sm"
+                                style={{
+                                    background: "rgba(220,38,38,0.10)",
+                                    border: "1px solid rgba(220,38,38,0.20)"
+                                }}>
+                                <span className="w-2 h-2 rounded-full animate-pulse" style={{ background: "#dc2626" }} />
+                                <span className="text-xs sm:text-sm font-medium tracking-widest uppercase"
+                                    style={{ color: "#dc2626", fontSize: "clamp(10px, 2.5vw, 11px)" }}>
+                                    Catálogo Mayorista · Temporada 2026
+                                </span>
                             </div>
+
+                            {/* H1 — matches Hero serif style */}
+                            <h1
+                                className="font-light leading-[1.15] mb-4"
+                                style={{
+                                    fontFamily: "var(--font-cormorant), Georgia, serif",
+                                    fontSize: "clamp(36px, 8vw, 64px)",
+                                    color: "#1c1412",
+                                }}
+                            >
+                                Accesorios para el Pelo
+                                <br />
+                                <em
+                                    className="not-italic"
+                                    style={{
+                                        fontStyle: "italic",
+                                        background: "linear-gradient(135deg, #dc2626, #ec4899)",
+                                        WebkitBackgroundClip: "text",
+                                        WebkitTextFillColor: "transparent",
+                                        backgroundClip: "text",
+                                    }}
+                                >
+                                    por Mayor
+                                </em>
+                            </h1>
+
+                            {/* Accent rule — matches Hero divider style */}
+                            <div className="flex items-center justify-center gap-3 mb-5">
+                                <div className="w-12 sm:w-20 h-px" style={{ background: "linear-gradient(to right, transparent, rgba(220,38,38,0.35))" }} />
+                                <div className="w-8 h-1 rounded-full" style={{ background: "linear-gradient(135deg, #dc2626, #ec4899)" }} />
+                                <div className="w-12 sm:w-20 h-px" style={{ background: "linear-gradient(to left, transparent, rgba(220,38,38,0.35))" }} />
+                            </div>
+
+                            {/* SEO subtitle */}
+                            <p className="text-sm sm:text-base md:text-lg max-w-xl mx-auto font-light tracking-wide leading-relaxed mb-7"
+                                style={{ color: "rgba(28,20,18,0.65)" }}>
+                                Hebillas, Broches, Vinchas, Peinetas y más accesorios para el cabello.{' '}
+                                <span className="font-medium" style={{ color: "#1c1412" }}>Precios mayoristas</span>{' '}
+                                con envíos a toda Argentina.
+                            </p>
+
+                            {/* Category quick-filter strip */}
+                            {categories.length > 0 && (
+                                <div className="flex flex-wrap justify-center gap-2">
+                                    <button
+                                        onClick={() => setSelectedCategory('')}
+                                        className="px-3 sm:px-4 py-1.5 rounded-full text-xs sm:text-sm font-medium transition-all duration-200"
+                                        style={selectedCategory === ''
+                                            ? { background: "linear-gradient(135deg,#dc2626,#ec4899)", color: "#fff", border: "1px solid transparent", boxShadow: "0 4px 12px rgba(220,38,38,0.25)" }
+                                            : { background: "rgba(28,20,18,0.05)", color: "rgba(28,20,18,0.75)", border: "1px solid rgba(28,20,18,0.12)" }
+                                        }
+                                    >
+                                        Todos
+                                    </button>
+                                    {categories.map(cat => (
+                                        <button
+                                            key={cat._id}
+                                            onClick={() => { setSelectedCategory(cat._id); setCurrentPage(1); }}
+                                            className="px-3 sm:px-4 py-1.5 rounded-full text-xs sm:text-sm font-medium transition-all duration-200"
+                                            style={selectedCategory === cat._id
+                                                ? { background: "linear-gradient(135deg,#dc2626,#ec4899)", color: "#fff", border: "1px solid transparent", boxShadow: "0 4px 12px rgba(220,38,38,0.25)" }
+                                                : { background: "rgba(28,20,18,0.05)", color: "rgba(28,20,18,0.75)", border: "1px solid rgba(28,20,18,0.12)" }
+                                            }
+                                        >
+                                            {cat.name}
+                                        </button>
+                                    ))}
+                                </div>
+                            )}
                         </div>
+
+                        {/* Bottom shimmer strip */}
+                        <div className="absolute bottom-0 left-0 right-0 h-px"
+                            style={{ background: "linear-gradient(to right, transparent, rgba(220,38,38,0.3), transparent)" }} />
                     </div>
+                    {/* ── end Premium Hero Banner ── */}
 
                     {/* Barra de búsqueda y filtros - Minimalist Compact Design */}
                     <div className="bg-white/80 backdrop-blur-md rounded-xl shadow-md border border-gray-100 p-3 sm:p-4 mb-6">
