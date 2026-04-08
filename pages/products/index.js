@@ -176,7 +176,7 @@ export default function Products({ allProducts = [], categories = [] }) {
             <div className="relative min-h-screen w-full bg-gradient-to-br from-pink-50/30 to-blue-50/30 font-['Inter',_'Segoe_UI',_'system-ui',_'-apple-system',_sans-serif]">
                 <div className="max-w-7xl mx-auto p-4 sm:p-6">
                     {/* ── Premium Hero Banner ── */}
-                    <div className="relative overflow-hidden rounded-2xl sm:rounded-3xl mb-8 sm:mb-12 border border-[#ede8e3] shadow-xl shadow-[#dc2626]/5"
+                    <div className="relative overflow-hidden rounded-2xl sm:rounded-3xl mb-6 sm:mb-8 border border-[#ede8e3] shadow-xl shadow-[#dc2626]/5"
                         style={{ background: "linear-gradient(160deg, #faf8f5 0%, #f5f0eb 100%)" }}>
 
                         {/* Decorative background blobs — warm tones */}
@@ -194,10 +194,10 @@ export default function Products({ allProducts = [], categories = [] }) {
                             }}
                         />
 
-                        <div className="relative z-10 px-4 py-8 sm:px-10 sm:py-14 md:py-16 text-center">
+                        <div className="relative z-10 px-4 py-6 sm:px-10 sm:py-10 md:py-12 text-center">
 
                             {/* Eyebrow label */}
-                            <div className="inline-flex items-center gap-2 rounded-full px-3 py-1 mb-4 sm:mb-5 shadow-sm"
+                            <div className="inline-flex items-center gap-2 rounded-full px-3 py-1 mb-3 sm:mb-4 shadow-sm"
                                 style={{
                                     background: "rgba(220,38,38,0.10)",
                                     border: "1px solid rgba(220,38,38,0.20)"
@@ -211,10 +211,10 @@ export default function Products({ allProducts = [], categories = [] }) {
 
                             {/* H1 */}
                             <h1
-                                className="font-light leading-[1.15] mb-3 sm:mb-4"
+                                className="font-light leading-[1.15] mb-2 sm:mb-3"
                                 style={{
                                     fontFamily: "var(--font-cormorant), Georgia, serif",
-                                    fontSize: "clamp(28px, 7vw, 64px)",
+                                    fontSize: "clamp(24px, 6vw, 56px)",
                                     color: "#1c1412",
                                 }}
                             >
@@ -235,15 +235,15 @@ export default function Products({ allProducts = [], categories = [] }) {
                             </h1>
 
                             {/* Accent rule */}
-                            <div className="flex items-center justify-center gap-3 mb-4 sm:mb-5">
+                            <div className="flex items-center justify-center gap-3 mb-3 sm:mb-4">
                                 <div className="w-10 sm:w-20 h-px" style={{ background: "linear-gradient(to right, transparent, rgba(220,38,38,0.35))" }} />
                                 <div className="w-6 sm:w-8 h-1 rounded-full" style={{ background: "linear-gradient(135deg, #dc2626, #ec4899)" }} />
                                 <div className="w-10 sm:w-20 h-px" style={{ background: "linear-gradient(to left, transparent, rgba(220,38,38,0.35))" }} />
                             </div>
 
                             {/* SEO subtitle */}
-                            <p className="max-w-xl mx-auto font-light tracking-wide leading-relaxed mb-5 sm:mb-7 px-2"
-                                style={{ color: "rgba(28,20,18,0.65)", fontSize: "clamp(12px, 3vw, 18px)" }}>
+                            <p className="max-w-xl mx-auto font-light tracking-wide leading-relaxed mb-4 sm:mb-5 px-2"
+                                style={{ color: "rgba(28,20,18,0.65)", fontSize: "clamp(12px, 2.8vw, 16px)" }}>
                                 Hebillas, Broches, Vinchas, Peinetas y más accesorios para el cabello.{' '}
                                 <span className="font-medium" style={{ color: "#1c1412" }}>Precios mayoristas</span>{' '}
                                 con envíos a toda Argentina.
