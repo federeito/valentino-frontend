@@ -22,7 +22,7 @@ export default function PromoBanner() {
                 {promos.map((promo, index) => (
                     <div
                         key={index}
-                        className={`absolute inset-0 flex items-center justify-center gap-2 transition-all duration-700 transform ${
+                        className={`absolute inset-0 flex items-center justify-center gap-1 transition-all duration-700 transform ${
                             index === currentIndex
                                 ? 'translate-y-0 opacity-100'
                                 : index < currentIndex
