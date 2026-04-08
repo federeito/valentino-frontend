@@ -176,8 +176,8 @@ export default function Products({ allProducts = [], categories = [] }) {
             <div className="relative min-h-screen w-full bg-gradient-to-br from-pink-50/30 to-blue-50/30 font-['Inter',_'Segoe_UI',_'system-ui',_'-apple-system',_sans-serif]">
                 <div className="max-w-7xl mx-auto p-4 sm:p-6">
                     {/* ── Premium Hero Banner ── */}
-                    <div className="relative overflow-hidden rounded-2xl sm:rounded-3xl mb-8 sm:mb-12 border border-[#e8e0d8] shadow-xl shadow-[#dc2626]/5"
-                        style={{ background: "linear-gradient(160deg, #f5f0eb 0%, #ede8e3 100%)" }}>
+                    <div className="relative overflow-hidden rounded-2xl sm:rounded-3xl mb-8 sm:mb-12 border border-[#ede8e3] shadow-xl shadow-[#dc2626]/5"
+                        style={{ background: "linear-gradient(160deg, #faf8f5 0%, #f5f0eb 100%)" }}>
 
                         {/* Decorative background blobs — warm tones */}
                         <div className="absolute -top-10 -left-10 w-56 h-56 rounded-full blur-3xl pointer-events-none"
@@ -194,27 +194,27 @@ export default function Products({ allProducts = [], categories = [] }) {
                             }}
                         />
 
-                        <div className="relative z-10 px-6 py-10 sm:px-10 sm:py-14 md:py-16 text-center">
+                        <div className="relative z-10 px-4 py-8 sm:px-10 sm:py-14 md:py-16 text-center">
 
                             {/* Eyebrow label */}
-                            <div className="inline-flex items-center gap-2 rounded-full px-3 py-1 mb-5 shadow-sm"
+                            <div className="inline-flex items-center gap-2 rounded-full px-3 py-1 mb-4 sm:mb-5 shadow-sm"
                                 style={{
                                     background: "rgba(220,38,38,0.10)",
                                     border: "1px solid rgba(220,38,38,0.20)"
                                 }}>
-                                <span className="w-2 h-2 rounded-full animate-pulse" style={{ background: "#dc2626" }} />
-                                <span className="text-xs sm:text-sm font-medium tracking-widest uppercase"
-                                    style={{ color: "#dc2626", fontSize: "clamp(10px, 2.5vw, 11px)" }}>
+                                <span className="w-2 h-2 rounded-full animate-pulse flex-shrink-0" style={{ background: "#dc2626" }} />
+                                <span className="font-medium tracking-widest uppercase"
+                                    style={{ color: "#dc2626", fontSize: "clamp(9px, 2.2vw, 11px)" }}>
                                     Catálogo Mayorista · Temporada 2026
                                 </span>
                             </div>
 
-                            {/* H1 — matches Hero serif style */}
+                            {/* H1 */}
                             <h1
-                                className="font-light leading-[1.15] mb-4"
+                                className="font-light leading-[1.15] mb-3 sm:mb-4"
                                 style={{
                                     fontFamily: "var(--font-cormorant), Georgia, serif",
-                                    fontSize: "clamp(36px, 8vw, 64px)",
+                                    fontSize: "clamp(28px, 7vw, 64px)",
                                     color: "#1c1412",
                                 }}
                             >
@@ -234,47 +234,79 @@ export default function Products({ allProducts = [], categories = [] }) {
                                 </em>
                             </h1>
 
-                            {/* Accent rule — matches Hero divider style */}
-                            <div className="flex items-center justify-center gap-3 mb-5">
-                                <div className="w-12 sm:w-20 h-px" style={{ background: "linear-gradient(to right, transparent, rgba(220,38,38,0.35))" }} />
-                                <div className="w-8 h-1 rounded-full" style={{ background: "linear-gradient(135deg, #dc2626, #ec4899)" }} />
-                                <div className="w-12 sm:w-20 h-px" style={{ background: "linear-gradient(to left, transparent, rgba(220,38,38,0.35))" }} />
+                            {/* Accent rule */}
+                            <div className="flex items-center justify-center gap-3 mb-4 sm:mb-5">
+                                <div className="w-10 sm:w-20 h-px" style={{ background: "linear-gradient(to right, transparent, rgba(220,38,38,0.35))" }} />
+                                <div className="w-6 sm:w-8 h-1 rounded-full" style={{ background: "linear-gradient(135deg, #dc2626, #ec4899)" }} />
+                                <div className="w-10 sm:w-20 h-px" style={{ background: "linear-gradient(to left, transparent, rgba(220,38,38,0.35))" }} />
                             </div>
 
                             {/* SEO subtitle */}
-                            <p className="text-sm sm:text-base md:text-lg max-w-xl mx-auto font-light tracking-wide leading-relaxed mb-7"
-                                style={{ color: "rgba(28,20,18,0.65)" }}>
+                            <p className="max-w-xl mx-auto font-light tracking-wide leading-relaxed mb-5 sm:mb-7 px-2"
+                                style={{ color: "rgba(28,20,18,0.65)", fontSize: "clamp(12px, 3vw, 18px)" }}>
                                 Hebillas, Broches, Vinchas, Peinetas y más accesorios para el cabello.{' '}
                                 <span className="font-medium" style={{ color: "#1c1412" }}>Precios mayoristas</span>{' '}
                                 con envíos a toda Argentina.
                             </p>
 
-                            {/* Category quick-filter strip */}
+                            {/* Category quick-filter strip — scrollable on mobile, wrap on desktop */}
                             {categories.length > 0 && (
-                                <div className="flex flex-wrap justify-center gap-2">
-                                    <button
-                                        onClick={() => setSelectedCategory('')}
-                                        className="px-3 sm:px-4 py-1.5 rounded-full text-xs sm:text-sm font-medium transition-all duration-200"
-                                        style={selectedCategory === ''
-                                            ? { background: "linear-gradient(135deg,#dc2626,#ec4899)", color: "#fff", border: "1px solid transparent", boxShadow: "0 4px 12px rgba(220,38,38,0.25)" }
-                                            : { background: "rgba(28,20,18,0.05)", color: "rgba(28,20,18,0.75)", border: "1px solid rgba(28,20,18,0.12)" }
-                                        }
+                                <div className="relative">
+
+                                    {/* Mobile: horizontally scrollable */}
+                                    <div
+                                        className="flex sm:hidden gap-2 overflow-x-auto py-1"
+                                        style={{
+                                            scrollbarWidth: 'none',
+                                            msOverflowStyle: 'none',
+                                            WebkitOverflowScrolling: 'touch',
+                                            paddingLeft: '4px',
+                                            paddingRight: '32px', // room for right fade
+                                        }}
                                     >
-                                        Todos
-                                    </button>
-                                    {categories.map(cat => (
-                                        <button
-                                            key={cat._id}
-                                            onClick={() => { setSelectedCategory(cat._id); setCurrentPage(1); }}
-                                            className="px-3 sm:px-4 py-1.5 rounded-full text-xs sm:text-sm font-medium transition-all duration-200"
-                                            style={selectedCategory === cat._id
-                                                ? { background: "linear-gradient(135deg,#dc2626,#ec4899)", color: "#fff", border: "1px solid transparent", boxShadow: "0 4px 12px rgba(220,38,38,0.25)" }
-                                                : { background: "rgba(28,20,18,0.05)", color: "rgba(28,20,18,0.75)", border: "1px solid rgba(28,20,18,0.12)" }
-                                            }
-                                        >
-                                            {cat.name}
-                                        </button>
-                                    ))}
+                                        {[{ _id: '', name: 'Todos' }, ...categories].map(cat => (
+                                            <button
+                                                key={cat._id}
+                                                onClick={() => {
+                                                    setSelectedCategory(cat._id);
+                                                    if (cat._id !== '') setCurrentPage(1);
+                                                }}
+                                                className="flex-shrink-0 px-4 py-1.5 rounded-full text-xs font-medium transition-all duration-200 whitespace-nowrap"
+                                                style={selectedCategory === cat._id
+                                                    ? { background: "linear-gradient(135deg,#dc2626,#ec4899)", color: "#fff", border: "1px solid transparent", boxShadow: "0 4px 12px rgba(220,38,38,0.25)" }
+                                                    : { background: "rgba(28,20,18,0.05)", color: "rgba(28,20,18,0.75)", border: "1px solid rgba(28,20,18,0.12)" }
+                                                }
+                                            >
+                                                {cat.name}
+                                            </button>
+                                        ))}
+                                    </div>
+
+                                    {/* Left + right fade edges on mobile */}
+                                    <div className="sm:hidden absolute inset-y-0 left-0 w-4 pointer-events-none"
+                                        style={{ background: "linear-gradient(to left, transparent, rgba(250,248,245,0.95))" }} />
+                                    <div className="sm:hidden absolute inset-y-0 right-0 w-8 pointer-events-none"
+                                        style={{ background: "linear-gradient(to right, transparent, rgba(250,248,245,0.95))" }} />
+
+                                    {/* Desktop: wrap */}
+                                    <div className="hidden sm:flex flex-wrap justify-center gap-2">
+                                        {[{ _id: '', name: 'Todos' }, ...categories].map(cat => (
+                                            <button
+                                                key={cat._id}
+                                                onClick={() => {
+                                                    setSelectedCategory(cat._id);
+                                                    if (cat._id !== '') setCurrentPage(1);
+                                                }}
+                                                className="px-4 py-1.5 rounded-full text-sm font-medium transition-all duration-200"
+                                                style={selectedCategory === cat._id
+                                                    ? { background: "linear-gradient(135deg,#dc2626,#ec4899)", color: "#fff", border: "1px solid transparent", boxShadow: "0 4px 12px rgba(220,38,38,0.25)" }
+                                                    : { background: "rgba(28,20,18,0.05)", color: "rgba(28,20,18,0.75)", border: "1px solid rgba(28,20,18,0.12)" }
+                                                }
+                                            >
+                                                {cat.name}
+                                            </button>
+                                        ))}
+                                    </div>
                                 </div>
                             )}
                         </div>
