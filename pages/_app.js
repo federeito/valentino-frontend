@@ -7,6 +7,7 @@ import { Toaster } from "react-hot-toast";
 import { SessionProvider } from "next-auth/react";
 import Head from "next/head";
 import { SpeedInsights } from "@vercel/speed-insights/next";
+import { Analytics } from "@vercel/analytics/next";
 
 const poppinsFont = Poppins({ subsets: ["latin"], weight: '400' });
 const cormorantFont = Cormorant_Garamond({
@@ -37,5 +38,6 @@ export default function App({ Component, pageProps: { session, ...pageProps } })
       </PriceVisibilityProvider>
     </SessionProvider>
     <SpeedInsights />
+    <Analytics />
   </>
 }
