@@ -6,6 +6,7 @@ import { signIn, useSession } from "next-auth/react";
 import Link from "next/link";
 import { useContext, useEffect, useState, useCallback, useRef, useMemo } from "react";
 import toast from "react-hot-toast";
+import Head from 'next/head';
 
 const formatPrice = (price) => {
     return price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
@@ -693,6 +694,7 @@ export default function Cart() {
 
         return (
             <section className="flex justify-between max-md:flex-col md:space-x-4 px-2 md:px-4 pb-4 pt-20 max-w-[1600px] mx-auto">
+                <Head><title>Carrito de Compras | Valentino Accesorios</title></Head>
                 <div className="md:w-3/5">
                     <div className="mt-6 md:mt-8">
                         <header className="text-left flex justify-between w-full mb-4">
@@ -893,6 +895,7 @@ export default function Cart() {
     if (session) {
         return (
             <section className="flex justify-between max-md:flex-col md:space-x-4 px-2 md:px-4 pb-4 pt-20 max-w-[1600px] mx-auto">
+                <Head><title>Carrito de Compras | Valentino Accesorios</title></Head>
                 <div className="md:w-3/5">
                     <div className="mt-6 md:mt-8">
                         <header className="text-left flex justify-between w-full mb-4">

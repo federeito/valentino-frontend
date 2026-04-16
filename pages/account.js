@@ -3,6 +3,7 @@ import { useState, useEffect } from 'react';
 import { FaGoogle, FaFacebook, FaUser, FaSignOutAlt, FaEnvelope, FaEdit, FaSave, FaTimes } from 'react-icons/fa';
 import OrderTracking from "@/src/components/OrderTracking";
 import axios from "axios";
+import Head from 'next/head';
 
 export default function Account() {
     const { data: session, status } = useSession();
