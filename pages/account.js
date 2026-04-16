@@ -443,6 +443,9 @@ export default function Account() {
     // Login Page
     return (
         <>
+            <Head>
+                <title>Mi Cuenta | Valentino Accesorios</title>
+            </Head>
             {/* Background */}
             <div className="fixed inset-0 -z-10 bg-gradient-to-br from-blue-50 via-white to-purple-50/30" />
             

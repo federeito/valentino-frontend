@@ -569,61 +569,66 @@ export default function Cart() {
     // Show loading state while checking permissions
     if (pricePermissionLoading) {
         return (
-            <div className="grid h-screen px-4 bg-white place-content-center">
-                <div className="text-center">
-                    <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto mb-4"></div>
-                    <p className="text-gray-600">Verificando permisos...</p>
+            <>
+                <Head><title>Carrito de Compras | Valentino Accesorios</title></Head>
+                <div className="grid h-screen px-4 bg-white place-content-center">
+                    <div className="text-center">
+                        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto mb-4"></div>
+                        <p className="text-gray-600">Verificando permisos...</p>
+                    </div>
                 </div>
-            </div>
+            </>
         );
     }
 
-    // Restrict cart access if user can't view prices
     if (!canViewPrices) {
         return (
-            <div className="grid h-screen px-4 bg-white place-content-center">
-                <div className="text-center max-w-md">
-                    <div className="w-20 h-20 mx-auto bg-gradient-to-br from-yellow-100 to-yellow-200 rounded-full flex items-center justify-center mb-6">
-                        <svg className="w-10 h-10 text-yellow-600" fill="currentColor" viewBox="0 0 20 20">
-                            <path fillRule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clipRule="evenodd" />
-                        </svg>
-                    </div>
-                    <h2 className="text-2xl font-bold text-gray-900 mb-4">
-                    Acceso para clientes registrados
-                    </h2>
-                    <p className="text-gray-600 mb-6">
-                        {!session ? 
-                            'Debes iniciar sesión para acceder al carrito de compras.' :
-                            'Tu cuenta está pendiente de aprobación. Una vez aprobada, podrás ver precios y realizar compras.'
-                        }
-                    </p>
-                    {!session && (
-                        <div className="flex flex-col gap-3">
-                            <button
-                                onClick={() => signIn('google')}
-                                className="inline-flex items-center justify-center gap-3 rounded-sm border-2 border-gray-300 bg-white px-8 py-3 text-md font-medium text-gray-700 hover:bg-gray-50"
-                            >
-                                <svg className="w-5 h-5" viewBox="0 0 24 24">
-                                    <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
-                                    <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
-                                    <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/>
-                                    <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
-                                </svg>
-                                Iniciar Sesión con Google
-                            </button>
-                            <button
-                                onClick={() => signIn('facebook')}
-                                className="inline-flex items-center justify-center gap-3 rounded-sm border-2 border-[#1877F2] bg-[#1877F2] px-8 py-3 text-md font-medium text-white hover:bg-[#166FE5]"
-                            >
-                                <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
-                                    <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
-                                </svg>
-                                Iniciar Sesión con Facebook
-                            </button>
+            <>
+                <Head><title>Carrito de Compras | Valentino Accesorios</title></Head>
+                <div className="grid h-screen px-4 bg-white place-content-center">
+                    <div className="text-center max-w-md">
+                        <div className="w-20 h-20 mx-auto bg-gradient-to-br from-yellow-100 to-yellow-200 rounded-full flex items-center justify-center mb-6">
+                            <svg className="w-10 h-10 text-yellow-600" fill="currentColor" viewBox="0 0 20 20">
+                                <path fillRule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clipRule="evenodd" />
+                            </svg>
                         </div>
-                    )}
+                        <h2 className="text-2xl font-bold text-gray-900 mb-4">
+                            Acceso para clientes registrados
+                        </h2>
+                        <p className="text-gray-600 mb-6">
+                            {!session ? 
+                                'Debes iniciar sesión para acceder al carrito de compras.' :
+                                'Tu cuenta está pendiente de aprobación. Una vez aprobada, podrás ver precios y realizar compras.'
+                            }
+                        </p>
+                        {!session && (
+                            <div className="flex flex-col gap-3">
+                                <button
+                                    onClick={() => signIn('google')}
+                                    className="inline-flex items-center justify-center gap-3 rounded-sm border-2 border-gray-300 bg-white px-8 py-3 text-md font-medium text-gray-700 hover:bg-gray-50"
+                                >
+                                    <svg className="w-5 h-5" viewBox="0 0 24 24">
+                                        <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
+                                        <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
+                                        <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/>
+                                        <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
+                                    </svg>
+                                    Iniciar Sesión con Google
+                                </button>
+                                <button
+                                    onClick={() => signIn('facebook')}
+                                    className="inline-flex items-center justify-center gap-3 rounded-sm border-2 border-[#1877F2] bg-[#1877F2] px-8 py-3 text-md font-medium text-white hover:bg-[#166FE5]"
+                                >
+                                    <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                                        <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
+                                    </svg>
+                                    Iniciar Sesión con Facebook
+                                </button>
+                            </div>
+                        )}
+                    </div>
                 </div>
-            </div>
+            </>
         );
     }
 
@@ -650,42 +655,39 @@ export default function Cart() {
 
     if (!session && !isGuest) {
         return (
-            <div className="grid h-screen px-4 bg-white place-content-center">
-                <div className="text-center">
-                    <p className="mt-4 text-text text-2xl">
-                        Elige cómo deseas continuar
-                    </p>
-                    <div className="flex flex-col gap-4 mt-6">
-                        <button
-                            onClick={() => signIn('google')}
-                            className="inline-flex items-center justify-center gap-3 rounded-sm border-2 border-gray-300 bg-white px-12 py-3 text-md font-medium text-gray-700 hover:bg-gray-50 focus:ring-3 focus:outline-hidden"
-                        >
-                            <svg className="w-5 h-5" viewBox="0 0 24 24">
-                                <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
-                                <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
-                                <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/>
-                                <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
-                            </svg>
-                            Continuar con Google
-                        </button>
-                        <button
-                            onClick={() => signIn('facebook')}
-                            className="inline-flex items-center justify-center gap-3 rounded-sm border-2 border-[#1877F2] bg-[#1877F2] px-12 py-3 text-md font-medium text-white hover:bg-[#166FE5] focus:ring-3 focus:outline-hidden"
-                        >
-                            <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
-                                <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
-                            </svg>
-                            Continuar con Facebook
-                        </button>
-                        <button
-                            onClick={() => setIsGuest(true)}
-                            className="inline-block rounded-sm border border-gray-300 px-12 py-3 text-md font-medium text-gray-700 hover:bg-gray-50 focus:ring-3 focus:outline-hidden"
-                        >
-                            Continuar como invitado
-                        </button>
+            <>
+                <Head><title>Carrito de Compras | Valentino Accesorios</title></Head>
+                <div className="grid h-screen px-4 bg-white place-content-center">
+                    <div className="text-center">
+                        <p className="mt-4 text-text text-2xl">
+                            Elige cómo deseas continuar
+                        </p>
+                        <div className="flex flex-col gap-4 mt-6">
+                            <button
+                                onClick={() => signIn('google')}
+                                className="inline-flex items-center justify-center gap-3 rounded-sm border-2 border-gray-300 bg-white px-12 py-3 text-md font-medium text-gray-700 hover:bg-gray-50 focus:ring-3 focus:outline-hidden"
+                            >
+                                <svg className="w-5 h-5" viewBox="0 0 24 24">
+                                    <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
+                                    <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
+                                    <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/>
+                                    <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
+                                </svg>
+                                Continuar con Google
+                            </button>
+                            <button
+                                onClick={() => signIn('facebook')}
+                                className="inline-flex items-center justify-center gap-3 rounded-sm border-2 border-[#1877F2] bg-[#1877F2] px-12 py-3 text-md font-medium text-white hover:bg-[#166FE5] focus:ring-3 focus:outline-hidden"
+                            >
+                                <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                                    <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
+                                </svg>
+                                Continuar con Facebook
+                            </button>
+                        </div>
                     </div>
                 </div>
-            </div>
+            </>
         );
     }
 
@@ -693,294 +695,294 @@ export default function Cart() {
         const guestInfoComplete = guestEmail && guestName;
 
         return (
-            <section className="flex justify-between max-md:flex-col md:space-x-4 px-2 md:px-4 pb-4 pt-20 max-w-[1600px] mx-auto">
+            <>
                 <Head><title>Carrito de Compras | Valentino Accesorios</title></Head>
-                <div className="md:w-3/5">
-                    <div className="mt-6 md:mt-8">
-                        <header className="text-left flex justify-between w-full mb-4">
-                            <h1 className="text-xl font-bold text-gray-900 sm:text-3xl">
-                                Tu Carrito
-                            </h1>
-                        </header>
-                        {!products?.length ? (
-                            <p className="my-6 text-center">Tu Carrito Está Vacío.</p>
-                        ) : (
-                            <>
-                                {renderCartProducts()}
-                                <div className="mt-8 flex justify-end border-t border-gray-100 pt-6">
-                                    <div className="w-full max-w-md space-y-4">
-                                        <dl className="space-y-2 text-sm md:text-md text-text">
-                                            <div className="flex justify-end text-red-500 border-b pb-2 mb-3">
-                                                <button onClick={deleteCart} className="text-sm hover:underline">Borrar Carrito</button>
-                                            </div>
-                                            <div className="flex justify-between text-base md:text-lg font-semibold">
-                                                <dt>Subtotal</dt>
-                                                <dd>$ {formatPrice(total)}</dd>
-                                            </div>
-                                            {lineaEconomicaPromoActive && (
-                                                <div className="flex items-center justify-between gap-2 text-sm md:text-base text-green-600">
-                                                    <dt className="flex items-center gap-1 min-w-0 shrink">
-                                                        <span className="bg-green-100 text-green-700 text-xs font-bold px-2 py-0.5 rounded-full shrink-0">2x1</span>
-                                                        <span className="truncate">Línea Económica ({lineaEconomicaUnits} uds)</span>
-                                                    </dt>
-                                                    <dd className="shrink-0 whitespace-nowrap">-$ {formatPrice(lineaEconomicaDiscount)}</dd>
+                <section className="flex justify-between max-md:flex-col md:space-x-4 px-2 md:px-4 pb-4 pt-20 max-w-[1600px] mx-auto">
+                    <div className="md:w-3/5">
+                        <div className="mt-6 md:mt-8">
+                            <header className="text-left flex justify-between w-full mb-4">
+                                <h1 className="text-xl font-bold text-gray-900 sm:text-3xl">
+                                    Tu Carrito
+                                </h1>
+                            </header>
+                            {!products?.length ? (
+                                <p className="my-6 text-center">Tu Carrito Está Vacío.</p>
+                            ) : (
+                                <>
+                                    {renderCartProducts()}
+                                    <div className="mt-8 flex justify-end border-t border-gray-100 pt-6">
+                                        <div className="w-full max-w-md space-y-4">
+                                            <dl className="space-y-2 text-sm md:text-md text-text">
+                                                <div className="flex justify-end text-red-500 border-b pb-2 mb-3">
+                                                    <button onClick={deleteCart} className="text-sm hover:underline">Borrar Carrito</button>
                                                 </div>
-                                            )}
-                                            {paymentMethod === 'transfer' && (
-                                                <>
-                                                    <div className="flex justify-between text-sm md:text-base text-green-600">
-                                                        <dt>Descuento (10% por transferencia)</dt>
-                                                        <dd>-$ {formatPrice(discount)}</dd>
-                                                    </div>
-                                                    <div className="flex justify-between text-lg md:text-xl font-bold border-t pt-2">
-                                                        <dt>Total a Pagar</dt>
-                                                        <dd>$ {formatPrice(finalTotal)}</dd>
-                                                    </div>
-                                                </>
-                                            )}
-                                            {paymentMethod !== 'transfer' && (
                                                 <div className="flex justify-between text-base md:text-lg font-semibold">
-                                                    <dt>Total</dt>
-                                                    <dd>$ {formatPrice(subtotalAfterPromo)}</dd>
+                                                    <dt>Subtotal</dt>
+                                                    <dd>$ {formatPrice(total)}</dd>
                                                 </div>
-                                            )}
-                                        </dl>
-                                        <div className="flex justify-end">
-                                            <Link
-                                                className="group flex items-center justify-between gap-3 rounded-lg border border-primary bg-primary px-4 py-2.5 md:px-5 md:py-3 transition-colors hover:bg-transparent focus:ring focus:outline-none w-full sm:w-auto"
-                                                href="/accesorios-para-el-pelo"
-                                            >
-                                                <span className="font-medium text-sm md:text-base text-white transition-colors group-hover:text-primary">
-                                                    Continuar Comprando
-                                                </span>
-                                                <span className="shrink-0 rounded-full border border-current bg-white p-1.5 md:p-2 text-primary">
-                                                    <svg
-                                                        className="w-4 h-4 md:w-5 md:h-5 rtl:rotate-180"
-                                                        xmlns="http://www.w3.org/2000/svg"
-                                                        fill="none"
-                                                        viewBox="0 0 24 24"
-                                                        stroke="currentColor"
-                                                    >
-                                                        <path
-                                                            strokeLinecap="round"
-                                                            strokeLinejoin="round"
-                                                            strokeWidth="2"
-                                                            d="M17 8l4 4m0 0l-4 4m4-4H3"
-                                                        />
-                                                    </svg>
-                                                </span>
-                                            </Link>
+                                                {lineaEconomicaPromoActive && (
+                                                    <div className="flex items-center justify-between gap-2 text-sm md:text-base text-green-600">
+                                                        <dt className="flex items-center gap-1 min-w-0 shrink">
+                                                            <span className="bg-green-100 text-green-700 text-xs font-bold px-2 py-0.5 rounded-full shrink-0">2x1</span>
+                                                            <span className="truncate">Línea Económica ({lineaEconomicaUnits} uds)</span>
+                                                        </dt>
+                                                        <dd className="shrink-0 whitespace-nowrap">-$ {formatPrice(lineaEconomicaDiscount)}</dd>
+                                                    </div>
+                                                )}
+                                                {paymentMethod === 'transfer' && (
+                                                    <>
+                                                        <div className="flex justify-between text-sm md:text-base text-green-600">
+                                                            <dt>Descuento (10% por transferencia)</dt>
+                                                            <dd>-$ {formatPrice(discount)}</dd>
+                                                        </div>
+                                                        <div className="flex justify-between text-lg md:text-xl font-bold border-t pt-2">
+                                                            <dt>Total a Pagar</dt>
+                                                            <dd>$ {formatPrice(finalTotal)}</dd>
+                                                        </div>
+                                                    </>
+                                                )}
+                                                {paymentMethod !== 'transfer' && (
+                                                    <div className="flex justify-between text-base md:text-lg font-semibold">
+                                                        <dt>Total</dt>
+                                                        <dd>$ {formatPrice(subtotalAfterPromo)}</dd>
+                                                    </div>
+                                                )}
+                                            </dl>
+                                            <div className="flex justify-end">
+                                                <Link
+                                                    className="group flex items-center justify-between gap-3 rounded-lg border border-primary bg-primary px-4 py-2.5 md:px-5 md:py-3 transition-colors hover:bg-transparent focus:ring focus:outline-none w-full sm:w-auto"
+                                                    href="/accesorios-para-el-pelo"
+                                                >
+                                                    <span className="font-medium text-sm md:text-base text-white transition-colors group-hover:text-primary">
+                                                        Continuar Comprando
+                                                    </span>
+                                                    <span className="shrink-0 rounded-full border border-current bg-white p-1.5 md:p-2 text-primary">
+                                                        <svg
+                                                            className="w-4 h-4 md:w-5 md:h-5 rtl:rotate-180"
+                                                            xmlns="http://www.w3.org/2000/svg"
+                                                            fill="none"
+                                                            viewBox="0 0 24 24"
+                                                            stroke="currentColor"
+                                                        >
+                                                            <path
+                                                                strokeLinecap="round"
+                                                                strokeLinejoin="round"
+                                                                strokeWidth="2"
+                                                                d="M17 8l4 4m0 0l-4 4m4-4H3"
+                                                            />
+                                                        </svg>
+                                                    </span>
+                                                </Link>
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
-                            </>
-                        )}
+                                </>
+                            )}
+                        </div>
                     </div>
-                </div>
-                <div className="md:w-2/5 mt-6 md:mt-8">
-                    <div className="mx-auto max-w-lg">
-                        <header className="text-left flex flex-col w-full mb-3">
-                            <h1 className="text-xl font-bold text-gray-900 sm:text-3xl">
-                                Información del Comprador
-                            </h1>
-                            <p className="mt-2 text-sm md:text-base text-gray-600">Complete sus datos para continuar con la compra</p>
-                        </header>
-                        <div className="p-4 md:p-5 border shadow-md my-2 md:my-3 bg-white rounded-lg">
-                            <div className="space-y-3">
-                                <div className="grid grid-cols-6 gap-2 md:gap-3">
-                                    <div className="col-span-6">
-                                        <label className="mb-1 block text-md font-medium text-gray-700">Email</label>
-                                        <input
-                                            type="email"
-                                            className="block w-full rounded-md p-3 border border-gray-300"
-                                            value={guestEmail}
-                                            onChange={e => setGuestEmail(e.target.value)}
-                                            placeholder="tu@email.com"
-                                        />
-                                    </div>
-                                    <div className="col-span-6">
-                                        <label className="mb-1 block text-md font-medium text-gray-700">Nombre Completo</label>
-                                        <input
-                                            type="text"
-                                            className="block w-full rounded-md p-3 border border-gray-300"
-                                            value={guestName}
-                                            onChange={e => setGuestName(e.target.value)}
-                                            placeholder="Tu nombre completo"
-                                        />
-                                    </div>
-                                    {guestInfoComplete && (
-                                        <>
-                                            <div className="col-span-6 sm:col-span-3">
-                                                <label htmlFor="example10" className="mb-1 block text-md font-medium text-gray-700">Ciudad</label>
-                                                <input type="text" id="example10" className="block p-3 border w-full rounded-md border-gray-300 shadow-sm focus:border-primary-400 focus:ring focus:ring-primary-200 focus:ring-opacity-50 disabled:cursor-not-allowed disabled:bg-gray-50 disabled:text-gray-500" placeholder=""
-                                                    value={city}
-                                                    onChange={ev => setCity(ev.target.value)}
-                                                />
-                                            </div>
-                                            <div className="col-span-4 sm:col-span-2">
-                                                <label htmlFor="example11" className="mb-1 block text-md font-medium text-gray-700">Región/Provincia</label>
-                                                <input type="text" id="example11" className="block p-3 border w-full rounded-md border-gray-300 shadow-sm focus:border-primary-400 focus:ring focus:ring-primary-200 focus:ring-opacity-50 disabled:cursor-not-allowed disabled:bg-gray-50 disabled:text-gray-500" placeholder=""
-                                                    value={state}
-                                                    onChange={ev => setState(ev.target.value)}
-                                                />
-                                            </div>
-                                            <div className="col-span-2 sm:col-span-1">
-                                                <label htmlFor="example12" className="mb-1 block text-md font-medium text-gray-700">C.P.</label>
-                                                <input type="text" id="example12" className="block p-3 border w-full rounded-md border-gray-300 shadow-sm focus:border-primary-400 focus:ring focus:ring-primary-200 focus:ring-opacity-50 disabled:cursor-not-allowed disabled:bg-gray-50 disabled:text-gray-500" placeholder=""
-                                                    value={zip}
-                                                    onChange={ev => setZip(ev.target.value)}
-                                                />
-                                            </div>
+                    <div className="md:w-2/5 mt-6 md:mt-8">
+                        <div className="mx-auto max-w-lg">
+                            <header className="text-left flex flex-col w-full mb-3">
+                                <h1 className="text-xl font-bold text-gray-900 sm:text-3xl">
+                                    Información del Comprador
+                                </h1>
+                                <p className="mt-2 text-sm md:text-base text-gray-600">Complete sus datos para continuar con la compra</p>
+                            </header>
+                            <div className="p-4 md:p-5 border shadow-md my-2 md:my-3 bg-white rounded-lg">
+                                <div className="space-y-3">
+                                    <div className="grid grid-cols-6 gap-2 md:gap-3">
+                                        <div className="col-span-6">
+                                            <label className="mb-1 block text-md font-medium text-gray-700">Email</label>
+                                            <input
+                                                type="email"
+                                                className="block w-full rounded-md p-3 border border-gray-300"
+                                                value={guestEmail}
+                                                onChange={e => setGuestEmail(e.target.value)}
+                                                placeholder="tu@email.com"
+                                            />
+                                        </div>
+                                        <div className="col-span-6">
+                                            <label className="mb-1 block text-md font-medium text-gray-700">Nombre Completo</label>
+                                            <input
+                                                type="text"
+                                                className="block w-full rounded-md p-3 border border-gray-300"
+                                                value={guestName}
+                                                onChange={e => setGuestName(e.target.value)}
+                                                placeholder="Tu nombre completo"
+                                            />
+                                        </div>
+                                        {guestInfoComplete && (
+                                            <>
+                                                <div className="col-span-6 sm:col-span-3">
+                                                    <label htmlFor="example10" className="mb-1 block text-md font-medium text-gray-700">Ciudad</label>
+                                                    <input type="text" id="example10" className="block p-3 border w-full rounded-md border-gray-300 shadow-sm focus:border-primary-400 focus:ring focus:ring-primary-200 focus:ring-opacity-50 disabled:cursor-not-allowed disabled:bg-gray-50 disabled:text-gray-500" placeholder=""
+                                                        value={city}
+                                                        onChange={ev => setCity(ev.target.value)}
+                                                    />
+                                                </div>
+                                                <div className="col-span-4 sm:col-span-2">
+                                                    <label htmlFor="example11" className="mb-1 block text-md font-medium text-gray-700">Región/Provincia</label>
+                                                    <input type="text" id="example11" className="block p-3 border w-full rounded-md border-gray-300 shadow-sm focus:border-primary-400 focus:ring focus:ring-primary-200 focus:ring-opacity-50 disabled:cursor-not-allowed disabled:bg-gray-50 disabled:text-gray-500" placeholder=""
+                                                        value={state}
+                                                        onChange={ev => setState(ev.target.value)}
+                                                    />
+                                                </div>
+                                                <div className="col-span-2 sm:col-span-1">
+                                                    <label htmlFor="example12" className="mb-1 block text-md font-medium text-gray-700">C.P.</label>
+                                                    <input type="text" id="example12" className="block p-3 border w-full rounded-md border-gray-300 shadow-sm focus:border-primary-400 focus:ring focus:ring-primary-200 focus:ring-opacity-50 disabled:cursor-not-allowed disabled:bg-gray-50 disabled:text-gray-500" placeholder=""
+                                                        value={zip}
+                                                        onChange={ev => setZip(ev.target.value)}
+                                                    />
+                                                </div>
 
-                                            <div className="col-span-6 mt-2">
-                                                {!isCartValid && (
-                                                    <p className="text-xs md:text-sm text-red-500 font-bold mb-2">
-                                                        Hay productos en el carrito con stock insuficiente. Por favor, ajusta las cantidades.
-                                                    </p>
-                                                )}
-                                                {!meetsMinimumPurchase && cartProducts.length > 0 && (
-                                                    <div className="bg-yellow-50 border-l-4 border-yellow-400 p-3 mb-3 rounded">
-                                                        <p className="text-xs md:text-sm text-yellow-800">
-                                                            <span className="font-semibold">Compra mínima:</span> ${formatPrice(MINIMUM_PURCHASE)}. 
-                                                            <span className="block sm:inline sm:ml-1 mt-1 sm:mt-0">Te faltan ${formatPrice(MINIMUM_PURCHASE - subtotalAfterPromo)} para alcanzar el mínimo.</span>
+                                                <div className="col-span-6 mt-2">
+                                                    {!isCartValid && (
+                                                        <p className="text-xs md:text-sm text-red-500 font-bold mb-2">
+                                                            Hay productos en el carrito con stock insuficiente. Por favor, ajusta las cantidades.
                                                         </p>
+                                                    )}
+                                                    {!meetsMinimumPurchase && cartProducts.length > 0 && (
+                                                        <div className="bg-yellow-50 border-l-4 border-yellow-400 p-3 mb-3 rounded">
+                                                            <p className="text-xs md:text-sm text-yellow-800">
+                                                                <span className="font-semibold">Compra mínima:</span> ${formatPrice(MINIMUM_PURCHASE)}. 
+                                                                <span className="block sm:inline sm:ml-1 mt-1 sm:mt-0">Te faltan ${formatPrice(MINIMUM_PURCHASE - subtotalAfterPromo)} para alcanzar el mínimo.</span>
+                                                            </p>
+                                                        </div>
+                                                    )}
+                                                    <div className="flex gap-2 flex-col sm:flex-row">
+                                                        <button
+                                                            onClick={() => setPaymentMethod('mercadopago')}
+                                                            disabled={!isCartValid || cartProducts.length === 0 || !formComplete || !meetsMinimumPurchase}
+                                                            className={`flex-1 rounded p-2 text-xs md:text-sm transition border-2 h-[60px] md:h-[70px] flex items-center justify-center
+                                                                ${paymentMethod === 'mercadopago' ? 'border-purple-600 bg-secondary' : 'border-gray-300 bg-gray-100'}
+                                                                ${(!isCartValid || cartProducts.length === 0 || !formComplete || !meetsMinimumPurchase) ? 'bg-gray-300 text-gray-500 cursor-not-allowed' : ''}
+                                                            `}
+                                                        >
+                                                            <img
+                                                                src="https://res.cloudinary.com/djuk4a84p/image/upload/v1755571794/MP_RGB_HANDSHAKE_color_horizontal_l0i6d8.svg"
+                                                                alt="Mercado Pago"
+                                                                className="h-[45px] md:h-[55px] w-auto mx-auto"
+                                                            />
+                                                        </button>
+                                                        <button
+                                                            onClick={() => setPaymentMethod('transfer')}
+                                                            disabled={!isCartValid || cartProducts.length === 0 || !formComplete || !meetsMinimumPurchase}
+                                                            className={`flex-1 rounded p-2 text-xs md:text-sm transition border-2 font-bold
+                                                                ${paymentMethod === 'transfer' ? 'border-purple-600 bg-secondary' : 'border-gray-300 bg-gray-100'}
+                                                                ${(!isCartValid || cartProducts.length === 0 || !formComplete || !meetsMinimumPurchase) ? 'bg-gray-300 text-gray-500 cursor-not-allowed' : ''}
+                                                            `}
+                                                        >
+                                                            Transferencia Bancaria
+                                                        </button>
                                                     </div>
-                                                )}
-                                                <div className="flex gap-2 flex-col sm:flex-row">
                                                     <button
-                                                        onClick={() => setPaymentMethod('mercadopago')}
+                                                        onClick={paymentMethod === 'mercadopago' ? mpCheckout : transferCheckout}
                                                         disabled={!isCartValid || cartProducts.length === 0 || !formComplete || !meetsMinimumPurchase}
-                                                        className={`flex-1 rounded p-2 text-xs md:text-sm transition border-2 h-[60px] md:h-[70px] flex items-center justify-center
-                                                            ${paymentMethod === 'mercadopago' ? 'border-purple-600 bg-secondary' : 'border-gray-300 bg-gray-100'}
-                                                            ${(!isCartValid || cartProducts.length === 0 || !formComplete || !meetsMinimumPurchase) ? 'bg-gray-300 text-gray-500 cursor-not-allowed' : ''}
-                                                        `}
+                                                        className={`mt-4 block rounded px-4 py-3 md:px-5 md:py-3 w-full transition font-bold text-sm md:text-base
+                                                        ${(!isCartValid || cartProducts.length === 0 || !formComplete || !meetsMinimumPurchase) ? 'bg-gray-300 text-gray-500 cursor-not-allowed' : 'bg-black text-white hover:bg-gray-800'}`}
                                                     >
-                                                        <img
-                                                            src="https://res.cloudinary.com/djuk4a84p/image/upload/v1755571794/MP_RGB_HANDSHAKE_color_horizontal_l0i6d8.svg"
-                                                            alt="Mercado Pago"
-                                                            className="h-[45px] md:h-[55px] w-auto mx-auto"
-                                                        />
-                                                    </button>
-                                                    <button
-                                                        onClick={() => setPaymentMethod('transfer')}
-                                                        disabled={!isCartValid || cartProducts.length === 0 || !formComplete || !meetsMinimumPurchase}
-                                                        className={`flex-1 rounded p-2 text-xs md:text-sm transition border-2 font-bold
-                                                            ${paymentMethod === 'transfer' ? 'border-purple-600 bg-secondary' : 'border-gray-300 bg-gray-100'}
-                                                            ${(!isCartValid || cartProducts.length === 0 || !formComplete || !meetsMinimumPurchase) ? 'bg-gray-300 text-gray-500 cursor-not-allowed' : ''}
-                                                        `}
-                                                    >
-                                                        Transferencia Bancaria
+                                                        Realizar pedido
                                                     </button>
                                                 </div>
-                                                <button
-                                                    onClick={paymentMethod === 'mercadopago' ? mpCheckout : transferCheckout}
-                                                    disabled={!isCartValid || cartProducts.length === 0 || !formComplete || !meetsMinimumPurchase}
-                                                    className={`mt-4 block rounded px-4 py-3 md:px-5 md:py-3 w-full transition font-bold text-sm md:text-base
-                                                    ${(!isCartValid || cartProducts.length === 0 || !formComplete || !meetsMinimumPurchase) ? 'bg-gray-300 text-gray-500 cursor-not-allowed' : 'bg-black text-white hover:bg-gray-800'}`}
-                                                >
-                                                    Realizar pedido
-                                                </button>
-                                            </div>
-                                        </>
-                                    )}
+                                            </>
+                                        )}
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                </div>
-            </section>
+                </section>
+            </>
         );
     }
 
     if (session) {
         return (
-            <section className="flex justify-between max-md:flex-col md:space-x-4 px-2 md:px-4 pb-4 pt-20 max-w-[1600px] mx-auto">
+            <>
                 <Head><title>Carrito de Compras | Valentino Accesorios</title></Head>
-                <div className="md:w-3/5">
-                    <div className="mt-6 md:mt-8">
-                        <header className="text-left flex justify-between w-full mb-4">
-                            <h1 className="text-xl font-bold text-gray-900 sm:text-3xl">
-                                Tu Carrito
-                            </h1>
-                        </header>
-                        {!products?.length ? (
-                            <p className="my-6 text-center">Tu Carrito Está Vacío.</p>
-                        ) : (
-                            <>
-                                {renderCartProducts()}
-                                <div className="mt-8 flex justify-end border-t border-gray-100 pt-6">
-                                    <div className="w-full max-w-md space-y-4">
-                                        <dl className="space-y-2 text-sm md:text-md text-text">
-                                            <div className="flex justify-end text-red-500 border-b pb-2 mb-3">
-                                                <button onClick={deleteCart} className="text-sm hover:underline">Borrar Carrito</button>
-                                            </div>
-                                            <div className="flex justify-between text-base md:text-lg font-semibold">
-                                                <dt>Subtotal</dt>
-                                                <dd>$ {formatPrice(total)}</dd>
-                                            </div>
-                                            {lineaEconomicaPromoActive && (
-                                                <div className="flex items-center justify-between gap-2 text-sm md:text-base text-green-600">
-                                                    <dt className="flex items-center gap-1 min-w-0 shrink">
-                                                        <span className="bg-green-100 text-green-700 text-xs font-bold px-2 py-0.5 rounded-full shrink-0">2x1</span>
-                                                        <span className="truncate">Línea Económica ({lineaEconomicaUnits} uds)</span>
-                                                    </dt>
-                                                    <dd className="shrink-0 whitespace-nowrap">-$ {formatPrice(lineaEconomicaDiscount)}</dd>
+                <section className="flex justify-between max-md:flex-col md:space-x-4 px-2 md:px-4 pb-4 pt-20 max-w-[1600px] mx-auto">
+                    <div className="md:w-3/5">
+                        <div className="mt-6 md:mt-8">
+                            <header className="text-left flex justify-between w-full mb-4">
+                                <h1 className="text-xl font-bold text-gray-900 sm:text-3xl">
+                                    Tu Carrito
+                                </h1>
+                            </header>
+                            {!products?.length ? (
+                                <p className="my-6 text-center">Tu Carrito Está Vacío.</p>
+                            ) : (
+                                <>
+                                    {renderCartProducts()}
+                                    <div className="mt-8 flex justify-end border-t border-gray-100 pt-6">
+                                        <div className="w-full max-w-md space-y-4">
+                                            <dl className="space-y-2 text-sm md:text-md text-text">
+                                                <div className="flex justify-end text-red-500 border-b pb-2 mb-3">
+                                                    <button onClick={deleteCart} className="text-sm hover:underline">Borrar Carrito</button>
                                                 </div>
-                                            )}
-                                            {paymentMethod === 'transfer' && (
-                                                <>
-                                                    <div className="flex justify-between text-sm md:text-base text-green-600">
-                                                        <dt>Descuento (10% por transferencia)</dt>
-                                                        <dd>-$ {formatPrice(discount)}</dd>
-                                                    </div>
-                                                    <div className="flex justify-between text-lg md:text-xl font-bold border-t pt-2">
-                                                        <dt>Total a Pagar</dt>
-                                                        <dd>$ {formatPrice(finalTotal)}</dd>
-                                                    </div>
-                                                </>
-                                            )}
-                                            {paymentMethod !== 'transfer' && (
                                                 <div className="flex justify-between text-base md:text-lg font-semibold">
-                                                    <dt>Total</dt>
-                                                    <dd>$ {formatPrice(subtotalAfterPromo)}</dd>
+                                                    <dt>Subtotal</dt>
+                                                    <dd>$ {formatPrice(total)}</dd>
                                                 </div>
-                                            )}
-                                        </dl>
-                                        <div className="flex justify-end">
-                                            <Link
-                                                className="group flex items-center justify-between gap-3 rounded-lg border border-primary bg-primary px-4 py-2.5 md:px-5 md:py-3 transition-colors hover:bg-transparent focus:ring focus:outline-none w-full sm:w-auto"
-                                                href="/accesorios-para-el-pelo"
-                                            >
-                                                <span className="font-medium text-sm md:text-base text-white transition-colors group-hover:text-primary">
-                                                    Continuar Comprando
-                                                </span>
-                                                <span className="shrink-0 rounded-full border border-current bg-white p-1.5 md:p-2 text-primary">
-                                                    <svg
-                                                        className="w-4 h-4 md:w-5 md:h-5 rtl:rotate-180"
-                                                        xmlns="http://www.w3.org/2000/svg"
-                                                        fill="none"
-                                                        viewBox="0 0 24 24"
-                                                        stroke="currentColor"
-                                                    >
-                                                        <path
-                                                            strokeLinecap="round"
-                                                            strokeLinejoin="round"
-                                                            strokeWidth="2"
-                                                            d="M17 8l4 4m0 0l-4 4m4-4H3"
-                                                        />
-                                                    </svg>
-                                                </span>
-                                            </Link>
+                                                {lineaEconomicaPromoActive && (
+                                                    <div className="flex items-center justify-between gap-2 text-sm md:text-base text-green-600">
+                                                        <dt className="flex items-center gap-1 min-w-0 shrink">
+                                                            <span className="bg-green-100 text-green-700 text-xs font-bold px-2 py-0.5 rounded-full shrink-0">2x1</span>
+                                                            <span className="truncate">Línea Económica ({lineaEconomicaUnits} uds)</span>
+                                                        </dt>
+                                                        <dd className="shrink-0 whitespace-nowrap">-$ {formatPrice(lineaEconomicaDiscount)}</dd>
+                                                    </div>
+                                                )}
+                                                {paymentMethod === 'transfer' && (
+                                                    <>
+                                                        <div className="flex justify-between text-sm md:text-base text-green-600">
+                                                            <dt>Descuento (10% por transferencia)</dt>
+                                                            <dd>-$ {formatPrice(discount)}</dd>
+                                                        </div>
+                                                        <div className="flex justify-between text-lg md:text-xl font-bold border-t pt-2">
+                                                            <dt>Total a Pagar</dt>
+                                                            <dd>$ {formatPrice(finalTotal)}</dd>
+                                                        </div>
+                                                    </>
+                                                )}
+                                                {paymentMethod !== 'transfer' && (
+                                                    <div className="flex justify-between text-base md:text-lg font-semibold">
+                                                        <dt>Total</dt>
+                                                        <dd>$ {formatPrice(subtotalAfterPromo)}</dd>
+                                                    </div>
+                                                )}
+                                            </dl>
+                                            <div className="flex justify-end">
+                                                <Link
+                                                    className="group flex items-center justify-between gap-3 rounded-lg border border-primary bg-primary px-4 py-2.5 md:px-5 md:py-3 transition-colors hover:bg-transparent focus:ring focus:outline-none w-full sm:w-auto"
+                                                    href="/accesorios-para-el-pelo"
+                                                >
+                                                    <span className="font-medium text-sm md:text-base text-white transition-colors group-hover:text-primary">
+                                                        Continuar Comprando
+                                                    </span>
+                                                    <span className="shrink-0 rounded-full border border-current bg-white p-1.5 md:p-2 text-primary">
+                                                        <svg
+                                                            className="w-4 h-4 md:w-5 md:h-5 rtl:rotate-180"
+                                                            xmlns="http://www.w3.org/2000/svg"
+                                                            fill="none"
+                                                            viewBox="0 0 24 24"
+                                                            stroke="currentColor"
+                                                        >
+                                                            <path
+                                                                strokeLinecap="round"
+                                                                strokeLinejoin="round"
+                                                                strokeWidth="2"
+                                                                d="M17 8l4 4m0 0l-4 4m4-4H3"
+                                                            />
+                                                        </svg>
+                                                    </span>
+                                                </Link>
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
-                            </>
-                        )}
+                                </>
+                            )}
+                        </div>
                     </div>
-                </div>
-                {!products?.length ? (
-                    ''
-                ) : (
                     <div className="md:w-2/5 mt-6 md:mt-8">
                         <div className="mx-auto max-w-lg">
                             <header className="text-left flex flex-col w-full mb-3">
@@ -1143,8 +1145,8 @@ export default function Cart() {
                             </div>
                         </div>
                     </div>
-                )}
-            </section>
+                </section>
+            </>
         );
     }
 

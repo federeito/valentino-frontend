@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import Head from 'next/head';
 
 export default function Nosotros() {
     const [isVisible, setIsVisible] = useState(false);
@@ -9,6 +10,10 @@ export default function Nosotros() {
 
     return (
         <>
+            <Head>
+                <title>Sobre Valentino Accesorios | Mayorista de Accesorios para el Pelo</title>
+            </Head>
+
             {/* Background */}
             <div className="fixed inset-0 -z-10 bg-gradient-to-br from-blue-50 via-white to-purple-50/30" />
             

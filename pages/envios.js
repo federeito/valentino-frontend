@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
+import Head from "next/head";
 
 export default function Envios() {
   const [isVisible, setIsVisible] = useState(false);
@@ -16,6 +17,9 @@ export default function Envios() {
 
   return (
     <>
+      <Head>
+        <title>Envíos | Accesorios para el Pelo por Mayor en Argentina</title>
+      </Head>
       <div className="fixed inset-0 -z-10 bg-gradient-to-br from-gray-50 via-white to-red-50/20" />
 
       <div className={`min-h-screen py-10 sm:py-16 lg:py-20 transform transition-all duration-1000 ${
