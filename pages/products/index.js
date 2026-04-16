@@ -161,7 +161,7 @@ export default function Products({ allProducts = [], categories = [] }) {
     return (
         <>
             <Head>
-                <title>Accesorios para el Pelo por Mayor | Valentino Accesorios</title>
+                <title>Accesorios para el Pelo por Mayor | Catálogo Mayorista</title>
                 <meta name="description" content="Catálogo mayorista de accesorios para el pelo: hebillas, clips, vinchas, peinetas y más. Precios por mayor, envíos a toda Argentina. ¡Más de 300 modelos exclusivos!" />
                 <link rel="canonical" href="https://www.valentinoaccesorios.com.ar/accesorios-para-el-pelo" />
             </Head>
