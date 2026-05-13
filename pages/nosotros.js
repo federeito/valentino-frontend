@@ -34,7 +34,7 @@ export default function Nosotros() {
                         <div className="prose prose-lg max-w-none">
                             <div className="space-y-6 text-gray-700 leading-relaxed">
                                 <p className="text-lg sm:text-xl md:text-2xl font-semibold text-gray-900 mb-8">
-                                    Desde 1966, Soledad | Accesorios se dedica a la selección y comercialización mayorista de accesorios que combinan calidad, diseño y elegancia.
+                                    Desde 1966, Soledad se dedica a la selección y comercialización mayorista de accesorios que combinan calidad, diseño y elegancia.
                                 </p>
 
                                 <p className="text-base sm:text-lg">
@@ -46,7 +46,7 @@ export default function Nosotros() {
                                 </p>
 
                                 <p className="text-base sm:text-lg">
-                                    En Soledad | Accesorios, creemos que los accesorios son un elemento esencial para expresar estilo y personalidad. Por eso, ofrecemos piezas que se distinguen por su belleza, calidad y carácter atemporal.
+                                    En Soledad Accesorios, creemos que los accesorios son un elemento esencial para expresar estilo y personalidad. Por eso, ofrecemos piezas que se distinguen por su belleza, calidad y carácter atemporal.
                                 </p>
                             </div>
 
