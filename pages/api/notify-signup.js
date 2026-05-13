@@ -45,7 +45,7 @@ export default async function handler(req, res) {
             <div class="container">
                 <div class="header">
                     <h1 style="color: #dc2626; margin: 0;">🎉 Nuevo Cliente Registrado</h1>
-                    <img src="https://res.cloudinary.com/djuk4a84p/image/upload/v1755574026/valentino_logo_g5zdfg.png" alt="Valentino Paris Logo" class="logo"/>
+                    <img src="https://res.cloudinary.com/djuk4a84p/image/upload/v1778687241/soledadlogoaccs_cpclqs.png" alt="Soledad Accesorios Logo" class="logo"/>
                 </div>
                 
                 <div class="section">
@@ -79,7 +79,7 @@ export default async function handler(req, res) {
     const recipients = process.env.ADMIN_NOTIFICATION_EMAILS?.split(',') || [];
 
     const mailOptions = {
-        from: `"${process.env.MAILERSEND_FROM_CONTACT_NAME || 'Valentino Paris'}" <${process.env.MAILERSEND_FROM_EMAIL_CONTACT}>`,
+        from: `"${process.env.MAILERSEND_FROM_CONTACT_NAME || 'Soledad Accesorios'}" <${process.env.MAILERSEND_FROM_EMAIL_CONTACT}>`,
         to: recipients,
         subject: `Nuevo registro: ${name} (${provider})`,
         html: htmlContent,

@@ -570,7 +570,7 @@ export default function Cart() {
     if (pricePermissionLoading) {
         return (
             <>
-                <Head><title>Carrito de Compras | Valentino Accesorios</title></Head>
+                <Head><title>Carrito de Compras | Soledad Accesorios</title></Head>
                 <div className="grid h-screen px-4 bg-white place-content-center">
                     <div className="text-center">
                         <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto mb-4"></div>
@@ -584,7 +584,7 @@ export default function Cart() {
     if (!canViewPrices) {
         return (
             <>
-                <Head><title>Carrito de Compras | Valentino Accesorios</title></Head>
+                <Head><title>Carrito de Compras | Soledad Accesorios</title></Head>
                 <div className="grid h-screen px-4 bg-white place-content-center">
                     <div className="text-center max-w-md">
                         <div className="w-20 h-20 mx-auto bg-gradient-to-br from-yellow-100 to-yellow-200 rounded-full flex items-center justify-center mb-6">
@@ -656,7 +656,7 @@ export default function Cart() {
     if (!session && !isGuest) {
         return (
             <>
-                <Head><title>Carrito de Compras | Valentino Accesorios</title></Head>
+                <Head><title>Carrito de Compras | Soledad Accesorios</title></Head>
                 <div className="grid h-screen px-4 bg-white place-content-center">
                     <div className="text-center">
                         <p className="mt-4 text-text text-2xl">
@@ -696,7 +696,7 @@ export default function Cart() {
 
         return (
             <>
-                <Head><title>Carrito de Compras | Valentino Accesorios</title></Head>
+                <Head><title>Carrito de Compras | Soledad Accesorios</title></Head>
                 <section className="flex justify-between max-md:flex-col md:space-x-4 px-2 md:px-4 pb-4 pt-20 max-w-[1600px] mx-auto">
                     <div className="md:w-3/5">
                         <div className="mt-6 md:mt-8">
@@ -899,7 +899,7 @@ export default function Cart() {
     if (session) {
         return (
             <>
-                <Head><title>Carrito de Compras | Valentino Accesorios</title></Head>
+                <Head><title>Carrito de Compras | Soledad Accesorios</title></Head>
                 <section className="flex justify-between max-md:flex-col md:space-x-4 px-2 md:px-4 pb-4 pt-20 max-w-[1600px] mx-auto">
                     <div className="md:w-3/5">
                         <div className="mt-6 md:mt-8">

@@ -30,7 +30,7 @@ export default function Privacy() {
     return (
         <>
             <Head>
-                <title>Política de Privacidad | Valentino Accesorios</title>
+                <title>Política de Privacidad | Soledad Accesorios</title>
             </Head>
             <div className="fixed inset-0 -z-10 bg-gradient-to-br from-gray-50 via-white to-red-50/20" />
             
@@ -59,7 +59,7 @@ export default function Privacy() {
                         {/* Introduction */}
                         <div className="mb-8">
                             <p className="text-gray-700 leading-relaxed text-sm sm:text-base">
-                                En <span className="font-semibold text-red-600">Valentino Paris</span> valoramos tu privacidad y nos comprometemos a proteger tus datos personales. Esta política describe qué información recopilamos, cómo la utilizamos y qué derechos tenés como usuario.
+                                En <span className="font-semibold text-red-600">Soledad Accesorios</span> valoramos tu privacidad y nos comprometemos a proteger tus datos personales. Esta política describe qué información recopilamos, cómo la utilizamos y qué derechos tenés como usuario.
                             </p>
                         </div>
 
@@ -150,8 +150,8 @@ export default function Privacy() {
                             <div className="bg-red-50 border-l-4 border-red-500 p-4 rounded-r-lg mt-4">
                                 <p className="text-gray-700 text-sm sm:text-base">
                                     <span className="font-semibold">Contactanos a:</span>{' '}
-                                    <a href="mailto:contacto@valentinoaccesorios.com.ar" className="text-red-600 hover:text-red-700 font-medium underline break-all">
-                                        contacto@valentinoaccesorios.com.ar
+                                    <a href="mailto:contacto@soledadaccesorios.com.ar" className="text-red-600 hover:text-red-700 font-medium underline break-all">
+                                        contacto@soledadaccesorios.com.ar
                                     </a>
                                 </p>
                             </div>
@@ -173,8 +173,8 @@ export default function Privacy() {
                             <p className="text-gray-700 mb-3 text-sm sm:text-base">Si tenés consultas sobre privacidad:</p>
                             <div className="flex items-center gap-2 flex-wrap">
                                 <span>📧</span>
-                                <a href="mailto:contacto@valentinoaccesorios.com.ar" className="text-red-600 hover:text-red-700 font-semibold underline break-all text-sm sm:text-lg">
-                                    contacto@valentinoaccesorios.com.ar
+                                <a href="mailto:contacto@soledadaccesorios.com.ar" className="text-red-600 hover:text-red-700 font-semibold underline break-all text-sm sm:text-lg">
+                                    contacto@soledadaccesorios.com.ar
                                 </a>
                             </div>
                         </section>

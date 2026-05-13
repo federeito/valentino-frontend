@@ -56,7 +56,7 @@ export default function Header() {
     return (
         <>
             {/* Only show spacer if NOT on cart page */}
-            {!isCartPage && <div className="h-[92px]" />}
+            {!isCartPage && <div className="h-[100px]" />}
             
             <header className={`fixed ${isCartPage ? 'top-0' : 'top-7'} left-0 right-0 z-50 transition-all duration-500 ${
                 isScrolled 
@@ -67,14 +67,14 @@ export default function Header() {
                 <div className="absolute top-0 left-0 w-full h-0.5 bg-gradient-to-r from-transparent via-red-500 to-transparent opacity-60" />
                 
                 <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-                    <div className="flex h-16 items-center justify-between">
+                    <div className="flex h-20 items-center justify-between">
                         {/* Logo */}
                         <Link href="/" className="group transition-all duration-300 hover:scale-105">
                             <div className="relative px-2 py-1 bg-white rounded-lg">
                                 <img 
-                                    src="https://res.cloudinary.com/djuk4a84p/image/upload/v1757197833/logo_valentino_y57cmb.png"
-                                    alt="Valentino Paris"
-                                    className="h-10 w-auto sm:h-12 transition-all duration-300 group-hover:brightness-110"
+                                    src="https://res.cloudinary.com/djuk4a84p/image/upload/v1778687241/soledadlogoaccs_cpclqs.png"
+                                    alt="Soledad Accesorios"
+                                    className="h-15 w-auto sm:h-[70px] transition-all duration-300 group-hover:brightness-110"
                                 />
                             </div>
                         </Link>

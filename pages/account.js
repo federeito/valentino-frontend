@@ -134,7 +134,7 @@ export default function Account() {
         return (
             <>
                 <Head>
-                <title>Mi Cuenta | Valentino Accesorios</title>
+                <title>Mi Cuenta | Soledad Accesorios</title>
                 </Head>
                 {/* Background */}
                 <div className="fixed inset-0 -z-10 bg-gradient-to-br from-blue-50 via-white to-purple-50/30" />
@@ -432,7 +432,7 @@ export default function Account() {
 
                         {/* Additional Info */}
                         <div className="mt-5 sm:mt-6 md:mt-8 text-center text-gray-600 text-xs sm:text-sm px-4">
-                            <p className="break-words">¿Necesitás ayuda? Contactanos a <span className="hidden sm:inline">contacto@valentinoaccesorios.com.ar</span><span className="sm:hidden">nuestro email</span></p>
+                            <p className="break-words">¿Necesitás ayuda? Contactanos a <span className="hidden sm:inline">contacto@soledadaccesorios.com.ar</span><span className="sm:hidden">nuestro email</span></p>
                         </div>
                     </div>
                 </div>
@@ -444,7 +444,7 @@ export default function Account() {
     return (
         <>
             <Head>
-                <title>Mi Cuenta | Valentino Accesorios</title>
+                <title>Mi Cuenta | Soledad Accesorios</title>
             </Head>
             {/* Background */}
             <div className="fixed inset-0 -z-10 bg-gradient-to-br from-blue-50 via-white to-purple-50/30" />

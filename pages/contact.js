@@ -59,8 +59,8 @@ export default function Contact() {
     return (
         <>
             <Head>
-                <title>Contacto | Valentino Accesorios</title>
-                <meta name="description" content="Contactá con Valentino Paris. Estamos para ayudarte con tus consultas sobre nuestros productos mayoristas." />
+                <title>Contacto | Soledad Accesorios</title>
+                <meta name="description" content="Contactá con Soledad Accesorios. Estamos para ayudarte con tus consultas sobre nuestros productos mayoristas." />
             </Head>
 
             <div className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-red-50/20 py-12 px-4 sm:px-6 lg:px-8">
@@ -174,10 +174,10 @@ export default function Contact() {
                             <p className="text-center text-gray-600 text-sm">
                                 También podés contactarnos directamente a{' '}
                                 <a 
-                                    href="mailto:contacto@valentinoaccesorios.com.ar" 
+                                    href="mailto:contacto@soledadaccesorios.com.ar" 
                                     className="text-red-600 hover:text-red-700 font-medium"
                                 >
-                                    contacto@valentinoaccesorios.com.ar
+                                    contacto@soledadaccesorios.com.ar
                                 </a>
                             </p>
                         </div>

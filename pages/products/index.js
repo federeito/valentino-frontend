@@ -163,7 +163,7 @@ export default function Products({ allProducts = [], categories = [] }) {
             <Head>
                 <title>Accesorios para el Pelo por Mayor | Catálogo Mayorista</title>
                 <meta name="description" content="Catálogo mayorista de accesorios para el pelo: hebillas, clips, vinchas, peinetas y más. Precios por mayor, envíos a toda Argentina. ¡Más de 300 modelos exclusivos!" />
-                <link rel="canonical" href="https://www.valentinoaccesorios.com.ar/accesorios-para-el-pelo" />
+                <link rel="canonical" href="https://www.soledadaccesorios.com.ar/accesorios-para-el-pelo" />
             </Head>
             <PromoBanner />
             {/* Background decorativo - Pastel colors */}

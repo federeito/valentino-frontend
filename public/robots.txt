@@ -3,7 +3,7 @@ User-agent: *
 Allow: /
 
 # Host
-Host: https://www.valentinoaccesorios.com.ar
+Host: https://www.soledadaccesorios.com.ar
 
 # Sitemaps
-Sitemap: https://www.valentinoaccesorios.com.ar/sitemap.xml
+Sitemap: https://www.soledadaccesorios.com.ar/sitemap.xml

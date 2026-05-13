@@ -30,7 +30,7 @@ export default function Terms() {
     return (
         <>
             <Head>
-                <title>Términos y Condiciones | Valentino Accesorios</title>
+                <title>Términos y Condiciones | Soledad Accesorios</title>
             </Head>
             <div className="fixed inset-0 -z-10 bg-gradient-to-br from-gray-50 via-white to-red-50/20" />
             
@@ -59,7 +59,7 @@ export default function Terms() {
                         {/* Introduction */}
                         <div className="mb-8">
                             <p className="text-gray-700 leading-relaxed text-sm sm:text-base">
-                                El uso del sitio web <span className="font-semibold text-red-600">Valentino Paris</span> implica la aceptación de los siguientes términos y condiciones.
+                                El uso del sitio web <span className="font-semibold text-red-600">Soledad Accesorios</span> implica la aceptación de los siguientes términos y condiciones.
                             </p>
                         </div>
 
@@ -112,7 +112,7 @@ export default function Terms() {
                             <SectionTitle number="5">Propiedad intelectual</SectionTitle>
                             <p className="text-gray-700 text-sm sm:text-base">
                                 Todo el contenido del sitio (imágenes, textos, logos, diseños) es propiedad de{' '}
-                                <span className="font-semibold text-red-600">Valentino Paris</span> y no puede ser utilizado sin autorización.
+                                <span className="font-semibold text-red-600">Soledad Accesorios</span> y no puede ser utilizado sin autorización.
                             </p>
                         </section>
 
@@ -162,8 +162,8 @@ export default function Terms() {
                             <div className="bg-red-50 border-l-4 border-red-500 p-4 rounded-r-lg">
                                 <div className="flex items-center gap-2 flex-wrap">
                                     <span>📧</span>
-                                    <a href="mailto:contacto@valentinoaccesorios.com.ar" className="text-red-600 hover:text-red-700 font-semibold underline break-all text-sm sm:text-lg">
-                                        contacto@valentinoaccesorios.com.ar
+                                    <a href="mailto:contacto@soledadaccesorios.com.ar" className="text-red-600 hover:text-red-700 font-semibold underline break-all text-sm sm:text-lg">
+                                        contacto@soledadaccesorios.com.ar
                                     </a>
                                 </div>
                             </div>

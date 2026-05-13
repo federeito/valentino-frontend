@@ -246,7 +246,7 @@ export default async function handler(req, res) {
                 <div class="container">
                     <div class="header">
                         <h1>¡Gracias por tu pedido, ${name}!</h1>
-                        <img src="https://res.cloudinary.com/djuk4a84p/image/upload/v1755574026/valentino_logo_g5zdfg.png" alt="Valentino Paris Logo" class="logo"/>
+                        <img src="https://res.cloudinary.com/djuk4a84p/image/upload/v1778687241/soledadlogoaccs_cpclqs.png" alt="Soledad Accesorios Logo" class="logo"/>
                     </div>
                     
                     <div class="section">
@@ -295,7 +295,7 @@ export default async function handler(req, res) {
                     
                     <div class="footer">
                         <p>¡Muchas gracias por tu compra!</p>
-                        <p style="font-size: 12px; color: #999;">Valentino Paris - Venta Mayorista de accesorios para el pelo</p>
+                        <p style="font-size: 12px; color: #999;">Soledad Accesorios - Venta Mayorista de accesorios para el pelo</p>
                     </div>
                 </div>
             </body>
@@ -304,7 +304,7 @@ export default async function handler(req, res) {
 
         // Configuración del correo
         const mailOptions = {
-            from: `"${process.env.MAILERSEND_FROM_NAME || 'Valentino Paris'}" <${process.env.MAILERSEND_FROM_EMAIL}>`,
+            from: `"${process.env.MAILERSEND_FROM_NAME || 'Soledad Accesorios'}" <${process.env.MAILERSEND_FROM_EMAIL}>`,
             to: email,
             subject: `Confirmación de tu pedido #${orderDoc._id.toString().slice(-6)}`,
             html: htmlContent,

@@ -20,7 +20,7 @@ const cormorantFont = Cormorant_Garamond({
 export default function App({ Component, pageProps: { session, ...pageProps } }) {
   return <>
     <Head>
-      <link rel="icon" href="https://res.cloudinary.com/djuk4a84p/image/upload/v1772474170/favicon_n1ymv4.png" />
+      <link rel="icon" href="https://res.cloudinary.com/djuk4a84p/image/upload/v1778690764/faviconsole_mnkhpp.png" />
       <meta name="description" content="Accesorios para el pelo con amplio stock. Catálogo mayorista online para comercios y revendedores. Envíos a todo el país." />
     </Head>
     <SessionProvider session={session}>

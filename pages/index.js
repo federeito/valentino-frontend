@@ -17,9 +17,9 @@ export default function Home({ featuredProducts, newProducts, collectionProduct 
     return (
         <>
             <Head>
-                <title>Accesorios para el Pelo por Mayor | Valentino Accesorios</title>
+                <title>Accesorios para el Pelo por Mayor | Soledad Accesorios</title>
                 <meta name="description" content="Accesorios para el pelo por mayor. Vinchas, hebillas, broches y más con precios mayoristas para revendedores. Envíos a todo el país." />
-                <link rel="canonical" href="https://www.valentinoaccesorios.com.ar/" />
+                <link rel="canonical" href="https://www.soledadaccesorios.com.ar/" />
                 <link rel="preconnect" href="https://res.cloudinary.com" />
             </Head>
             <PromoBanner />

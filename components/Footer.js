@@ -23,7 +23,7 @@ export default function Footer() {
                     {/* Brand Column */}
                     <div className="space-y-4 sm:space-y-5 lg:space-y-6 text-center sm:text-left">
                         <h3 className="text-xl sm:text-2xl font-bold bg-gradient-to-r from-red-600 to-red-700 bg-clip-text text-transparent">
-                            Valentino Paris
+                            Soledad Accesorios
                         </h3>
                         <p className="text-gray-600 text-xs sm:text-sm leading-relaxed max-w-xs mx-auto sm:mx-0">
                             Accesorios para el cabello al por mayor. Novedades, tendencias y amplio stock para tu negocio.
@@ -180,7 +180,7 @@ export default function Footer() {
                 {/* Bottom Copyright */}
                 <div className="mt-8 sm:mt-10 lg:mt-12 pt-6 sm:pt-8 border-t border-gray-200">
                     <p className="text-center text-xs sm:text-sm text-gray-600 px-4">
-                        © 2026 Valentino | Paris – Todos los derechos reservados
+                        © 2026 Soledad | Accesorios – Todos los derechos reservados
                     </p>
                 </div>
             </div>
