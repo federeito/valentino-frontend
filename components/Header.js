@@ -67,14 +67,14 @@ export default function Header() {
                 <div className="absolute top-0 left-0 w-full h-0.5 bg-gradient-to-r from-transparent via-red-500 to-transparent opacity-60" />
                 
                 <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-                    <div className="flex h-20 items-center justify-between">
+                    <div className="flex h-16 sm:h-20 items-center justify-between">
                         {/* Logo */}
                         <Link href="/" className="group transition-all duration-300 hover:scale-105">
                             <div className="relative px-2 py-1 bg-white rounded-lg">
                                 <img 
                                     src="https://res.cloudinary.com/djuk4a84p/image/upload/v1778687241/soledadlogoaccs_cpclqs.png"
                                     alt="Soledad Accesorios"
-                                    className="h-15 w-auto sm:h-[70px] transition-all duration-300 group-hover:brightness-110"
+                                    className="h-10 w-auto sm:h-14 md:h-[70px] transition-all duration-300 group-hover:brightness-110"
                                 />
                             </div>
                         </Link>
