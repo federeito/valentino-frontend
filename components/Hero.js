@@ -285,8 +285,8 @@ export default function Hero() {
               src={slide.image}
               alt={slide.subtitle || slide.titleAccent}
               fill
-              priority={i === 0}
-              loading={i === 0 ? "eager" : "lazy"}
+              priority={i === 0 || i === 1}
+              loading={i === 0 || i === 1 ? "eager" : "lazy"}
               quality={i === 2 ? 95 : 85}
               sizes="(max-width: 1024px) 100vw, 65vw"
               className="object-cover transition-transform duration-[8000ms]"
