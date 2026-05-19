@@ -44,6 +44,8 @@ export default function App({ Component, pageProps: { session, ...pageProps } })
             placeholder="Escribe un mensaje..."
             notification
             notificationDelay={60}
+            chatboxHeight={320}
+            buttonStyle={{ width: '50px', height: '50px' }}
           />
         </CartContextProvider>
       </PriceVisibilityProvider>
