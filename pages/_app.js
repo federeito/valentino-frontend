@@ -42,7 +42,7 @@ export default function App({ Component, pageProps: { session, ...pageProps } })
             statusMessage="Respondemos en breve"
             chatMessage="¡Hola! ¿En qué te podemos ayudar?"
             placeholder="Escribe un mensaje..."
-            notification
+            notification="true"
             notificationDelay={60}
             chatboxHeight={320}
             buttonStyle={{ width: '50px', height: '50px' }}
