@@ -8,6 +8,7 @@ import { SessionProvider } from "next-auth/react";
 import Head from "next/head";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import { Analytics } from "@vercel/analytics/next";
+import { FloatingWhatsApp } from 'react-floating-whatsapp';
 
 const poppinsFont = Poppins({ subsets: ["latin"], weight: '400' });
 const cormorantFont = Cormorant_Garamond({
@@ -34,6 +35,16 @@ export default function App({ Component, pageProps: { session, ...pageProps } })
               reverseOrder={false}
             />
           </main>
+          <FloatingWhatsApp
+            phoneNumber="541144381198"
+            accountName="Soledad | Accesorios"
+            avatar="https://res.cloudinary.com/djuk4a84p/image/upload/v1778690764/faviconsole_mnkhpp.png"
+            statusMessage="Respondemos en breve"
+            chatMessage="¡Hola! ¿En qué te podemos ayudar?"
+            placeholder="Escribe un mensaje..."
+            notification
+            notificationDelay={60}
+          />
         </CartContextProvider>
       </PriceVisibilityProvider>
     </SessionProvider>
