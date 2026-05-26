@@ -74,7 +74,7 @@ export default function Header() {
                                 <img 
                                     src="https://res.cloudinary.com/djuk4a84p/image/upload/v1778687241/soledadlogoaccs_cpclqs.png"
                                     alt="Soledad Accesorios"
-                                    className="h-10 w-auto sm:h-14 md:h-[70px] transition-all duration-300 group-hover:brightness-110"
+                                    className="h-10 w-auto sm:h-14 md:h-[68px] transition-all duration-300 group-hover:brightness-110"
                                 />
                             </div>
                         </Link>
