@@ -285,9 +285,10 @@ export default function Hero() {
               src={slide.image}
               alt={slide.subtitle || slide.titleAccent}
               fill
-              priority={i === 0 || i === 1}
-              loading={i === 0 || i === 1 ? "eager" : "lazy"}
-              quality={i === 2 ? 95 : 85}
+              priority={i === 0}
+              fetchPriority={i === 0 ? "high" : "low"}
+              loading={i === 0 ? "eager" : "lazy"}
+              quality={85}
               sizes="(max-width: 1024px) 100vw, 65vw"
               className="object-cover transition-transform duration-[8000ms]"
               style={{ 
