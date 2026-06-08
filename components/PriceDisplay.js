@@ -1,5 +1,6 @@
 import { usePriceVisibility } from '@/lib/PriceVisibilityContext';
 import { signIn } from 'next-auth/react';
+import { useRouter } from 'next/router';
 
 const formatPrice = (price) => {
     return price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
@@ -13,6 +14,7 @@ export const PriceDisplay = ({
     showUnit = true
 }) => {
     const { canViewPrices, isLoading, isLoggedIn } = usePriceVisibility();
+    const router = useRouter();
 
     if (isLoading) {
         return (
@@ -43,7 +45,10 @@ export const PriceDisplay = ({
     if (!isLoggedIn && showLoginPrompt) {
         return (
             <div className={`${className}`}>
-                <div className="bg-gradient-to-r from-blue-50 to-indigo-50 border-2 border-blue-200 rounded-xl p-3 mb-2">
+                <div
+                    onClick={() => router.push('/account')}
+                    className="cursor-pointer bg-gradient-to-r from-blue-50 to-indigo-50 border-2 border-blue-200 rounded-xl p-3 mb-2 hover:border-blue-400 hover:shadow-md transition-all duration-200"
+                >
                     <div className="flex items-center gap-2 justify-center">
                         <div className="p-1 bg-blue-100 rounded-full">
                             <svg className="w-4 h-4 text-blue-600" fill="currentColor" viewBox="0 0 20 20">
@@ -63,7 +68,10 @@ export const PriceDisplay = ({
     // Default fallback - for logged in but not approved users, don't show duplicate message
     return (
         <div className={`${className}`}>
-            <div className="bg-gradient-to-r from-amber-50 to-orange-50 border-2 border-amber-200 rounded-xl p-3 mb-2">
+            <div
+                onClick={() => router.push('/account')}
+                className="cursor-pointer bg-gradient-to-r from-amber-50 to-orange-50 border-2 border-amber-200 rounded-xl p-3 mb-2 hover:border-amber-400 hover:shadow-md transition-all duration-200"
+            >
                 <div className="flex items-center gap-2 justify-center">
                     <div className="p-1 bg-amber-100 rounded-full">
                         <svg className="w-4 h-4 text-amber-600" fill="currentColor" viewBox="0 0 20 20">
