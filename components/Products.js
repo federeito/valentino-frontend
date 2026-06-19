@@ -22,12 +22,12 @@ export default function Products({ products, showPrice = false }) {
     };
 
     return (
-        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3 sm:gap-4 md:gap-6">
+        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 xl:grid-cols-5 gap-3 sm:gap-4 md:gap-6">
             {products?.length > 0 && products.map((product, index) => (
                 <Link 
                     href={`/products/${product._id}`} 
                     key={product._id}
-                    className="group"
+                    className={`group ${index >= 4 ? 'hidden sm:block' : ''}`}
                 >
                     <div 
                         className="bg-white rounded-xl sm:rounded-2xl shadow-md hover:shadow-2xl border-2 border-transparent hover:border-red-200 transition-all duration-500 hover:scale-105 overflow-hidden"
