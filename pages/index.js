@@ -47,7 +47,7 @@ export default function Home({ featuredProducts, newProducts, collectionProduct 
                             </p>
                             <div className="w-16 sm:w-20 h-1 bg-gradient-to-r from-red-500 to-pink-500 mx-auto mt-4 sm:mt-6 rounded-full" />
                         </div>
-                        <Products products={newProducts} />
+                        <Products products={newProducts} showPrice={true} />
                     </div>
                 </section>
 

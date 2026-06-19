@@ -45,7 +45,7 @@ export default function Collection({ product }) {
                                     className="mt-6 sm:mt-8 inline-flex items-center gap-2 rounded-xl border-2 border-blue-200 bg-white/90 px-6 sm:px-8 py-2.5 sm:py-3 
                                     text-sm sm:text-md font-medium text-gray-700 transition-all duration-300 hover:bg-blue-50/80 hover:border-blue-300 hover:text-blue-700
                                     hover:shadow-lg hover:shadow-blue-200/30 active:scale-95 tracking-wide">
-                                    Comprar Todo
+                                   Explorar catálogo
                                     <svg className="w-4 h-4 sm:w-5 sm:h-5 transition-transform group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
                                     </svg>

@@ -4,7 +4,7 @@ import Link from "next/link";
 import { useContext, useState } from "react";
 import toast from "react-hot-toast";
 
-export default function Products({ products }) {
+export default function Products({ products, showPrice = false }) {
     const { addProduct } = useContext(CartContext);
     const [hoveredProduct, setHoveredProduct] = useState(null);
 
@@ -110,6 +110,7 @@ export default function Products({ products }) {
                                     className="text-gray-800"
                                     showUnit={true}
                                     showLoginPrompt={false}
+                                    showPrice={showPrice}
                                 />
                             </div>
                         </div>

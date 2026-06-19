@@ -11,16 +11,33 @@ export const PriceDisplay = ({
     className = "", 
     size = "default",
     showLoginPrompt = true,
-    showUnit = true
+    showUnit = true,
+    showPrice = false   // NEW: bypass auth and always show price
 }) => {
     const { canViewPrices, isLoading, isLoggedIn } = usePriceVisibility();
     const router = useRouter();
 
-    if (isLoading) {
+    if (isLoading && !showPrice) {
         return (
             <div className={`animate-pulse bg-gray-200 rounded ${
                 size === "large" ? "h-8 w-24" : "h-6 w-20"
             } ${className}`} />
+        );
+    }
+
+    // NEW: bypass all auth checks when showPrice is true
+    if (showPrice) {
+        const textSize = size === "large" ? "text-2xl md:text-4xl" : 
+                        size === "small" ? "text-sm" : "text-xl md:text-2xl";
+        return (
+            <div className={className}>
+                <span className={`font-bold text-gray-800 ${textSize}`}>
+                    ${formatPrice(price)}
+                </span>
+                {showUnit && (
+                    <span className="text-sm text-gray-500 ml-1">c/u</span>
+                )}
+            </div>
         );
     }
 
@@ -116,7 +133,7 @@ export const CartButton = ({
                 <div className="bg-yellow-100 border border-yellow-400 text-yellow-700 px-3 py-2 rounded-lg text-sm mb-2">
                     <div className="flex items-center gap-2 justify-center">
                         <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
-                            <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clipRule="evenodd" />
+                            <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 100 2 2 2 0 012 2 1 1 0 102 0 4 4 0 00-4-4z" clipRule="evenodd" />
                         </svg>
                         <span className="font-semibold text-xs">Cuenta pendiente de aprobación</span>
                     </div>
